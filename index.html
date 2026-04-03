@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trung (Ethan) Truong — Video Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ed;
+    --cream: #ede8e0;
+    --warm-gray: #b5aea5;
+    --accent: #c8ff00;
+    --accent-dim: #9ab800;
+    --mid-gray: #3a3a3a;
+    --card-dark: #141414;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--warm-gray) var(--black);
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent); color: var(--black); }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 3rem;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: padding 0.4s ease;
+  }
+  nav.scrolled { padding: 0.8rem 3rem; }
+  .nav-logo { font-family: var(--serif); font-size: 1.35rem; letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav-links a { position: relative; padding-bottom: 2px; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: flex-end;
+    padding: 0 3rem 6rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 20%, rgba(200,255,0,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(200,255,0,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { max-width: 900px; position: relative; z-index: 2; }
+  .hero-label {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 400;
+    line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.5s;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-desc {
+    font-size: 1.1rem; line-height: 1.7; color: var(--warm-gray); max-width: 540px;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s;
+  }
+  .hero-number {
+    position: absolute; right: 3rem; bottom: 6rem;
+    font-family: var(--serif); font-size: clamp(12rem, 22vw, 22rem); font-style: italic;
+    color: rgba(200,255,0,0.04); line-height: 1; pointer-events: none; user-select: none; z-index: 1;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 3rem; }
+  .section-number { font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: var(--accent); margin-bottom: 0.5rem; }
+  .section-title { font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 400; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1.5rem; }
+
+  /* ─── ABOUT ─── */
+  .about {
+    background: var(--white); color: var(--black);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .about .section-title { margin-bottom: 2rem; }
+  .about-text { font-size: 1.05rem; line-height: 1.8; color: var(--mid-gray); }
+  .about-text p + p { margin-top: 1.2rem; }
+  .skills-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid rgba(10,10,10,0.1); border-left: 1px solid rgba(10,10,10,0.1);
+  }
+  .skill-item {
+    padding: 1.4rem 1.6rem; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.03em;
+    border-bottom: 1px solid rgba(10,10,10,0.1); border-right: 1px solid rgba(10,10,10,0.1);
+    transition: all 0.3s ease; cursor: default;
+  }
+  .skill-item:hover { background: var(--black); color: var(--accent); }
+
+  /* ─── PROJECTS ─── */
+  .projects { background: var(--black); padding-bottom: 2rem; }
+  .projects-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 2rem;
+  }
+  .projects-header .section-title { margin-bottom: 0; }
+  .projects-count { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm-gray); }
+
+  .category { margin-bottom: 5rem; }
+  .category-header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .category-index { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--accent); min-width: 2.5rem; }
+  .category-name { font-family: var(--serif); font-size: 1.8rem; font-weight: 400; letter-spacing: -0.01em; }
+  .category-desc { font-size: 0.88rem; color: var(--warm-gray); margin-left: auto; max-width: 400px; text-align: right; line-height: 1.5; }
+
+  /* ─── VIDEO CARDS ─── */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+  .video-card {
+    position: relative; border-radius: 6px; overflow: hidden; background: var(--card-dark);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); cursor: pointer; display: block;
+  }
+  .video-card:hover { transform: translateY(-4px); }
+  .video-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
+  .video-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+    filter: brightness(0.85);
+  }
+  .video-card:hover .video-thumb img { transform: scale(1.04); filter: brightness(1); }
+  .play-icon {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+  .video-card:hover .play-icon { opacity: 1; }
+  .play-icon svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); }
+  .video-card-body { padding: 1rem 1.2rem; }
+  .video-card-type { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+  .video-card-title { font-family: var(--serif); font-size: 1.05rem; line-height: 1.35; }
+
+  /* Shorts */
+  .shorts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .shorts-grid .video-card .video-thumb { aspect-ratio: 9/16; }
+
+  /* Vimeo fallback */
+  .vimeo-thumb { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; }
+  .vimeo-label { font-family: var(--serif); font-size: 1.1rem; color: var(--warm-gray); text-align: center; padding: 1rem; line-height: 1.4; }
+
+  /* ─── CONTACT ─── */
+  .contact { background: var(--white); color: var(--black); text-align: center; padding: 8rem 3rem; }
+  .contact .section-title { font-size: clamp(2.8rem, 5vw, 4.5rem); margin-bottom: 1rem; }
+  .contact-subtitle { font-size: 1.05rem; color: var(--mid-gray); margin-bottom: 3rem; line-height: 1.7; }
+  .contact-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 1rem 2.2rem; border: 1px solid var(--black); border-radius: 100px;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.06em; transition: all 0.3s ease;
+  }
+  .contact-link:hover { background: var(--black); color: var(--accent); }
+  .contact-link svg { width: 16px; height: 16px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black); padding: 2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.78rem; color: var(--warm-gray);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer .back-top { font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+  footer .back-top:hover { color: var(--accent); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 0 1.5rem 4rem; }
+    .hero-number { display: none; }
+    .about { grid-template-columns: 1fr; gap: 3rem; }
+    .category-header { flex-direction: column; gap: 0.5rem; }
+    .category-desc { margin-left: 0; text-align: left; max-width: none; }
+    .projects-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .video-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .shorts-grid { grid-template-columns: repeat(3, 1fr); }
+    .contact { padding: 5rem 1.5rem; }
+    footer { padding: 1.5rem; }
+  }
+  @media (max-width: 550px) {
+    .video-grid { grid-template-columns: 1fr; }
+    .shorts-grid { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">Ethan<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-label">Video Producer &amp; Editor</p>
+    <h1>Trung <em>(Ethan)</em> Truong</h1>
+    <p class="hero-desc">I am a dynamic and highly skilled multimedia editor with extensive experience in video production, graphic design, and photo editing.</p>
+  </div>
+  <div class="hero-number">ET</div>
+</section>
+
+<section class="about" id="about">
+  <div class="reveal">
+    <p class="section-number">Nº1</p>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-text">
+      <p>I am a dynamic and highly skilled multimedia editor with extensive experience in video production, graphic design, and photo editing. I have demonstrated expertise in creating compelling video content for various platforms, including YouTube, advertisements, online courses, and testimonials.</p>
+      <p>I have a proven track record in leading multimedia projects, ensuring high-quality output, and delivering on time.</p>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="skills-grid">
+      <div class="skill-item">Graphic Design</div>
+      <div class="skill-item">Multimedia Editing</div>
+      <div class="skill-item">Video Production</div>
+      <div class="skill-item">Creative Direction</div>
+      <div class="skill-item">Motion Graphics</div>
+      <div class="skill-item">Visualization</div>
+      <div class="skill-item">Project Management</div>
+      <div class="skill-item">AI Generative</div>
+      <div class="skill-item">Storytelling</div>
+      <div class="skill-item">AI Workflow</div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="projects-header reveal">
+    <div>
+      <p class="section-number">Nº2</p>
+      <h2 class="section-title">Projects &amp; Works</h2>
+    </div>
+    <p class="projects-count">29 Selected Works</p>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">01</span>
+      <h3 class="category-name">Product Showcases</h3>
+      <p class="category-desc">Want your product to make an impact? I edit videos that bring out its strengths and connect with your audience.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/HBTfzwOwkxY" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/maxresdefault.jpg" alt="Powerlift Hangar Showcase" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Product Showcases</p><p class="video-card-title">Powerlift Hangar Showcase</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/Z5ZgsThn3nc" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/Z5ZgsThn3nc/maxresdefault.jpg" alt="Hydaway Product Design" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Product Showcases</p><p class="video-card-title">Hydaway Product Design Test Results</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">02</span>
+      <h3 class="category-name">Brand Film</h3>
+      <p class="category-desc">I specialize in finding the story that already exists in the footage and making it land.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/jH6LaZDXNMs" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/maxresdefault.jpg" alt="Joe Schaeffer" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Brand Film</p><p class="video-card-title">Joe Schaeffer | Artist Film</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/J0j3ZWbqS5s" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/J0j3ZWbqS5s/maxresdefault.jpg" alt="Feedflo" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Brand Film</p><p class="video-card-title">Feedflo | Impact Film | Mogler Farms</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">03</span>
+      <h3 class="category-name">Company Values</h3>
+      <p class="category-desc">Showcases projects rooted in integrity, innovation, and community impact, reflecting commitment to excellence.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/Mh5BJ9R5pFw" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/Mh5BJ9R5pFw/maxresdefault.jpg" alt="Kore Cares" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Kore Cares - Our Culture</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/oUDLKNFswlQ" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/oUDLKNFswlQ/maxresdefault.jpg" alt="Plexus AV" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Plexus AV</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/E56W3HIF3ao" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/E56W3HIF3ao/maxresdefault.jpg" alt="Sencore Brand" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Sencore Brand [2024]</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">04</span>
+      <h3 class="category-name">Video Advertisement</h3>
+      <p class="category-desc">Short-form product ads with clean storytelling, smooth motion, and platform-ready delivery.</p>
+    </div>
+    <div class="shorts-grid">
+      <a class="video-card" href="https://youtube.com/shorts/vwf4U1WzQ0s" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/maxresdefault.jpg" alt="No More Solo" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">No More Solo</p></div>
+      </a>
+      <a class="video-card" href="https://youtube.com/shorts/iYsKXGBhExY" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/iYsKXGBhExY/maxresdefault.jpg" alt="IG_Keychron" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">IG_Keychron</p></div>
+      </a>
+      <a class="video-card" href="https://youtube.com/shorts/-toxHWQCe_w" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/-toxHWQCe_w/maxresdefault.jpg" alt="Dental Ads" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">Dental Ads</p></div>
+      </a>
+      <a class="video-card" href="https://youtube.com/shorts/W3KMqXGB6Qg" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/W3KMqXGB6Qg/maxresdefault.jpg" alt="SHORT KETONE" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">SHORT KETONE</p></div>
+      </a>
+      <a class="video-card" href="https://youtube.com/shorts/eE9IeIG6HFU" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/eE9IeIG6HFU/maxresdefault.jpg" alt="SIÊU ỨNG DỤNG" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">SIÊU ỨNG DỤNG</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">05</span>
+      <h3 class="category-name">Social Awareness</h3>
+      <p class="category-desc">Highlights a dedication to social awareness, featuring multimedia projects that address social justice, sustainability, and community engagement, crafted to inspire and drive impactful change.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://www.youtube.com/watch?v=op512g61BmI" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/op512g61BmI/maxresdefault.jpg" alt="CHAD" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">CHAD | Community Health Worker Testimonial</p></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=gom6gM6hxyU" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/gom6gM6hxyU/maxresdefault.jpg" alt="South Dakota Symphony" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">South Dakota Symphony Orchestra | Gala 2024</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/WlpPZHtb2jc" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/WlpPZHtb2jc/maxresdefault.jpg" alt="Camp POSTCARD" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Camp POSTCARD - Rise and Shine [2024]</p></div>
+      </a>
+      <a class="video-card" href="https://vimeo.com/1078713150/aeb895970a" target="_blank" rel="noopener">
+        <div class="video-thumb vimeo-thumb"><div class="vimeo-label">Veterans Services<br>Volunteers of America<br>Dakotas</div><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Veterans Services</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/RonJvUgm8JQ" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/RonJvUgm8JQ/maxresdefault.jpg" alt="Cats TNR" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Cats TNR - Sioux Empire TNR Coalition</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">06</span>
+      <h3 class="category-name">YouTube Videos</h3>
+      <p class="category-desc">Featuring a selection of YouTube videos that demonstrate creative storytelling and technical expertise, each project highlights our approach to engaging and impactful content.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/a3mAARp5T98" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/a3mAARp5T98/maxresdefault.jpg" alt="Managing Employees" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">Managing Employees Doesn't Have to Suck</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/C0NH1Izy5zM" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/C0NH1Izy5zM/maxresdefault.jpg" alt="Speed Learning" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">How to Absorb Everything You Read</p></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=bsSM3c1vdOY" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/bsSM3c1vdOY/maxresdefault.jpg" alt="Content Creator" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">Become a Full Time Content Creator | 10 Ways</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">07</span>
+      <h3 class="category-name">Testimonials</h3>
+      <p class="category-desc">Showcasing diverse testimonials from clients and collaborators who have experienced the impact and effectiveness of our multimedia projects, underscoring our commitment to quality and innovation.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/pNw0LhYSSv4" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/pNw0LhYSSv4/maxresdefault.jpg" alt="Love Hay" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">Love Hay - Operation of The Year</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/7Ky4nM_jru4" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/7Ky4nM_jru4/maxresdefault.jpg" alt="DRA Testimonial" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">DRA Testimonial - Charlie</p></div>
+      </a>
+      <a class="video-card" href="https://youtu.be/MTw-beRT1Ro" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/MTw-beRT1Ro/maxresdefault.jpg" alt="Easy Automation Inc." loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">Easy Automation Inc. - Testimonial Simplot Grower</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">08</span>
+      <h3 class="category-name">Product Demo</h3>
+      <p class="category-desc">Combining dynamic animations, crisp graphics, and purposeful storytelling, this approach effectively highlights key features, demonstrates functionality, and communicates value.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://youtu.be/ofQ9lYCnjjk" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/ofQ9lYCnjjk/maxresdefault.jpg" alt="Demo Revve" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Product Demo</p><p class="video-card-title">Demo Revve</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">09</span>
+      <h3 class="category-name">Motion Graphics</h3>
+      <p class="category-desc">Featuring motion graphics that demonstrate my creative storytelling and technical expertise, each project highlights my approach to engaging and impactful visual content.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://www.youtube.com/watch?v=DV1G6hvNptI" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/DV1G6hvNptI/maxresdefault.jpg" alt="WHAT IS AN NFT?" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Motion Graphics</p><p class="video-card-title">WHAT IS AN NFT?</p></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=57Wtwlewnac" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/57Wtwlewnac/maxresdefault.jpg" alt="WHAT IS WEB 3.0?" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Motion Graphics</p><p class="video-card-title">WHAT IS WEB 3.0?</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">10</span>
+      <h3 class="category-name">Podcast</h3>
+      <p class="category-desc">Provided expert audio editing for 'Nostalgia Street,' enhancing narrative impact and listener engagement through sound design and editing techniques.</p>
+    </div>
+    <div class="video-grid">
+      <a class="video-card" href="https://www.youtube.com/watch?v=ORcY-A6fwG8" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/ORcY-A6fwG8/maxresdefault.jpg" alt="HOW TO BEAT MIKE TYSON" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">HOW TO BEAT MIKE TYSON (S1E4)</p></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=-MI2w6o8Tes" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/-MI2w6o8Tes/maxresdefault.jpg" alt="ROBOTS MILKING COWS?!" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">ROBOTS MILKING COWS?! (S2E32)</p></div>
+      </a>
+      <a class="video-card" href="https://www.youtube.com/watch?v=Lgr4LS4ULw4" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/Lgr4LS4ULw4/maxresdefault.jpg" alt="TALES FROM A REAL COWGIRL" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">TALES FROM A REAL COWGIRL (S1E24)</p></div>
+      </a>
+    </div>
+  </div>
+
+</section>
+
+<section class="contact" id="contact">
+  <div class="reveal">
+    <p class="section-number">Nº3</p>
+    <h2 class="section-title">Let's Work Together</h2>
+    <p class="contact-subtitle">Have a project in mind? I'd love to hear about it.</p>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:trbatrung@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+        trbatrung@gmail.com
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/trung-ethan-truong" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2026 Trung (Ethan) Truong</span>
+  <a href="#" class="back-top">Back to top &uarr;</a>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) { setTimeout(() => entry.target.classList.add('visible'), i * 80); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
