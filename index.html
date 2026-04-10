@@ -38,7 +38,6 @@
     position: relative;
   }
 
-  /* ─── CINEMATIC FILM GRAIN ─── */
   body::after {
     content: '';
     position: fixed; inset: 0; pointer-events: none; z-index: 9999;
@@ -149,7 +148,6 @@
     scroll-snap-type: x mandatory; 
     gap: 1.5rem; 
     padding-bottom: 1rem; 
-    /* Hide scrollbar visually but keep functionality */
     -ms-overflow-style: none; 
     scrollbar-width: none; 
   }
@@ -162,10 +160,7 @@
     border: 1px solid rgba(255,255,255,0.03);
   }
   
-  /* Standard Video sizing */
   .video-grid .video-card { width: calc(45% - 0.75rem); min-width: 320px; }
-  
-  /* Shorts Video sizing */
   .shorts-grid .video-card { width: calc(20% - 1.2rem); min-width: 200px; }
 
   .video-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #000; }
@@ -178,11 +173,10 @@
   }
   .video-card:hover .video-thumb img { filter: brightness(0.3); transform: scale(1.02); }
 
-  /* Interactive Hover Iframe */
   .hover-player {
     position: absolute; inset: 0; width: 100%; height: 100%;
     border: none; z-index: 5; opacity: 0; transition: opacity 0.5s ease;
-    pointer-events: none; /* Let the card handle clicks */
+    pointer-events: none;
   }
   .video-card:hover .hover-player { opacity: 1; }
 
@@ -190,17 +184,50 @@
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     opacity: 0; transition: opacity 0.3s ease; z-index: 10; pointer-events: none;
   }
-  /* Only show play icon if video isn't auto-playing */
   .video-card:not(.is-playing):hover .play-icon { opacity: 1; }
-  
   .play-icon svg { width: 48px; height: 48px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); }
   .video-card-body { padding: 1.2rem; }
   .video-card-type { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
   .video-card-title { font-family: var(--serif); font-size: 1.2rem; line-height: 1.35; color: var(--white); }
 
-  /* Vimeo fallback */
   .vimeo-thumb { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; }
   .vimeo-label { font-family: var(--serif); font-size: 1.2rem; color: var(--warm-gray); text-align: center; padding: 1rem; line-height: 1.4; }
+
+  /* ─── AI SECTION CAPABILITY CARDS ─── */
+  .ai-capability-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 2.5rem;
+  }
+  .ai-cap-card {
+    padding: 2rem 2.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.3s ease;
+  }
+  .ai-cap-card:hover { background: rgba(200,255,0,0.03); }
+  .ai-cap-label {
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+  }
+  .ai-cap-title {
+    font-family: var(--serif); font-size: 1.4rem; font-weight: 400;
+    letter-spacing: -0.01em; margin-bottom: 0.75rem; color: var(--white);
+  }
+  .ai-cap-desc {
+    font-size: 0.85rem; line-height: 1.7; color: var(--warm-gray);
+  }
+  .ai-tools {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;
+  }
+  .ai-tool-tag {
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.3rem 0.7rem; border: 1px solid rgba(200,255,0,0.2);
+    border-radius: 100px; color: var(--accent-dim);
+  }
 
   /* ─── CONTACT ─── */
   .contact { background: var(--white); color: var(--black); text-align: center; padding: 8rem 3rem; }
@@ -239,10 +266,9 @@
     .category-header { flex-direction: column; gap: 0.5rem; }
     .category-desc { margin-left: 0; text-align: left; max-width: none; }
     .projects-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
-    
     .video-grid .video-card { width: calc(85% - 1rem); min-width: auto; }
     .shorts-grid .video-card { width: calc(45% - 1rem); min-width: auto; }
-    
+    .ai-capability-grid { grid-template-columns: 1fr; }
     .contact { padding: 5rem 1.5rem; }
     footer { padding: 1.5rem; }
   }
@@ -398,6 +424,55 @@
   <div class="category reveal">
     <div class="category-header">
       <span class="category-index">05</span>
+      <h3 class="category-name">AI-Augmented Production</h3>
+      <p class="category-desc">Not a replacement for craft — an extension of it. AI tools integrated into every stage of production to deliver what traditional workflows can't.</p>
+    </div>
+
+    <div class="ai-capability-grid">
+      <div class="ai-cap-card">
+        <p class="ai-cap-label">Capability 01</p>
+        <h4 class="ai-cap-title">AI-Directed B-Roll</h4>
+        <p class="ai-cap-desc">No shoot. No location scout. No stock footage compromises. Using Veo and Kling, I generate footage from precise prompts — putting exactly the right visual on screen, not the closest available option. The dermatology course below is 80% AI-generated footage, directed frame by frame.</p>
+        <div class="ai-tools">
+          <span class="ai-tool-tag">Veo</span>
+          <span class="ai-tool-tag">Kling</span>
+          <span class="ai-tool-tag">Prompt Direction</span>
+        </div>
+      </div>
+      <div class="ai-cap-card">
+        <p class="ai-cap-label">Capability 02</p>
+        <h4 class="ai-cap-title">Scalable Spokesperson</h4>
+        <p class="ai-cap-desc">Executives and founders who can't commit to a shoot schedule can still show up consistently across every market, every platform, every week. HeyGen avatar production means your face and voice — without the calendar dependency.</p>
+        <div class="ai-tools">
+          <span class="ai-tool-tag">HeyGen</span>
+          <span class="ai-tool-tag">Avatar Production</span>
+          <span class="ai-tool-tag">Multi-market Scale</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-grid">
+      <a class="video-card" data-yt-id="uGsAgs07RbU" href="https://youtu.be/uGsAgs07RbU" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/uGsAgs07RbU/maxresdefault.jpg" alt="Dermatology Course Module" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">AI B-Roll Direction · Veo &amp; Kling</p><p class="video-card-title">Dermatology Course — Module Intro</p></div>
+      </a>
+    </div>
+
+    <div class="shorts-grid" style="margin-top: 1.5rem;">
+      <a class="video-card" data-yt-id="WlB4_OJTftM" href="https://youtube.com/shorts/WlB4_OJTftM" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="AI Spokesperson Short 1" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Executive Scale</p></div>
+      </a>
+      <a class="video-card" data-yt-id="3stIKPZL_00" href="https://youtube.com/shorts/3stIKPZL_00" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/3stIKPZL_00/maxresdefault.jpg" alt="AI Spokesperson Short 2" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Brand Presence</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="category reveal">
+    <div class="category-header">
+      <span class="category-index">06</span>
       <h3 class="category-name">Social Awareness</h3>
       <p class="category-desc">Impactful multimedia projects addressing sustainability, social justice, and community initiatives.</p>
     </div>
@@ -427,7 +502,7 @@
 
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">06</span>
+      <span class="category-index">07</span>
       <h3 class="category-name">YouTube Videos</h3>
       <p class="category-desc">Long-form and educational content edited for maximum retention, creative pacing, and audience engagement.</p>
     </div>
@@ -449,7 +524,7 @@
 
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">07</span>
+      <span class="category-index">08</span>
       <h3 class="category-name">Testimonials</h3>
       <p class="category-desc">Authentic, interview-driven stories from clients and partners that build trust and communicate real value.</p>
     </div>
@@ -471,7 +546,7 @@
 
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">08</span>
+      <span class="category-index">09</span>
       <h3 class="category-name">Product Demo</h3>
       <p class="category-desc">Dynamic animations and crisp graphics combined to communicate functionality and feature value clearly.</p>
     </div>
@@ -485,7 +560,7 @@
 
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">09</span>
+      <span class="category-index">10</span>
       <h3 class="category-name">Motion Graphics</h3>
       <p class="category-desc">Bringing complex ideas to life through precision animation and engaging visual design.</p>
     </div>
@@ -503,7 +578,7 @@
 
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">10</span>
+      <span class="category-index">11</span>
       <h3 class="category-name">Podcast</h3>
       <p class="category-desc">Expert audio editing and sound design to elevate narrative impact and deepen listener immersion.</p>
     </div>
@@ -523,6 +598,7 @@
     </div>
   </div>
 
+  <!-- ─── AI AUGMENTED PRODUCTION ─── -->
 </section>
 
 <section class="contact" id="contact">
@@ -549,11 +625,9 @@
 </footer>
 
 <script>
-  // Navbar blur effect on scroll
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
   
-  // Fade up animation triggers
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
@@ -562,14 +636,12 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  // Dynamic Hover-to-Play for YouTube Iframes
   document.querySelectorAll('.video-card[data-yt-id]').forEach(card => {
     let thumb = card.querySelector('.video-thumb');
     let ytId = card.getAttribute('data-yt-id');
     let hoverTimeout;
 
     card.addEventListener('mouseenter', () => {
-       // Add a slight delay so fast scrolling doesn't trigger 100 iframes
        hoverTimeout = setTimeout(() => {
            if(!card.classList.contains('is-playing')) {
              card.classList.add('is-playing');
