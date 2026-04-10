@@ -193,22 +193,32 @@
   .vimeo-thumb { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; }
   .vimeo-label { font-family: var(--serif); font-size: 1.2rem; color: var(--warm-gray); text-align: center; padding: 1rem; line-height: 1.4; }
 
-  /* ─── AI SECTION CAPABILITY CARDS ─── */
-  .ai-capability-grid {
+  /* ─── AI SECTION CAPABILITY BLOCKS ─── */
+  .ai-blocks { display: flex; flex-direction: column; gap: 0; }
+  .ai-block {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    border-left: 1px solid rgba(255,255,255,0.08);
-    margin-bottom: 2.5rem;
-  }
-  .ai-cap-card {
-    padding: 2rem 2.2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    border-right: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom: none;
     transition: background 0.3s ease;
   }
-  .ai-cap-card:hover { background: rgba(200,255,0,0.03); }
+  .ai-block:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .ai-block:hover { background: rgba(200,255,0,0.02); }
+  .ai-block-info {
+    padding: 2.2rem 2.4rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .ai-block-video {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0,0,0,0.2);
+  }
+  .ai-block-video .video-card { flex: 1; width: auto; min-width: 0; }
+  .ai-block-video--shorts .video-card .video-thumb { aspect-ratio: 9/16; }
+  .ai-cap-card { padding: 2rem 2.2rem; }
   .ai-cap-label {
     font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--accent); margin-bottom: 0.75rem;
@@ -268,7 +278,8 @@
     .projects-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
     .video-grid .video-card { width: calc(85% - 1rem); min-width: auto; }
     .shorts-grid .video-card { width: calc(45% - 1rem); min-width: auto; }
-    .ai-capability-grid { grid-template-columns: 1fr; }
+    .ai-block { grid-template-columns: 1fr; }
+    .ai-block-info { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .contact { padding: 5rem 1.5rem; }
     footer { padding: 1.5rem; }
   }
@@ -428,45 +439,50 @@
       <p class="category-desc">Not a replacement for craft — an extension of it. AI tools integrated into every stage of production to deliver what traditional workflows can't.</p>
     </div>
 
-    <div class="ai-capability-grid">
-      <div class="ai-cap-card">
-        <p class="ai-cap-label">Capability 01</p>
-        <h4 class="ai-cap-title">AI-Directed B-Roll</h4>
-        <p class="ai-cap-desc">No shoot. No location scout. No stock footage compromises. Using Veo and Kling, I generate footage from precise prompts — putting exactly the right visual on screen, not the closest available option. The dermatology course below is 80% AI-generated footage, directed frame by frame.</p>
-        <div class="ai-tools">
-          <span class="ai-tool-tag">Veo</span>
-          <span class="ai-tool-tag">Kling</span>
-          <span class="ai-tool-tag">Prompt Direction</span>
+    <div class="ai-blocks">
+
+      <div class="ai-block">
+        <div class="ai-block-info">
+          <p class="ai-cap-label">Capability 01</p>
+          <h4 class="ai-cap-title">AI-Directed B-Roll</h4>
+          <p class="ai-cap-desc">No shoot. No location scout. No stock footage compromises. Using Veo and Kling, I generate footage from precise prompts — putting exactly the right visual on screen, not the closest available option. 80% of this module is AI-generated footage, directed frame by frame.</p>
+          <div class="ai-tools">
+            <span class="ai-tool-tag">Veo</span>
+            <span class="ai-tool-tag">Kling</span>
+            <span class="ai-tool-tag">Prompt Direction</span>
+          </div>
+        </div>
+        <div class="ai-block-video">
+          <a class="video-card" data-yt-id="uGsAgs07RbU" href="https://youtu.be/uGsAgs07RbU" target="_blank" rel="noopener">
+            <div class="video-thumb"><img src="https://img.youtube.com/vi/uGsAgs07RbU/maxresdefault.jpg" alt="Dermatology Course Module" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+            <div class="video-card-body"><p class="video-card-type">AI B-Roll Direction · Veo &amp; Kling</p><p class="video-card-title">Dermatology Course — Module Intro</p></div>
+          </a>
         </div>
       </div>
-      <div class="ai-cap-card">
-        <p class="ai-cap-label">Capability 02</p>
-        <h4 class="ai-cap-title">Scalable Spokesperson</h4>
-        <p class="ai-cap-desc">Executives and founders who can't commit to a shoot schedule can still show up consistently across every market, every platform, every week. HeyGen avatar production means your face and voice — without the calendar dependency.</p>
-        <div class="ai-tools">
-          <span class="ai-tool-tag">HeyGen</span>
-          <span class="ai-tool-tag">Avatar Production</span>
-          <span class="ai-tool-tag">Multi-market Scale</span>
+
+      <div class="ai-block">
+        <div class="ai-block-info">
+          <p class="ai-cap-label">Capability 02</p>
+          <h4 class="ai-cap-title">Scalable Spokesperson</h4>
+          <p class="ai-cap-desc">Executives and founders who can't commit to a shoot schedule can still show up consistently across every market, every platform, every week. HeyGen avatar production means your face and voice — without the calendar dependency.</p>
+          <div class="ai-tools">
+            <span class="ai-tool-tag">HeyGen</span>
+            <span class="ai-tool-tag">Avatar Production</span>
+            <span class="ai-tool-tag">Multi-market Scale</span>
+          </div>
+        </div>
+        <div class="ai-block-video ai-block-video--shorts">
+          <a class="video-card" data-yt-id="WlB4_OJTftM" href="https://youtube.com/shorts/WlB4_OJTftM" target="_blank" rel="noopener">
+            <div class="video-thumb"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="AI Spokesperson Short 1" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+            <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Executive Scale</p></div>
+          </a>
+          <a class="video-card" data-yt-id="3stIKPZL_00" href="https://youtube.com/shorts/3stIKPZL_00" target="_blank" rel="noopener">
+            <div class="video-thumb"><img src="https://img.youtube.com/vi/3stIKPZL_00/maxresdefault.jpg" alt="AI Spokesperson Short 2" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+            <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Brand Presence</p></div>
+          </a>
         </div>
       </div>
-    </div>
 
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="uGsAgs07RbU" href="https://youtu.be/uGsAgs07RbU" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/uGsAgs07RbU/maxresdefault.jpg" alt="Dermatology Course Module" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">AI B-Roll Direction · Veo &amp; Kling</p><p class="video-card-title">Dermatology Course — Module Intro</p></div>
-      </a>
-    </div>
-
-    <div class="shorts-grid" style="margin-top: 1.5rem;">
-      <a class="video-card" data-yt-id="WlB4_OJTftM" href="https://youtube.com/shorts/WlB4_OJTftM" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="AI Spokesperson Short 1" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Executive Scale</p></div>
-      </a>
-      <a class="video-card" data-yt-id="3stIKPZL_00" href="https://youtube.com/shorts/3stIKPZL_00" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/3stIKPZL_00/maxresdefault.jpg" alt="AI Spokesperson Short 2" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Scalable Spokesperson · HeyGen</p><p class="video-card-title">AI Avatar Short — Brand Presence</p></div>
-      </a>
     </div>
   </div>
 
