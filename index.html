@@ -121,24 +121,6 @@
   .ai-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
   .ai-tool-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid rgba(200,255,0,0.2); border-radius: 100px; color: var(--accent-dim); }
 
-  /* CINEMATIC FEATURE - Hue film */
-  .feature-film { margin-bottom: 5rem; }
-  .feature-card { position: relative; border-radius: 8px; overflow: hidden; background: var(--card-dark); border: 1px solid rgba(200,255,0,0.12); }
-  .feature-card-inner { display: grid; grid-template-columns: 1.4fr 1fr; min-height: 340px; }
-  .feature-thumb { position: relative; overflow: hidden; }
-  .feature-thumb img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease; }
-  .feature-card:hover .feature-thumb img { transform: scale(1.03); filter: brightness(0.5); }
-  .feature-badge { position: absolute; top: 1.5rem; left: 1.5rem; background: var(--accent); color: var(--black); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.35rem 0.9rem; border-radius: 100px; }
-  .feature-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
-  .feature-card:hover .feature-play { opacity: 1; }
-  .feature-info { padding: 2.4rem 2.8rem; display: flex; flex-direction: column; justify-content: center; }
-  .feature-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
-  .feature-title { font-family: var(--serif); font-size: 2rem; font-style: italic; line-height: 1.2; margin-bottom: 1.2rem; }
-  .feature-desc { font-size: 0.88rem; line-height: 1.75; color: var(--warm-gray); margin-bottom: 1.5rem; }
-  .feature-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-  .feature-meta-item { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
-  .feature-meta-item strong { color: rgba(255,255,255,0.6); display: block; font-size: 0.78rem; margin-bottom: 0.2rem; }
-
   /* CONTACT */
   .contact { background: var(--white); color: var(--black); text-align: center; padding: 8rem 3rem; }
   .contact .section-title { font-size: clamp(2.8rem, 5vw, 4.5rem); margin-bottom: 1rem; }
@@ -171,9 +153,6 @@
     .shorts-grid .video-card { width: calc(45% - 1rem); min-width: auto; }
     .ai-block { grid-template-columns: 1fr; }
     .ai-block-info { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .feature-card-inner { grid-template-columns: 1fr; }
-    .feature-thumb { height: 240px; }
-    .feature-info { padding: 1.8rem; }
     .stat-bar { flex-wrap: wrap; }
     .stat-item { min-width: 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .contact { padding: 5rem 1.5rem; }
@@ -264,7 +243,7 @@
 
 
 <div class="sticky-bar" id="stickyBar">
-  <div class="sticky-bar-label">Available</div>
+  <div class="sticky-bar-label">Open To</div>
   <div class="sticky-bar-name">Trung (Ethan) Truong</div>
   <a class="sticky-bar-link" href="mailto:trbatrung@gmail.com">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
@@ -276,7 +255,7 @@
   </a>
   <div class="sticky-bar-status">
     <div class="sticky-dot"></div>
-    Open to freelance
+    Select projects &amp; senior roles
   </div>
 </div>
 
@@ -291,9 +270,9 @@
 
 <section class="hero">
   <div class="hero-content">
-    <p class="hero-label">Video Producer &amp; Editor · Ho Chi Minh City</p>
-    <h1>Story first.<br><em>Always.</em></h1>
-    <p class="hero-desc">I'm Trung (Ethan) Truong - a <strong>video producer and editor</strong> with 7+ years of experience crafting stories that land. I work across brand film, documentary, short-form, and long-form content. Where it makes the work better, I bring in AI tools like Veo3, HeyGen, and ElevenLabs - without letting them replace the craft.</p>
+    <p class="hero-label">AI Production · Video Producer &amp; Editor · Ho Chi Minh City</p>
+    <h1>Two crafts.<br><em>One producer.</em></h1>
+    <p class="hero-desc">I'm Trung (Ethan) Truong. Most producers either know AI tools or know filmmaking - <strong>I do both</strong>. I run the full pipeline from script to final cut with Veo3, HeyGen, and ElevenLabs, and deliver work that looks like it cost three times as much.</p>
     <div class="hero-tags">
       <span class="hero-tag">HeyGen</span>
       <span class="hero-tag">Veo3</span>
@@ -319,8 +298,8 @@
     <div class="stat-label">Pipeline Ownership</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">Available</div>
-    <div class="stat-label">For Freelance</div>
+    <div class="stat-num">Open</div>
+    <div class="stat-label">Select Projects &amp; Roles</div>
   </div>
 </div>
 
@@ -331,7 +310,7 @@
     <div class="about-text">
       <p>I run the full AI production pipeline - from brief to final delivery. That means scripting, AI video generation with Veo3 and Kling, avatar-based spokesperson production via HeyGen, voiceover with ElevenLabs, and cinematic editing in Final Cut Pro.</p>
       <p>Most producers either know AI tools or know filmmaking. I do both. That combination lets me build content that <strong>looks like it cost three times as much</strong> to produce - and delivers faster than any traditional workflow.</p>
-      <p>Based in Ho Chi Minh City. Available for freelance projects globally.</p>
+      <p>Based in Ho Chi Minh City. Working globally on select projects and senior roles.</p>
     </div>
   </div>
   <div class="reveal">
@@ -354,12 +333,12 @@
   <div class="projects-header reveal">
     <div>
       <p class="section-number">Nº2</p>
-      <h2 class="section-title">Projects &amp; Works</h2>
+      <h2 class="section-title">Selected Work</h2>
     </div>
-    <p class="projects-count">100+ Selected Works</p>
+    <p class="projects-count">Curated from 100+ Delivered</p>
   </div>
 
-  <!-- 01 AI-AUGMENTED - LEAD WITH STRONGEST -->
+  <!-- 01 AI-AUGMENTED -->
   <div class="category reveal">
     <div class="category-header">
       <span class="category-index">01</span>
@@ -409,10 +388,29 @@
           </a>
         </div>
       </div>
+      <div class="ai-block">
+        <div class="ai-block-info">
+          <p class="ai-cap-label">Capability 03</p>
+          <h4 class="ai-cap-title">Full AI Lesson Production</h4>
+          <p class="ai-cap-desc">A complete language lesson built end to end with AI - HeyGen presenter, Veo3 b-roll, scripted and proofed so every line of grammar and punctuation holds up to teaching standards. Educational content that scales without a studio, a teacher on camera, or a reshoot when the curriculum changes.</p>
+          <div class="ai-tools">
+            <span class="ai-tool-tag">HeyGen</span>
+            <span class="ai-tool-tag">Veo3</span>
+            <span class="ai-tool-tag">Script Accuracy</span>
+            <span class="ai-tool-tag">Final Cut Pro</span>
+          </div>
+        </div>
+        <div class="ai-block-video">
+          <a class="video-card" data-yt-id="8EKCg3SiSPI" href="https://youtu.be/8EKCg3SiSPI" target="_blank" rel="noopener">
+            <div class="video-thumb"><img src="https://img.youtube.com/vi/8EKCg3SiSPI/maxresdefault.jpg" alt="AI Language Lesson" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+            <div class="video-card-body"><p class="video-card-type">Full Pipeline · HeyGen + Veo3</p><p class="video-card-title">AI Language Lesson - Proof of Concept</p><p class="video-card-note">Avatar, b-roll, and script accuracy - no studio, no on-camera teacher</p></div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 03 BRAND FILM -->
+  <!-- 02 BRAND FILM -->
   <div class="category reveal">
     <div class="category-header">
       <span class="category-index">02</span>
@@ -431,29 +429,10 @@
     </div>
   </div>
 
-  <!-- 04 PRODUCT SHOWCASES -->
+  <!-- 03 VIDEO ADS -->
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Product Showcases</h3>
-      <p class="category-desc">Sleek, high-energy edits designed to highlight product strengths and connect with target audiences.</p>
-    </div>
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="HBTfzwOwkxY" href="https://youtu.be/HBTfzwOwkxY" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/maxresdefault.jpg" alt="Powerlift Hangar Showcase" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Product Showcase</p><p class="video-card-title">Powerlift Hangar Showcase</p></div>
-      </a>
-      <a class="video-card" data-yt-id="Z5ZgsThn3nc" href="https://youtu.be/Z5ZgsThn3nc" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/Z5ZgsThn3nc/maxresdefault.jpg" alt="Hydaway Product Design" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Product Showcase</p><p class="video-card-title">Hydaway Product Design Test Results</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 05 VIDEO ADS -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
+      <span class="category-index">03</span>
       <h3 class="category-name">Video Advertisement</h3>
       <p class="category-desc">High-conversion short-form ads with clean storytelling, smooth motion, and platform-ready pacing.</p>
     </div>
@@ -462,163 +441,40 @@
         <div class="video-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/maxresdefault.jpg" alt="No More Solo" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
         <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">No More Solo</p></div>
       </a>
-      <a class="video-card" data-yt-id="iYsKXGBhExY" href="https://youtube.com/shorts/iYsKXGBhExY" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/iYsKXGBhExY/maxresdefault.jpg" alt="IG_Keychron" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">IG_Keychron</p></div>
+      <a class="video-card" data-yt-id="W3KMqXGB6Qg" href="https://youtube.com/shorts/W3KMqXGB6Qg" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/W3KMqXGB6Qg/maxresdefault.jpg" alt="SHORT KETONE" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">SHORT KETONE</p></div>
       </a>
       <a class="video-card" data-yt-id="-toxHWQCe_w" href="https://youtube.com/shorts/-toxHWQCe_w" target="_blank" rel="noopener">
         <div class="video-thumb"><img src="https://img.youtube.com/vi/-toxHWQCe_w/maxresdefault.jpg" alt="Dental Ads" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
         <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">Dental Ads</p></div>
       </a>
-      <a class="video-card" data-yt-id="W3KMqXGB6Qg" href="https://youtube.com/shorts/W3KMqXGB6Qg" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/W3KMqXGB6Qg/maxresdefault.jpg" alt="SHORT KETONE" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">SHORT KETONE</p></div>
-      </a>
-      <a class="video-card" data-yt-id="eE9IeIG6HFU" href="https://youtube.com/shorts/eE9IeIG6HFU" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/eE9IeIG6HFU/maxresdefault.jpg" alt="SIÊU ỨNG DỤNG" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Short</p><p class="video-card-title">SIÊU ỨNG DỤNG</p></div>
-      </a>
     </div>
   </div>
 
-  <!-- 06 COMPANY VALUES -->
+  <!-- 04 CLIENT & STORY WORK -->
   <div class="category reveal">
     <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Company Values</h3>
-      <p class="category-desc">Purpose-driven narratives highlighting culture, integrity, and community impact.</p>
+      <span class="category-index">04</span>
+      <h3 class="category-name">Client &amp; Story Work</h3>
+      <p class="category-desc">Product showcases, company culture, community impact, and testimonial-driven stories that build trust.</p>
     </div>
     <div class="video-grid">
-      <a class="video-card" data-yt-id="Mh5BJ9R5pFw" href="https://youtu.be/Mh5BJ9R5pFw" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/Mh5BJ9R5pFw/maxresdefault.jpg" alt="Kore Cares" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Kore Cares - Our Culture</p></div>
+      <a class="video-card" data-yt-id="HBTfzwOwkxY" href="https://youtu.be/HBTfzwOwkxY" target="_blank" rel="noopener">
+        <div class="video-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/maxresdefault.jpg" alt="Powerlift Hangar Showcase" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
+        <div class="video-card-body"><p class="video-card-type">Product Showcase</p><p class="video-card-title">Powerlift Hangar Showcase</p></div>
       </a>
       <a class="video-card" data-yt-id="oUDLKNFswlQ" href="https://youtu.be/oUDLKNFswlQ" target="_blank" rel="noopener">
         <div class="video-thumb"><img src="https://img.youtube.com/vi/oUDLKNFswlQ/maxresdefault.jpg" alt="Plexus AV" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
         <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Plexus AV</p></div>
       </a>
-      <a class="video-card" data-yt-id="E56W3HIF3ao" href="https://youtu.be/E56W3HIF3ao" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/E56W3HIF3ao/maxresdefault.jpg" alt="Sencore Brand" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Company Values</p><p class="video-card-title">Sencore Brand [2024]</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 07 SOCIAL AWARENESS -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Social Awareness</h3>
-      <p class="category-desc">Impactful multimedia projects addressing sustainability, social justice, and community initiatives.</p>
-    </div>
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="op512g61BmI" href="https://www.youtube.com/watch?v=op512g61BmI" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/op512g61BmI/maxresdefault.jpg" alt="CHAD" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">CHAD | Community Health Worker</p></div>
-      </a>
-      <a class="video-card" data-yt-id="gom6gM6hxyU" href="https://www.youtube.com/watch?v=gom6gM6hxyU" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/gom6gM6hxyU/maxresdefault.jpg" alt="South Dakota Symphony" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">South Dakota Symphony Orchestra | Gala 2024</p></div>
-      </a>
-      <a class="video-card" data-yt-id="WlpPZHtb2jc" href="https://youtu.be/WlpPZHtb2jc" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/WlpPZHtb2jc/maxresdefault.jpg" alt="Camp POSTCARD" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Camp POSTCARD - Rise and Shine [2024]</p></div>
-      </a>
       <a class="video-card" href="https://vimeo.com/1078713150/aeb895970a" target="_blank" rel="noopener">
         <div class="video-thumb vimeo-thumb"><div class="vimeo-label">Veterans Services<br>Volunteers of America<br>Dakotas</div><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
         <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Veterans Services</p></div>
       </a>
-      <a class="video-card" data-yt-id="RonJvUgm8JQ" href="https://youtu.be/RonJvUgm8JQ" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/RonJvUgm8JQ/maxresdefault.jpg" alt="Cats TNR" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Social Awareness</p><p class="video-card-title">Cats TNR - Sioux Empire TNR Coalition</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 08 TESTIMONIALS -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Testimonials</h3>
-      <p class="category-desc">Authentic, interview-driven stories that build trust and communicate real value.</p>
-    </div>
-    <div class="video-grid">
       <a class="video-card" data-yt-id="pNw0LhYSSv4" href="https://youtu.be/pNw0LhYSSv4" target="_blank" rel="noopener">
         <div class="video-thumb"><img src="https://img.youtube.com/vi/pNw0LhYSSv4/maxresdefault.jpg" alt="Love Hay" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">Love Hay - Operation of The Year</p></div>
-      </a>
-      <a class="video-card" data-yt-id="7Ky4nM_jru4" href="https://youtu.be/7Ky4nM_jru4" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/7Ky4nM_jru4/maxresdefault.jpg" alt="DRA Testimonial" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">DRA Testimonial - Charlie</p></div>
-      </a>
-      <a class="video-card" data-yt-id="MTw-beRT1Ro" href="https://youtu.be/MTw-beRT1Ro" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/MTw-beRT1Ro/maxresdefault.jpg" alt="Easy Automation" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Testimonials</p><p class="video-card-title">Easy Automation Inc. - Simplot Grower</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 09 YOUTUBE -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">YouTube / Long-form</h3>
-      <p class="category-desc">Long-form and educational content edited for maximum retention, creative pacing, and audience engagement.</p>
-    </div>
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="a3mAARp5T98" href="https://youtu.be/a3mAARp5T98" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/a3mAARp5T98/maxresdefault.jpg" alt="Managing Employees" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">Managing Employees Doesn't Have to Suck</p></div>
-      </a>
-      <a class="video-card" data-yt-id="C0NH1Izy5zM" href="https://youtu.be/C0NH1Izy5zM" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/C0NH1Izy5zM/maxresdefault.jpg" alt="Speed Learning" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">How to Absorb Everything You Read</p></div>
-      </a>
-      <a class="video-card" data-yt-id="bsSM3c1vdOY" href="https://www.youtube.com/watch?v=bsSM3c1vdOY" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/bsSM3c1vdOY/maxresdefault.jpg" alt="Content Creator" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">YouTube</p><p class="video-card-title">Become a Full Time Content Creator</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 10 MOTION GRAPHICS -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Motion Graphics</h3>
-      <p class="category-desc">Bringing complex ideas to life through precision animation and engaging visual design.</p>
-    </div>
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="DV1G6hvNptI" href="https://www.youtube.com/watch?v=DV1G6hvNptI" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/DV1G6hvNptI/maxresdefault.jpg" alt="WHAT IS AN NFT?" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Motion Graphics</p><p class="video-card-title">WHAT IS AN NFT?</p></div>
-      </a>
-      <a class="video-card" data-yt-id="57Wtwlewnac" href="https://www.youtube.com/watch?v=57Wtwlewnac" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/57Wtwlewnac/maxresdefault.jpg" alt="WHAT IS WEB 3.0?" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Motion Graphics</p><p class="video-card-title">WHAT IS WEB 3.0?</p></div>
-      </a>
-    </div>
-  </div>
-
-  <!-- 11 PODCAST -->
-  <div class="category reveal">
-    <div class="category-header">
-      <span class="category-index">02</span>
-      <h3 class="category-name">Podcast</h3>
-      <p class="category-desc">Expert audio editing and sound design to elevate narrative impact and deepen listener immersion.</p>
-    </div>
-    <div class="video-grid">
-      <a class="video-card" data-yt-id="ORcY-A6fwG8" href="https://www.youtube.com/watch?v=ORcY-A6fwG8" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/ORcY-A6fwG8/maxresdefault.jpg" alt="HOW TO BEAT MIKE TYSON" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">HOW TO BEAT MIKE TYSON (S1E4)</p></div>
-      </a>
-      <a class="video-card" data-yt-id="-MI2w6o8Tes" href="https://www.youtube.com/watch?v=-MI2w6o8Tes" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/-MI2w6o8Tes/maxresdefault.jpg" alt="ROBOTS MILKING COWS?!" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">ROBOTS MILKING COWS?! (S2E32)</p></div>
-      </a>
-      <a class="video-card" data-yt-id="Lgr4LS4ULw4" href="https://www.youtube.com/watch?v=Lgr4LS4ULw4" target="_blank" rel="noopener">
-        <div class="video-thumb"><img src="https://img.youtube.com/vi/Lgr4LS4ULw4/maxresdefault.jpg" alt="TALES FROM A REAL COWGIRL" loading="lazy"><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#c8ff00" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#c8ff00"/></svg></div></div>
-        <div class="video-card-body"><p class="video-card-type">Podcast</p><p class="video-card-title">TALES FROM A REAL COWGIRL (S1E24)</p></div>
+        <div class="video-card-body"><p class="video-card-type">Testimonial</p><p class="video-card-title">Love Hay - Operation of The Year</p></div>
       </a>
     </div>
   </div>
@@ -629,7 +485,7 @@
   <div class="reveal">
     <p class="section-number">Nº3</p>
     <h2 class="section-title">Let's Build Something.</h2>
-    <p class="contact-subtitle">Available for AI production projects, brand films, and content strategy. Based in Ho Chi Minh City - working globally.</p>
+    <p class="contact-subtitle">Open to senior roles and select freelance projects - AI production, brand films, and content strategy. Based in Ho Chi Minh City, working globally.</p>
     <div class="contact-links">
       <a class="contact-link" href="mailto:trbatrung@gmail.com">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
