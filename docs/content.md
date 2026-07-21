@@ -28,12 +28,13 @@ Logo "Ethan." · links: Work · Tools · Approach · Services · Contact · live
 7+ Years in production · 100+ Projects delivered · Full pipeline ownership · Both (AI & real production)
 
 ## 01 — Selected Work `#work` (PROOF, first)
-Header: "The work speaks first." Categories:
-1. **AI-Augmented Production** — 3 feature blocks (B-roll, Spokesperson, Full pipeline), each with a
-   decision→outcome line in amber (e.g. "Replaced a 2-day location shoot").
-2. **Brand Film** — Joe Schaeffer; Feedflo.
+Header: "The work speaks first." Categories — **real production leads, AI last** (so the first
+impression is a legit filmmaker/editor, not "AI work"):
+1. **Brand Film** — Joe Schaeffer; Feedflo.
+2. **Client & Story Work** — Powerlift Hangar; Plexus AV; Veterans Services (Vimeo); Love Hay.
 3. **Video Advertisement** — No More Solo; Short Ketone; Dental Ads.
-4. **Client & Story Work** — Powerlift Hangar; Plexus AV; Veterans Services (Vimeo); Love Hay.
+4. **AI-Augmented Production** — 3 feature blocks (B-roll, Spokesperson, Full pipeline), each with a
+   decision→outcome line in amber (e.g. "Replaced a 2-day location shoot").
 Cards: hover-to-play YouTube preview, teal meta tag, serif title. (Video IDs in `projects.md`.)
 
 ## Breakaway band (editing CTA) — between Work and Tools
