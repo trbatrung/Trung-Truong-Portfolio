@@ -32,7 +32,7 @@
 
 ## Contact
 - **Email (canonical):** trbatrung@gmail.com ✅ confirmed 2026-07-21
-- **LinkedIn:** https://www.linkedin.com/in/trung-ethan-truong
+- **LinkedIn:** https://www.linkedin.com/in/trungtrr1379/
 - No GitHub or phone listed on the site.
 
 ## Core tools
