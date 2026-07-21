@@ -29,7 +29,8 @@ Capability blocks demonstrating the full AI pipeline.
 ## Nº04 — Client & Story Work
 - **Powerlift Hangar Showcase** — Product Showcase — YouTube `HBTfzwOwkxY`
 - **Plexus AV** — Company Values — YouTube `oUDLKNFswlQ`
-- **Veterans Services** — Social Awareness, Volunteers of America Dakotas — Vimeo `vimeo.com/1078713150/aeb895970a`
+- **Veterans Services** — Social Awareness, VOA Dakotas ("Rise & Shine 2025") — YouTube `ieu7p3qum_s`
+  (uses a title-card face until YouTube generates a usable auto-thumbnail; swap to real image once available)
 - **Love Hay - Operation of The Year** — Testimonial — YouTube `pNw0LhYSSv4`
 
 ## Skills grid (About section)

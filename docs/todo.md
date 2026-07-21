@@ -33,7 +33,9 @@ broken markup — these are content/polish items.
 - [ ] Fold in findings from future test batches (no public round/count badge — keep it as use-case findings).
 - [ ] Decision→outcome lines for the non-AI work cards (Brand Film / Ads / Client) — currently
       just meta tags; add a short result line where one exists.
-- [ ] Vimeo "Veterans Services" card still uses a styled placeholder (no real thumbnail/hover).
+- [x] ~~Vimeo "Veterans Services" card~~ ✅ replaced with YouTube (`ieu7p3qum_s`), now has hover-play + click.
+- [ ] Swap Veterans card's title-card face for the real YouTube thumbnail once YouTube finishes
+      processing it (currently only serves the 120×90 generic placeholder).
 - [ ] Consider adding a GitHub link (still none on the site).
 - [ ] Phase 2 (later): case-study sub-pages for 2–3 flagship projects.
 
