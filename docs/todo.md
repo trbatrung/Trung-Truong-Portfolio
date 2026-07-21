@@ -24,9 +24,11 @@ broken markup — these are content/polish items.
 - [x] Fix nav logo + "Back to top" anchors (now → `#top`). ✅
 
 ### Still open after revamp
-- [ ] **Refine "Tools I've vetted" with real specifics** — the current per-use-case notes are
-      grounded in your stated views but generic. Add named tools you tested and the actual caveats
-      you found, so it reads as first-hand, not framework.
+- [x] **Ground "Tools I've vetted" in real testing.** ✅ 2026-07-21 — rewritten from the Round 1
+      testing brief (5 platforms). Findings are first-hand but **tool names intentionally withheld**
+      (client-sensitive; the named breakdown is the paid deliverable). Source PDF lives in the repo
+      folder but is `.gitignore`d so it never publishes.
+- [ ] Add future test rounds as they happen (bump "Round 1 · July 2026 · 5 platforms" badge).
 - [ ] Decision→outcome lines for the non-AI work cards (Brand Film / Ads / Client) — currently
       just meta tags; add a short result line where one exists.
 - [ ] Vimeo "Veterans Services" card still uses a styled placeholder (no real thumbnail/hover).

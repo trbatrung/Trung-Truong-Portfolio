@@ -1,0 +1,6 @@
+# Client-sensitive / private source material — never publish
+*.pdf
+TESTS AI - Brief.pdf
+
+# OS cruft
+.DS_Store

@@ -184,8 +184,11 @@
 
   /* ---------- VETTING (spec sheet) ---------- */
   .vetting { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-  .vet-intro { font-size: clamp(1.05rem, 1.7vw, 1.3rem); color: var(--ink-dim); max-width: 60ch; margin-bottom: 3rem; line-height: 1.7; }
+  .vet-intro { font-size: clamp(1.05rem, 1.7vw, 1.3rem); color: var(--ink-dim); max-width: 62ch; margin-bottom: 1.6rem; line-height: 1.7; }
   .vet-intro b { color: var(--ink); font-weight: 500; }
+  .vet-round { font-family: var(--mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); margin-bottom: 2.6rem; display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
+  .vet-round .sep { color: var(--muted); }
+  .vet-round .q { color: var(--muted); text-transform: none; letter-spacing: .04em; }
   .vet-table { border-top: 1px solid var(--line); }
   .vet-row { display: grid; grid-template-columns: 1.1fr 1.6fr; gap: 2rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); align-items: start; transition: background .25s; }
   .vet-row:hover { background: rgba(255,255,255,.015); }
@@ -488,30 +491,35 @@
       </div>
       <div class="aside">Judgment,<br>not button-pushing</div>
     </div>
-    <p class="vet-intro reveal">There are thousands of AI video tools, all charging premium fees, each marketed like a specialist. Strip the wrapper and <b>most are the same engine in different packaging.</b> I test them by use case and tell you where each one falls apart, so you don't burn a month and a budget finding out.</p>
+    <p class="vet-intro reveal">There are thousands of AI video tools, all charging premium fees, each marketed like a specialist. Strip the wrapper and <b>most are the same engine in different packaging.</b> So I run structured test rounds: same product, same brief, head to head, and log exactly where each one breaks. The findings by use case are below. The tool-by-tool breakdown is what you get when we work together.</p>
+    <div class="vet-round reveal"><span>Round 1 · July 2026</span><span class="sep">/</span><span>5 platforms tested</span><span class="sep">/</span><span class="q">ad generation · UGC · repurposing · relighting</span></div>
     <div class="vet-table reveal">
       <div class="vet-row">
-        <div class="vet-use"><span class="rn">01</span><span class="ut">Push a product with UGC</span></div>
-        <p class="vet-call">I've run the popular UGC generators head to head. They're mostly one engine in different wrappers. I match the right one to your product, audience, and budget instead of paying premium for a logo.</p>
+        <div class="vet-use"><span class="rn">01</span><span class="ut">Product → ad creatives</span></div>
+        <p class="vet-call">Fed one product through the "one prompt, 12 concepts" generators. Fully-automated mode is hit or miss: a few concepts land, most come out formulaic. The reliable path is the mode that pulls real product data and still lets you steer, which is where shippable A/B variants actually come from.</p>
       </div>
       <div class="vet-row">
-        <div class="vet-use"><span class="rn">02</span><span class="ut">Short-form at volume</span></div>
-        <p class="vet-call">The field is thousands deep and quality collapses fast at scale. I know the few that actually hold up, and how to keep a batch consistent instead of uncanny.</p>
+        <div class="vet-use"><span class="rn">02</span><span class="ut">UGC actor / spokesperson ads</span></div>
+        <p class="vet-call">Built product-in-hand actor ads end to end: generate the actor, composite the real product, animate, lip-sync. The best tools even infer their own context b-roll. Two catches worth knowing: branding garbles in motion on the cheap engine tiers, and "swap the actor in an existing clip" is still unreliable, cheaper to regenerate per actor.</p>
       </div>
       <div class="vet-row">
-        <div class="vet-use"><span class="rn">03</span><span class="ut">AI spokesperson / avatar</span></div>
-        <p class="vet-call">HeyGen for avatar realism and multi-market scale, with a clear read on where synthetic delivery still shows and how to hide it.</p>
+        <div class="vet-use"><span class="rn">03</span><span class="ut">A/B testing &amp; localization at scale</span></div>
+        <p class="vet-call">Ran one script against several actors in parallel to find the winner before spending on a full run, then spun up multilingual versions fast and cheap. That combo is where AI genuinely wins on volume.</p>
       </div>
       <div class="vet-row">
-        <div class="vet-use"><span class="rn">04</span><span class="ut">AI b-roll &amp; footage</span></div>
-        <p class="vet-call">Veo3 and Kling, directed by prompt. Excellent for scale and coverage. I'll also tell you the shots they can't do yet, before they're on your storyboard.</p>
+        <div class="vet-use"><span class="rn">04</span><span class="ut">Long-form → short-form repurposing</span></div>
+        <p class="vet-call">Dropped a 16-minute talking head into a node canvas: it pulled clean, self-contained clips without cutting mid-sentence and synced pop-up graphics to the speaker's gestures. This class is a repurposing accelerator for hours of existing footage, not an ad-from-nothing generator.</p>
       </div>
       <div class="vet-row">
-        <div class="vet-use"><span class="rn">05</span><span class="ut">Voiceover</span></div>
-        <p class="vet-call">ElevenLabs, with the honest caveats on where synthetic VO reads flat, and when a real voice is worth the money.</p>
+        <div class="vet-use"><span class="rn">05</span><span class="ut">Relighting &amp; look-dev on real footage</span></div>
+        <p class="vet-call">Tested relighting and compositing on real clips: dropping a subject into a new environment, rebuilding flat 8-bit into true HDR, lighting a flat clip as a rough 3D object. Great for whole-scene mood and fast product lighting on solid packaging. It breaks on glass, liquid, fine hair, and fast camera moves, and the reference image drives the look far more than the prompt.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">06</span><span class="ut">Trusting the "agent" builders</span></div>
+        <p class="vet-call">The conversational builders quietly pick the lazy default, an aspect ratio, an engine, and won't flag it. Ask the good ones to explain a choice and they genuinely reconsider; the best lays out a full spec and cost table before spending a credit. Either way, the output is only as good as the brief.</p>
       </div>
       <div class="vet-row no-ai">
-        <div class="vet-use"><span class="rn">06</span><span class="ut">When NOT to use AI</span></div>
+        <div class="vet-use"><span class="rn">07</span><span class="ut">When NOT to use AI</span></div>
         <p class="vet-call">The one hero film that has to be perfect. AI video is built for scale, not for that. It's still limited, and I'll tell you plainly when it's the wrong call.</p>
       </div>
     </div>
