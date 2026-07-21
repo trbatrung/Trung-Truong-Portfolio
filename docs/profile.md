@@ -31,10 +31,7 @@
 - **Open** — Select Projects & Roles
 
 ## Contact
-- **Email (current on site):** trbatrung@gmail.com
-- **⚠️ Email to confirm:** session context shows `ethan.truong@edge8.ai`. Both recorded; the
-  gmail is what's live on the site. Confirm which is canonical before changing the site. See
-  [`todo.md`](todo.md).
+- **Email (canonical):** trbatrung@gmail.com ✅ confirmed 2026-07-21
 - **LinkedIn:** https://www.linkedin.com/in/trung-ethan-truong
 - No GitHub or phone listed on the site.
 

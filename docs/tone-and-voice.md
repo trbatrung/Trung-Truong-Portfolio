@@ -31,3 +31,19 @@ traditional workflow. Every piece of copy should ladder back to this.
 - "looks like it cost three times as much"
 - "No shoot. No location scout. No stock footage compromises."
 - "Not a replacement for craft - an extension of it."
+- "Slop or salvation. Both are wrong."
+- "I don't start with a tool. I start with a question: what is this video actually for?"
+- "AI gets you to 80% fast. Knowing that 80% is the finish line is the difference between shipping and spinning."
+- "Most producers see the picture through one lens. I see both."
+
+## Guardrails (from the 2026-07-21 positioning work — read with `positioning.md`)
+- **Show, don't tell.** Demonstrate judgment; never announce the title "consultant/strategist."
+  Let the reader conclude it.
+- **No claim without proof on the same screen.** Never state a level of value the page can't
+  immediately back up.
+- **No buzzwords in the skim layer.** Hero and top-of-page stay plain and concrete — a real
+  editor/producer, easy to hire. Big-picture framing lives lower, after the work.
+- **Plain over grand.** Trung's real voice is blunt, specific, practical. Specificity (named tools,
+  concrete outcomes, the "80%" rule) is the antidote to sounding like "big words."
+- **Editing is the front door, consulting is the ceiling.** Never phrase things so an editing
+  client feels the site is too fancy/expensive for their job.
