@@ -36,6 +36,12 @@ Header: "The work speaks first." Categories:
 4. **Client & Story Work** — Powerlift Hangar; Plexus AV; Veterans Services (Vimeo); Love Hay.
 Cards: hover-to-play YouTube preview, teal meta tag, serif title. (Video IDs in `projects.md`.)
 
+## Breakaway band (editing CTA) — between Work and Tools
+Full-width amber-tinted band, placed right after the work grid so it catches editing-first clients
+before the AI-heavy sections (reinforces "editing is the front-door hire"). Eyebrow "Straight-up
+editing, too" · headline "Want your video to look like *that*?" · line reassuring plain editing
+(brand films, ads, social cuts, long-form, full post) · CTA "Let's talk about your edit" → `#contact`.
+
 ## 02 — Tools I've Vetted `#vetting` (consulting proof)
 Header: "I've already broken it, so you don't have to." Intro on the wrapper-tool market (ends on
 "the tool-by-tool breakdown is what you get when we work together"), then a spec-sheet of 7 use-case
