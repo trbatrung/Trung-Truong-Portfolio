@@ -24,11 +24,13 @@ broken markup — these are content/polish items.
 - [x] Fix nav logo + "Back to top" anchors (now → `#top`). ✅
 
 ### Still open after revamp
-- [x] **Ground "Tools I've vetted" in real testing.** ✅ 2026-07-21 — rewritten from the Round 1
+- [x] **Ground "Tools I've vetted" in real testing.** ✅ 2026-07-21 — rewritten from Trung's
       testing brief (5 platforms). Findings are first-hand but **tool names intentionally withheld**
       (client-sensitive; the named breakdown is the paid deliverable). Source PDF lives in the repo
       folder but is `.gitignore`d so it never publishes.
-- [ ] Add future test rounds as they happen (bump "Round 1 · July 2026 · 5 platforms" badge).
+      Note: the "Round / N platforms tested" badge was intentionally NOT put on the site — the
+      testing log is Trung's private source of truth, not a public claim.
+- [ ] Fold in findings from future test batches (no public round/count badge — keep it as use-case findings).
 - [ ] Decision→outcome lines for the non-AI work cards (Brand Film / Ads / Client) — currently
       just meta tags; add a short result line where one exists.
 - [ ] Vimeo "Veterans Services" card still uses a styled placeholder (no real thumbnail/hover).

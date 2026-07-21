@@ -37,8 +37,11 @@ Header: "The work speaks first." Categories:
 Cards: hover-to-play YouTube preview, teal meta tag, serif title. (Video IDs in `projects.md`.)
 
 ## 02 — Tools I've Vetted `#vetting` (consulting proof)
-Header: "I've already broken it, so you don't have to." Intro on the wrapper-tool market, then a
-spec-sheet of 6 use cases (UGC, short-form, avatar, b-roll, VO, and **when NOT to use AI** in amber).
+Header: "I've already broken it, so you don't have to." Intro on the wrapper-tool market (ends on
+"the tool-by-tool breakdown is what you get when we work together"), then a spec-sheet of 7 use-case
+findings grounded in real testing but **anonymized** (no tool names): product→ad creatives, UGC
+actor ads, A/B + localization at scale, long-form→short-form repurposing, relighting & look-dev,
+trusting the "agent" builders, and **when NOT to use AI** (amber). No public round/count badge.
 
 ## 03 — How I Think `#approach` (POV, after proof)
 The locked POV copy — "Slop or salvation. Both are wrong." Amber pull-quote on the 80% rule.
