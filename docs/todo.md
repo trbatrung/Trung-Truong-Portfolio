@@ -14,13 +14,23 @@ broken markup — these are content/polish items.
 - [ ] **No repo README** at the project root, and **no GitHub link** on the site.
 
 ## Revamp backlog (see positioning.md for the full blueprint)
-- [ ] Rebuild `index.html` around proof-before-philosophy structure.
-- [ ] Rewrite hero plain (no "consultant" claim); drop lime accent + template signatures.
-- [ ] Reframe every work card by decision → outcome, not by software.
-- [ ] Add "Tools I've vetted" / AI R&D section (promote the product-testing projects).
-- [ ] Add "What I do" engagement ladder (strategy → production → editing).
-- [ ] Place locked POV copy LOW on the page (after the work).
-- [ ] Choose final design language (Cinema/Editorial leaning) + non-lime palette.
+- [x] Rebuild `index.html` around proof-before-philosophy structure. ✅ 2026-07-21
+- [x] Rewrite hero plain (no "consultant" claim); drop lime accent + template signatures. ✅
+- [x] Reframe work by decision → outcome (AI blocks have outcome lines). ✅
+- [x] Add "Tools I've vetted" / AI R&D section. ✅
+- [x] Add "What I do" engagement ladder (strategy → production → editing). ✅
+- [x] Place locked POV copy LOW on the page (after the work). ✅
+- [x] Choose final design language (tech × film, amber + teal) + drop lime. ✅
+- [x] Fix nav logo + "Back to top" anchors (now → `#top`). ✅
+
+### Still open after revamp
+- [ ] **Refine "Tools I've vetted" with real specifics** — the current per-use-case notes are
+      grounded in your stated views but generic. Add named tools you tested and the actual caveats
+      you found, so it reads as first-hand, not framework.
+- [ ] Decision→outcome lines for the non-AI work cards (Brand Film / Ads / Client) — currently
+      just meta tags; add a short result line where one exists.
+- [ ] Vimeo "Veterans Services" card still uses a styled placeholder (no real thumbnail/hover).
+- [ ] Consider adding a GitHub link (still none on the site).
 - [ ] Phase 2 (later): case-study sub-pages for 2–3 flagship projects.
 
 ## Watch-outs
