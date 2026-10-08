@@ -40,16 +40,39 @@ A fixed 1440x900 desktop screen (390x950 on phones), scaled to fit. See `positio
 8+ Years in production · 10+ Team built & directed · Full Pipeline ownership · Both AI & real
 production
 
-## 01 — Systems `#systems` · Status: step 3 (failure lines pending)
-"Systems I built, and what I changed when they broke." Aside: "Every video lives on the desktop
-above". Three columns, each: cap, title, one line, one result, tool tags, watch chips.
+## 01 — Systems `#systems` · Status: draft, needs sign-off
+Label "01 — Systems · Directed end to end". H2: "Three systems, and the problem each one solves."
+(Replaces the first-person "Systems I built, and what I changed when they broke.") Aside: "Every
+video lives on the desktop above". Each column: cap, title, one line, one result, a "What changed"
+line, tool tags, watch chips. The "What changed" lines come from the verified facts only.
 1. Code-based animation pipeline: "Motion written as code, finished in Final Cut Pro. For UI
-   walkthroughs, data viz and brand motion." Result: "QC inline at every stage, no review team
-   needed." ("Rebuilt around reusable components" was cut: not in the verified facts.)
+   walkthroughs, data viz and brand motion." Result: "Motion delivered solo, from brief to final
+   master." What changed: "Without a proper brief, AI first passes land far from final. Jobs now
+   start from a structured context package, so the first pass lands close."
 2. Avatar video at volume: "One approved face and voice, consistent across markets, with no
-   weekly shoot." Result: "One founder, every market, without a shoot schedule."
-3. End-to-end AI lesson: "A full language lesson with an AI presenter and AI b-roll, every line
-   proofed for teaching accuracy." Result: "A full lesson, no studio, no on-camera teacher."
+   weekly shoot." Result: "One founder, every market, without a shoot schedule." What changed:
+   "At volume, AI artifacts slip through. QC now runs inline at every stage, with no separate
+   review team."
+3. End-to-end AI lesson: "A full language lesson built with an AI presenter and AI b-roll."
+   Result: "A full lesson, no studio, no on-camera teacher." What changed: "A wrong line in a
+   lesson teaches the wrong thing. Every line is now proofed against a teaching-accuracy bar
+   before it ships."
+
+## Desktop folders (Finder) · Status: draft, needs sign-off
+Each folder shows its role, then one line. Every project window has a Role row.
+- Brand Film · Edit & planning: "The calls here are structure and pace: which story the footage
+  holds, and what gets cut to tell it." (Replaces "The story is a decision... I make that call
+  first", which claimed more than an edit.)
+- Client & Story Work · Edit & planning: "Product, culture, community, testimonial. Every cut
+  answers one question: what does this audience need to believe?"
+- Video Advertisement · Edit & planning: "Conversion sets the standard here, not taste.
+  Platform-native, and the first two seconds carry the whole thing."
+- Long-form & Podcast · Edit & planning: "YouTube episodes and podcasts. At this length, pacing is
+  the call that keeps the audience."
+- Motion & Explainers · Edit & planning: "Explainers and product demos built in motion. The
+  animation has to carry the argument, not decorate it."
+- AI Systems · Director, end to end: "Each system was designed, directed and delivered end to
+  end, and each one solves a specific production problem."
 
 ## 02 — How I Choose Tools `#approach` · Status: draft, needs sign-off
 Merges the old Tools I've Vetted and How I Think sections. "Slop or salvation. Both are wrong."

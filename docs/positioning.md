@@ -30,6 +30,9 @@ and has the systems to show for it.
    earned with decisions next to evidence, not with titles.
 
 ## Credit rules (never inflate)
+- **Confirmed roles (2026-10-08):** all pre-AI work (brand film, client, ads, long-form, motion) was
+  edit and planning. The AI systems were full direction, end to end. The site labels every video
+  with its role.
 - An editing engagement is described by the creative decisions inside the edit. It is never called
   a directed piece.
 - Team leadership is past tense (Arrowhead, Mike Dee). Today Ethan is a solo operator at Edge8.

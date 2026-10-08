@@ -4,31 +4,32 @@ Every video on the site. Since the October revamp they live in the desktop hero'
 Finder window (the `WORK` list in `../index.html`), not in a grid on the page. Video IDs are
 YouTube unless noted. Rows marked **deck** were pulled from Ethan's Pitch deck
 (pitch.com/v/editor-portfolio---trung-ethan-truong-m6k6nd) on 2026-10-08. Titles come from YouTube.
-**Role** and **For** are blank until Ethan confirms them (step 2 of `revamp-plan.md`). Copy for a
-project can't go above its confirmed role (see the credit rules in `positioning.md`).
+**Role** confirmed by Ethan on 2026-10-08: everything outside AI Systems was edit and planning;
+the AI systems were full direction. **For** (which company) is still blank. Copy for a project
+can't go above its role (see the credit rules in `positioning.md`).
 
 ## 01 · Brand Film
 | Project | Type | Video | Role | For |
 |---|---|---|---|---|
-| Joe Schaeffer | Artist Film | `jH6LaZDXNMs` | ? | ? |
-| Feedflo | Impact Film · Mogler Farms | `J0j3ZWbqS5s` | ? | ? |
+| Joe Schaeffer | Artist Film | `jH6LaZDXNMs` | Edit & planning | ? |
+| Feedflo | Impact Film · Mogler Farms | `J0j3ZWbqS5s` | Edit & planning | ? |
 
 ## 02 · Client & Story Work
 | Project | Type | Video | Role | For |
 |---|---|---|---|---|
-| Powerlift Hangar | Product Showcase | `HBTfzwOwkxY` | ? | ? |
-| Plexus AV | Company Values | `oUDLKNFswlQ` | ? | ? |
-| Veterans Services | Social Awareness · VOA Dakotas ("Rise & Shine 2025") | `ieu7p3qum_s` | ? | ? |
-| Love Hay | Testimonial · Operation of the Year | `pNw0LhYSSv4` | ? | ? |
-| Hydaway Design Test (deck) | Product Showcase | `Z5ZgsThn3nc` | ? | ? |
-| Sencore Brand (deck) | Company Values | `E56W3HIF3ao` | ? | ? |
-| Kore Cares (deck) | Company Culture | `Mh5BJ9R5pFw` | ? | ? |
-| DRA Testimonial (deck) | Testimonial | `7Ky4nM_jru4` | ? | ? |
-| Easy Automation (deck) | Testimonial · Simplot Grower Solutions | `MTw-beRT1Ro` | ? | ? |
-| CHAD Health Workers (deck) | Social Awareness · Testimonial | `op512g61BmI` | ? | ? |
-| SD Symphony Orchestra (deck) | Social Awareness · Gala 2024 | `gom6gM6hxyU` | ? | ? |
-| Camp POSTCARD (deck) | Social Awareness · Rise and Shine 2024 | `WlpPZHtb2jc` | ? | ? |
-| Cats TNR (deck) | Social Awareness · Sioux Empire TNR Coalition | `RonJvUgm8JQ` (no maxres thumbnail, uses hq) | ? | ? |
+| Powerlift Hangar | Product Showcase | `HBTfzwOwkxY` | Edit & planning | ? |
+| Plexus AV | Company Values | `oUDLKNFswlQ` | Edit & planning | ? |
+| Veterans Services | Social Awareness · VOA Dakotas ("Rise & Shine 2025") | `ieu7p3qum_s` | Edit & planning | ? |
+| Love Hay | Testimonial · Operation of the Year | `pNw0LhYSSv4` | Edit & planning | ? |
+| Hydaway Design Test (deck) | Product Showcase | `Z5ZgsThn3nc` | Edit & planning | ? |
+| Sencore Brand (deck) | Company Values | `E56W3HIF3ao` | Edit & planning | ? |
+| Kore Cares (deck) | Company Culture | `Mh5BJ9R5pFw` | Edit & planning | ? |
+| DRA Testimonial (deck) | Testimonial | `7Ky4nM_jru4` | Edit & planning | ? |
+| Easy Automation (deck) | Testimonial · Simplot Grower Solutions | `MTw-beRT1Ro` | Edit & planning | ? |
+| CHAD Health Workers (deck) | Social Awareness · Testimonial | `op512g61BmI` | Edit & planning | ? |
+| SD Symphony Orchestra (deck) | Social Awareness · Gala 2024 | `gom6gM6hxyU` | Edit & planning | ? |
+| Camp POSTCARD (deck) | Social Awareness · Rise and Shine 2024 | `WlpPZHtb2jc` | Edit & planning | ? |
+| Cats TNR (deck) | Social Awareness · Sioux Empire TNR Coalition | `RonJvUgm8JQ` (no maxres thumbnail, uses hq) | Edit & planning | ? |
 
 The deck also links a Vimeo cut of Veterans Services (`vimeo.com/1078713150`). Same film as the
 YouTube `ieu7p3qum_s` above, so it isn't listed twice.
@@ -36,33 +37,34 @@ YouTube `ieu7p3qum_s` above, so it isn't listed twice.
 ## 03 · Video Advertisement (Shorts)
 | Project | Video | Role | For |
 |---|---|---|---|
-| No More Solo | `vwf4U1WzQ0s` | ? | ? |
-| Short Ketone | `W3KMqXGB6Qg` | ? | ? |
-| Dental Ads | `-toxHWQCe_w` | ? | ? |
-| Nailzy (deck) | `eE9IeIG6HFU` | ? | ? |
-| Keychron (deck) | `iYsKXGBhExY` | ? | ? |
+| No More Solo | `vwf4U1WzQ0s` | Edit & planning | ? |
+| Short Ketone | `W3KMqXGB6Qg` | Edit & planning | ? |
+| Dental Ads | `-toxHWQCe_w` | Edit & planning | ? |
+| Nailzy (deck) | `eE9IeIG6HFU` | Edit & planning | ? |
+| Keychron (deck) | `iYsKXGBhExY` | Edit & planning | ? |
 
 ## 04 · Long-form & Podcast (new folder, from the deck)
 | Project | Type | Video | Role | For |
 |---|---|---|---|---|
-| How to Absorb Everything You Read | YouTube · Mike Dee | `C0NH1Izy5zM` | ? | Mike Dee? |
-| Become a Full-Time Content Creator | YouTube · Rish from Mapplinks | `bsSM3c1vdOY` | ? | ? |
-| Managing Employees Doesn't Have to Suck | YouTube · John T. Meyer | `a3mAARp5T98` | ? | ? |
-| Nostalgia Street, Ep. 4 | Podcast · 4Front Studios | `ORcY-A6fwG8` | ? | 4Front? |
-| Tales From a Real Cowgirl | Podcast · 4Front Studios | `Lgr4LS4ULw4` | ? | 4Front? |
-| Robots Milking Cows?! | Podcast · 4Front Studios | `-MI2w6o8Tes` | ? | 4Front? |
+| How to Absorb Everything You Read | YouTube · Mike Dee | `C0NH1Izy5zM` | Edit & planning | Mike Dee? |
+| Become a Full-Time Content Creator | YouTube · Rish from Mapplinks | `bsSM3c1vdOY` | Edit & planning | ? |
+| Managing Employees Doesn't Have to Suck | YouTube · John T. Meyer | `a3mAARp5T98` | Edit & planning | ? |
+| Nostalgia Street, Ep. 4 | Podcast · 4Front Studios | `ORcY-A6fwG8` | Edit & planning | 4Front? |
+| Tales From a Real Cowgirl | Podcast · 4Front Studios | `Lgr4LS4ULw4` | Edit & planning | 4Front? |
+| Robots Milking Cows?! | Podcast · 4Front Studios | `-MI2w6o8Tes` | Edit & planning | 4Front? |
 
 The deck calls the podcast work audio editing and sound design for Nostalgia Street.
 
 ## 05 · Motion & Explainers (new folder, from the deck)
 | Project | Type | Video | Role | For |
 |---|---|---|---|---|
-| Revve Product Demo | Product Demo | `ofQ9lYCnjjk` | ? | ? |
-| What Is an NFT? | Motion Graphics · Ninja Ape | `DV1G6hvNptI` | ? | ? |
-| What Is Web 3.0? | Motion Graphics · Ninja Ape | `57Wtwlewnac` | ? | ? |
+| Revve Product Demo | Product Demo | `ofQ9lYCnjjk` | Edit & planning | ? |
+| What Is an NFT? | Motion Graphics · Ninja Ape | `DV1G6hvNptI` | Edit & planning | ? |
+| What Is Web 3.0? | Motion Graphics · Ninja Ape | `57Wtwlewnac` | Edit & planning | ? |
 
 ## 06 · AI Systems (Edge8)
-Three systems. Each needs a real "what broke, what I changed" line from Ethan.
+Three systems. **Role: director, end to end** (confirmed 2026-10-08). Ethan delegated the
+"what changed" lines; they're drafted only from the verified facts, never from invented incidents.
 
 1. **Code-based animation pipeline.** Claude Code + Final Cut Pro, briefed through context
    packages, inline QC.
@@ -73,15 +75,20 @@ Three systems. Each needs a real "what broke, what I changed" line from Ethan.
    - "Rebuilt around reusable components" was cut on 2026-10-08 (not in the verified facts).
    - Video: "Install the Stack on a Mac" (`PQWu7NOOTFc`, 10:21, AI Officer Institute, published
      2026-09-22). A UI walkthrough. Placed here on 2026-10-08 because it's the same channel as
-     Founder Intro and matches "UI walkthroughs" in the CV. **Confirm it came out of this pipeline**;
-     if not, it moves to Motion & Explainers.
-   - What broke: _pending_
+     Founder Intro and matches "UI walkthroughs" in the CV. Confirmed by Ethan
+     on 2026-10-08: code-animation pipeline output.
+   - What changed: "Without a proper brief, AI first passes land far from final. Jobs now start from a
+     structured context package, so the first pass lands close." (CV: context packages so first-pass
+     output lands close to final.)
 2. **Avatar video at volume.** HeyGen + ElevenLabs.
    - Videos: Executive Scale (Shorts `WlB4_OJTftM`), Brand Presence (Shorts `3stIKPZL_00`)
-   - What broke: _pending_
+   - What changed: "At volume, AI artifacts slip through. QC now runs inline at every stage, with no
+     separate review team." (CV: inline QC to catch AI artifacts without a review team.)
 3. **End-to-end AI lesson.** HeyGen presenter, Veo 3 b-roll, script proofed for teaching accuracy.
    - Video: AI Language Lesson, Proof of Concept (`8EKCg3SiSPI`)
-   - What broke: _pending_
+   - What changed: "A wrong line in a lesson teaches the wrong thing. Every line is now proofed against
+     a teaching-accuracy bar before it ships." (Earlier site copy: every line proofed to teaching
+     standards.)
 
 ## Video descriptions (draft, 2026-10-08, needs sign-off)
 Shown in each video's window on the site. Written from the YouTube title, the YouTube description where there is one (only 9 of 33 have one), the thumbnail, and the runtime. They describe the video, not Ethan's role in it; role-level copy waits for step 2.

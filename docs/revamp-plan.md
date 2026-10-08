@@ -16,6 +16,11 @@ followed only part of `copy-rewrite-brief.md`, and from the desktop prototype bu
   (20 pulled from the Pitch deck) live in desktop folders with descriptions; the page was cut
   from about 1,360 words to about 480 (see `content.md`).
 
+- **Answered 2026-10-08:** keep the Ember background for now; Claude drafts the "what changed"
+  lines from verified facts; pre-AI work is edit & planning, AI systems are full direction;
+  "Install the Stack on a Mac" is code-animation output. Headline is "Where does AI belong in
+  your video?"
+
 ## How we work
 - One section at a time. Ethan signs off before the next one starts (the brief requires this).
 - Show before and after side by side for every copy change.

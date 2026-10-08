@@ -209,6 +209,7 @@
   .dt-meta dd { font-size: 15px; color: #6f6f6f; margin: 0; }
   .dt-meta .wide { grid-column: 1 / -1; }
   .dt-meta .wide dd { color: #b26a24; }
+  .dt-meta .wide.fix dd { color: #444; }
   .dt-media { border-radius: 10px; overflow: hidden; background: #111; aspect-ratio: 16/9; }
   .dt-media.vertical { aspect-ratio: 9/16; }
   .dt-media img, .dt-media iframe { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
@@ -246,6 +247,7 @@
   .fd-main h2 { font-size: 32px; margin-bottom: 8px; }
   .fd-group h3 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1a1a1a; margin: 28px 0 6px; }
   .fd-group .dt-desc { font-size: 14px; max-width: 62ch; }
+  .fd-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #b26a24; margin: 4px 0 4px; }
   .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 12px; margin-top: 14px; }
   .fd-item { display: flex; flex-direction: column; border: 0; background: none; padding: 6px; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
   .fd-item:hover, .fd-item:focus-visible { background: #f1f1f3; outline: none; }
@@ -304,6 +306,8 @@
   .feat-desc { font-size: .9rem; color: var(--ink-dim); line-height: 1.7; }
   .feat-out { font-size: .88rem; color: var(--amber); margin-top: 1rem; font-weight: 500; display: flex; gap: .5rem; align-items: baseline; }
   .feat-out::before { content: '→'; color: var(--amber); }
+  .feat-fix { font-size: .88rem; color: var(--ink-dim); line-height: 1.6; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--line); }
+  .feat-fix span { display: block; font-family: var(--mono); font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--teal); margin-bottom: .35rem; }
   .tools { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: auto; padding-top: 1.4rem; }
   .tool { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); }
   .watch { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
@@ -511,8 +515,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
-        <div class="idx mono">01 — Systems</div>
-        <h2>Systems I built, and what I changed when they broke.</h2>
+        <div class="idx mono">01 — Systems · Directed end to end</div>
+        <h2>Three systems, and the problem each one solves.</h2>
       </div>
       <div class="aside">Every video lives<br>on the desktop above</div>
     </div>
@@ -521,7 +525,8 @@
         <div class="feat-cap">System 01 — Code-Based Animation</div>
         <h4 class="feat-title">Code-based animation pipeline</h4>
         <p class="feat-desc">Motion written as code, finished in Final Cut Pro. For UI walkthroughs, data viz and brand motion.</p>
-        <div class="feat-out">QC inline at every stage, no review team needed.</div>
+        <div class="feat-out">Motion delivered solo, from brief to final master.</div>
+        <div class="feat-fix"><span>What changed</span>Without a proper brief, AI first passes land far from final. Jobs now start from a structured context package, so the first pass lands close.</div>
         <div class="tools"><span class="tool">Claude Code</span><span class="tool">Final Cut Pro</span><span class="tool">Context Packages</span><span class="tool">Inline QC</span></div>
         <div class="watch"><button class="watch-chip" type="button" data-project="pR03yYZbI8E">Founder Intro</button><button class="watch-chip" type="button" data-project="PQWu7NOOTFc">Install the Stack</button></div>
       </div>
@@ -530,14 +535,16 @@
         <h4 class="feat-title">Avatar video at volume</h4>
         <p class="feat-desc">One approved face and voice, consistent across markets, with no weekly shoot.</p>
         <div class="feat-out">One founder, every market, without a shoot schedule.</div>
+        <div class="feat-fix"><span>What changed</span>At volume, AI artifacts slip through. QC now runs inline at every stage, with no separate review team.</div>
         <div class="tools"><span class="tool">HeyGen</span><span class="tool">ElevenLabs</span><span class="tool">Avatar</span><span class="tool">Multi-market</span></div>
         <div class="watch"><button class="watch-chip" type="button" data-project="WlB4_OJTftM">Executive Scale</button><button class="watch-chip" type="button" data-project="3stIKPZL_00">Brand Presence</button></div>
       </div>
       <div class="sys" id="sys-03">
         <div class="feat-cap">System 03 — Full AI Pipeline</div>
         <h4 class="feat-title">End-to-end AI lesson</h4>
-        <p class="feat-desc">A full language lesson with an AI presenter and AI b-roll, every line proofed for teaching accuracy.</p>
+        <p class="feat-desc">A full language lesson built with an AI presenter and AI b-roll.</p>
         <div class="feat-out">A full lesson, no studio, no on-camera teacher.</div>
+        <div class="feat-fix"><span>What changed</span>A wrong line in a lesson teaches the wrong thing. Every line is now proofed against a teaching-accuracy bar before it ships.</div>
         <div class="tools"><span class="tool">HeyGen</span><span class="tool">Veo3</span><span class="tool">Script Accuracy</span><span class="tool">Final Cut Pro</span></div>
         <div class="watch"><button class="watch-chip" type="button" data-project="8EKCg3SiSPI">AI Language Lesson</button></div>
       </div>
@@ -755,12 +762,12 @@
   // Every video lives here: loose files on the desktop, the rest in folders, all in Finder.
   // AI-system details are read from the Systems section, so that copy has one source.
   const CATS = {
-    brand:  { name: 'Brand Film', desc: 'The story is a decision, not something you find in the footage. I make that call first, then build the film to it.' },
-    client: { name: 'Client & Story Work', desc: 'Product, culture, community, testimonial. Same question every time: what does this audience need to believe, and what earns that.' },
-    ads:    { name: 'Video Advertisement', desc: 'Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.' },
-    long:   { name: 'Long-form & Podcast', desc: 'YouTube episodes and podcasts. At this length, pacing is the call that keeps the audience.' },
-    motion: { name: 'Motion & Explainers', desc: 'Explainers and product demos built in motion. The animation has to carry the argument, not decorate it.' },
-    ai:     { name: 'AI Systems', desc: 'Systems I built, and what I changed when they broke.' },
+    brand:  { name: 'Brand Film', role: 'Edit & planning', desc: 'The calls here are structure and pace: which story the footage holds, and what gets cut to tell it.' },
+    client: { name: 'Client & Story Work', role: 'Edit & planning', desc: 'Product, culture, community, testimonial. Every cut answers one question: what does this audience need to believe?' },
+    ads:    { name: 'Video Advertisement', role: 'Edit & planning', desc: 'Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.' },
+    long:   { name: 'Long-form & Podcast', role: 'Edit & planning', desc: 'YouTube episodes and podcasts. At this length, pacing is the call that keeps the audience.' },
+    motion: { name: 'Motion & Explainers', role: 'Edit & planning', desc: 'Explainers and product demos built in motion. The animation has to carry the argument, not decorate it.' },
+    ai:     { name: 'AI Systems', role: 'Director, end to end', desc: 'Each system was designed, directed and delivered end to end, and each one solves a specific production problem.' },
   };
   const WORK = [
     { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand', len: '5:59', desc: 'A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.' },
@@ -910,6 +917,7 @@
     const cat = CATS[p.cat];
     const sys = p.sys ? document.getElementById(p.sys) : null;
     const rows = [
+      ['Role', cat.role],
       ['Type', p.type],
       ['Length', p.len],
       ['Category', cat.name],
@@ -917,10 +925,12 @@
       ['Tools', sys ? [...sys.querySelectorAll('.tool')].map(txt).join(', ') : ''],
     ].filter(r => r[1]);
     const results = sys ? [...sys.querySelectorAll('.feat-out')].map(txt) : [];
+    const fix = sys ? txt(sys.querySelector('.feat-fix')).replace(/^What changed/, '') : '';
     const paras = [p.desc || cat.desc, sys ? txt(sys.querySelector('.feat-desc')) : ''].filter(Boolean);
     const text = `<h2>${esc(p.title)}</h2>${paras.map(t => `<p class="dt-desc">${esc(t)}</p>`).join('')}
       <dl class="dt-meta">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
-      ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}</dl>`;
+      ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}
+      ${fix ? `<div class="wide fix"><dt>What changed</dt><dd>${esc(fix)}</dd></div>` : ''}</dl>`;
     const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, p.hq ? 'hqdefault' : 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>
       <a class="dt-watch" href="${watchUrl(p)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
     openWindow(p.id, p.title, p.short ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media, opener);
@@ -929,7 +939,7 @@
   function openFinder(active = 'all', opener) {
     const side = [['all', 'All work'], ...Object.entries(CATS).map(([k, c]) => [k, c.name])]
       .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
-    const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="dt-desc">${esc(CATS[k].desc)}</p>
+    const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="fd-role">Role · ${esc(CATS[k].role)}</p><p class="dt-desc">${esc(CATS[k].desc)}</p>
       <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
         `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy"><span class="fd-len">${esc(p.len)}</span></span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
     const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
