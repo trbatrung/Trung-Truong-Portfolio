@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto}.stage{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto;padding:8rem 1.5rem 3rem}.stage-text{position:static;width:auto}.dt-icons,.dt-dock{display:none}</style></noscript>
 <style>
   :root {
     --bg: #0a0b0d;
@@ -74,42 +74,44 @@
   .nav-tc::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 2s infinite; }
 
   /* ---------- HERO ---------- */
-  .hero { --p: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; padding: 8rem 0 8.5rem; }
+  .hero { --p: 0; --s: 1; position: relative; height: 100vh; height: 100svh; overflow: hidden; }
   .hero::after { /* vignette */
     content: ''; position: absolute; inset: 0; pointer-events: none;
     box-shadow: inset 0 0 200px 30px rgba(0,0,0,0.45);
   }
-  .hero .wrap { position: relative; z-index: 2; width: 100%; }
-  .hero-eyebrow { color: var(--teal); margin-bottom: 1.6rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+  .hero-eyebrow { color: var(--teal); font-size: 12.5px; margin-bottom: 26px; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
   .hero-eyebrow .bar { width: 26px; height: 1px; background: var(--teal); display: inline-block; }
   .hero h1 {
     font-family: var(--serif); font-weight: 400;
-    font-size: clamp(2.7rem, 7vw, 6rem); line-height: 1.02; letter-spacing: -0.025em;
-    max-width: 15ch; margin-bottom: 2rem;
+    font-size: 86px; line-height: 1.02; letter-spacing: -0.025em;
+    margin-bottom: 30px;
   }
-  .hero h1 .l2 { display: block; font-family: var(--sans); font-size: clamp(1.3rem, 2.5vw, 2rem); font-style: normal; font-weight: 500; color: var(--ink-dim); letter-spacing: -0.01em; margin-top: 1.5rem; line-height: 1.3; max-width: 30ch; }
+  .hero h1 .l2 { display: block; font-family: var(--sans); font-size: 30px; font-style: normal; font-weight: 500; color: var(--ink-dim); letter-spacing: -0.01em; margin-top: 22px; line-height: 1.3; max-width: 30ch; }
   .hero h1 .ai { color: var(--teal); font-weight: 600; }
   .hero h1 .craft { color: var(--amber); font-weight: 600; }
-  .hero-sub { font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--ink-dim); max-width: 52ch; margin-bottom: 2.6rem; }
+  .hero-sub { font-size: 18px; color: var(--ink-dim); max-width: 52ch; margin-bottom: 38px; }
   .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
   .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
   .btn svg { width: 15px; height: 15px; }
+  button.btn { cursor: pointer; }
   .btn-primary { background: var(--amber); color: #17130c; font-weight: 600; }
   .btn-primary:hover { background: #f0b273; transform: translateY(-2px); }
   .btn-ghost { border-color: var(--line); color: var(--ink-dim); }
   .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
 
-  .hero-status { margin-top: 2.2rem; color: rgba(241,237,230,.78); display: flex; align-items: center; gap: .6rem; }
+  .hero-status { font-size: 12px; margin-top: 32px; color: rgba(241,237,230,.78); display: flex; align-items: center; gap: .6rem; }
   .hero-status .live { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 2s infinite; }
   .hero h1 .l2, .hero-sub { color: rgba(241,237,230,.8); }
   .hero .btn-ghost { color: rgba(241,237,230,.85); border-color: rgba(241,237,230,.28); }
 
   /* ---------- DESKTOP HERO ----------
-     The hero is a desktop: a color / ombre background, flagship project icons,
-     Mac-style windows, and a dock. --p (0 to 1, set on scroll) bleeds it into the page. */
+     The hero is a desktop: one fixed screen (1440x900, or 390x844 on phones) scaled to fit
+     with --s, on a full-bleed color / ombre background. Icons, folders and a dock live on the
+     screen; windows open in a fixed layer above the page. --p (0 to 1, set on scroll) bleeds
+     the desktop into the page. */
   .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; transform: translateY(calc(var(--p) * 22%)); }
   .desk-bg::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: calc(var(--p) * .85); }
-  .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 26%; background: linear-gradient(to bottom, transparent, var(--bg)); }
+  .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to bottom, transparent, var(--bg)); }
   /* background options (data-bg on .hero) */
   .hero[data-bg="ember"] .desk-bg { background:
       radial-gradient(55% 55% at 82% 72%, rgba(230,161,91,.55), transparent 70%),
@@ -129,25 +131,62 @@
       radial-gradient(55% 50% at 68% 88%, #b4642e, transparent 70%),
       #17141d; }
 
-  /* icons: scattered on the right like a Mac desktop, draggable */
-  .dt-icons { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: calc(1 - var(--p) * 1.8); transform: translateY(calc(var(--p) * -50px)); }
+  /* the screen */
+  .stage { position: absolute; left: 50%; top: 0; z-index: 2; width: 1440px; height: 900px; transform: translateX(-50%) scale(var(--s)); transform-origin: top center; }
+  .stage-text { position: absolute; left: 148px; top: 70px; bottom: 100px; width: 790px; display: flex; flex-direction: column; justify-content: center; }
+
+  /* icons and folders: right side, like a Mac desktop; draggable */
+  .dt-icons { position: absolute; inset: 0; pointer-events: none; opacity: calc(1 - var(--p) * 1.8); transform: translateY(calc(var(--p) * -50px)); }
   .dt-icon { position: absolute; transform: translate(-50%,-50%); pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 128px; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: default; touch-action: none; outline: none; user-select: none; -webkit-user-select: none; }
   .dt-thumb { padding: 4px; border-radius: 7px; border: 1px solid transparent; transition: background .1s; }
   .dt-icon img { width: 80px; height: 52px; object-fit: cover; border-radius: 4px; background: #333; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; -webkit-user-drag: none; }
   .dt-icon.vertical img { width: 36px; height: 56px; }
+  .dt-folder svg { display: block; width: 70px; height: 57px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
   .dt-label { font-size: 12.5px; font-weight: 500; line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); padding: 1px 6px; border-radius: 4px; max-width: 128px; text-align: center; }
   .dt-icon.selected .dt-thumb { background: rgba(0,0,0,.22); border-color: rgba(255,255,255,.18); }
   .dt-icon.selected .dt-label { background: #0a5cd6; text-shadow: none; }
   .dt-icon.dragging { z-index: 5; opacity: .9; }
   .dt-icon:focus-visible .dt-thumb { outline: 2px solid #0a5cd6; outline-offset: 1px; }
 
-  /* windows */
-  .dt-wins { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-  .dt-win { position: absolute; pointer-events: auto; width: min(860px, calc(100vw - 48px)); max-height: calc(100vh - 200px); display: flex; flex-direction: column;
+  /* dock */
+  .dt-dock { position: absolute; left: 50%; bottom: 26px; transform: translate(-50%, calc(var(--p) * 40px)); opacity: calc(1 - var(--p) * 2); display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
+    border-radius: 22px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.26);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+  .dt-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.4); }
+  .dt-tile { position: relative; width: 52px; height: 52px; border-radius: 13px; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.22); transition: transform .2s cubic-bezier(.16,1,.3,1); }
+  .dt-tile svg { width: 24px; height: 24px; }
+  .dt-tile:hover, .dt-tile:focus-visible { transform: translateY(-7px) scale(1.12); outline: none; }
+  .dt-tip { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); padding: 4px 9px; border-radius: 6px; background: rgba(28,28,28,.88); color: #fff; font: 500 12px var(--sans); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
+  .dt-tile:hover .dt-tip, .dt-tile:focus-visible .dt-tip { opacity: 1; }
+  .dt-work { background: #f4f6fa; }
+  .dt-work svg { width: 34px; height: 28px; }
+  .dt-avatar { background: var(--paper); color: #111; font: 500 19px var(--serif); font-style: italic; }
+  .dt-notes { background: linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat, repeating-linear-gradient(to bottom, transparent 0 9px, #e4dfd2 9px 10px) 0 100%/100% 68% no-repeat, #fcfbf7; }
+
+  /* phone screen (390x844): text on top, a home-screen grid, the dock at the bottom */
+  .hero.is-phone .stage { width: 390px; height: 844px; }
+  .hero.is-phone .stage-text { position: static; width: auto; padding: 92px 24px 0; display: block; }
+  .hero.is-phone .hero-eyebrow { font-size: 9.5px; letter-spacing: .18em; margin-bottom: 16px; }
+  .hero.is-phone h1 { font-size: 38px; margin-bottom: 16px; }
+  .hero.is-phone h1 .l2 { font-size: 18px; margin-top: 14px; }
+  .hero.is-phone .hero-sub { font-size: 14.5px; line-height: 1.6; margin-bottom: 22px; }
+  .hero.is-phone .hero-cta .btn-ghost { display: none; }
+  .hero.is-phone .hero-status { font-size: 9.5px; margin-top: 18px; }
+  .hero.is-phone .dt-icons { position: static; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 4px; padding: 30px 14px 0; pointer-events: auto; }
+  .hero.is-phone .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
+  .hero.is-phone .dt-thumb { padding: 2px; }
+  .hero.is-phone .dt-icon img, .hero.is-phone .dt-icon.vertical img { width: 60px; height: 60px; border-radius: 14px; }
+  .hero.is-phone .dt-folder svg { width: 60px; height: 60px; }
+  .hero.is-phone .dt-label { font-size: 11px; max-width: 86px; }
+  .hero.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; }
+
+  /* windows: a fixed layer, so they open at real size from anywhere on the page */
+  .dt-wins { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
+  .dt-win { position: absolute; pointer-events: auto; width: min(860px, calc(100vw - 48px)); max-height: calc(100% - 140px); display: flex; flex-direction: column;
     background: #fff; color: #111; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -12px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.25);
     animation: dtIn .28s cubic-bezier(.16,1,.3,1) both; outline: none; }
   .dt-win.closing { animation: dtOut .14s ease-in both; pointer-events: none; }
-  .dt-win.max { left: 16px !important; top: 80px !important; width: calc(100% - 32px); max-height: calc(100vh - 200px); }
+  .dt-win.max { left: 16px !important; top: 16px !important; width: calc(100% - 32px); max-height: calc(100% - 32px); }
   @keyframes dtIn { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
   @keyframes dtOut { to { opacity: 0; transform: scale(.97); } }
   .dt-bar { flex: none; display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 14px; border-bottom: 1px solid #efefef; cursor: default; touch-action: none; }
@@ -183,41 +222,44 @@
   .dt-links a { font-size: 14px; font-weight: 500; color: #111; padding: 8px 14px; border-radius: 999px; background: #f1f1f1; }
   .dt-links a:hover { background: #e6e6e6; }
 
-  /* dock */
-  .dt-dock { position: absolute; left: 50%; bottom: 22px; transform: translate(-50%, calc(var(--p) * 40px)); opacity: calc(1 - var(--p) * 2); z-index: 6; display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
-    border-radius: 22px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.26);
-    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
-  .dt-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.4); }
-  .dt-tile { position: relative; width: 52px; height: 52px; border-radius: 13px; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.22); transition: transform .2s cubic-bezier(.16,1,.3,1); }
-  .dt-tile svg { width: 24px; height: 24px; }
-  .dt-tile:hover, .dt-tile:focus-visible { transform: translateY(-7px) scale(1.12); outline: none; }
-  .dt-tip { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); padding: 4px 9px; border-radius: 6px; background: rgba(28,28,28,.88); color: #fff; font: 500 12px var(--sans); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
-  .dt-tile:hover .dt-tip, .dt-tile:focus-visible .dt-tip { opacity: 1; }
-  .dt-avatar { background: var(--paper); color: #111; font: 500 19px var(--serif); font-style: italic; }
-  .dt-notes { background: linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat, repeating-linear-gradient(to bottom, transparent 0 9px, #e4dfd2 9px 10px) 0 100%/100% 68% no-repeat, #fcfbf7; }
+  /* Finder: the whole body of work, by folder */
+  .dt-win.finder { width: min(980px, calc(100vw - 48px)); height: min(640px, calc(100% - 140px)); }
+  .dt-win.finder .dt-body { padding: 0; flex: 1; min-height: 0; overflow: hidden; display: flex; }
+  .fd { display: flex; width: 100%; min-height: 0; }
+  .fd-side { flex: none; width: 200px; background: #f5f5f7; border-right: 1px solid #ececec; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; overflow: auto; }
+  .fd-side .h { font: 600 11px var(--sans); color: #9a9a9a; padding: 4px 10px 6px; }
+  .fd-side button { display: flex; align-items: center; gap: 9px; text-align: left; border: 0; background: none; padding: 7px 10px; border-radius: 6px; font: 500 13.5px var(--sans); color: #333; cursor: pointer; }
+  .fd-side button svg { width: 17px; height: 14px; flex: none; }
+  .fd-side button:hover { background: rgba(0,0,0,.05); }
+  .fd-side button.on { background: rgba(0,0,0,.09); }
+  .fd-main { flex: 1; min-width: 0; overflow: auto; overscroll-behavior: contain; padding: 22px 24px 28px; }
+  .fd-main h2 { font-size: 32px; margin-bottom: 8px; }
+  .fd-group h3 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1a1a1a; margin: 28px 0 6px; }
+  .fd-group .dt-desc { font-size: 14px; max-width: 62ch; }
+  .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 12px; margin-top: 14px; }
+  .fd-item { display: flex; flex-direction: column; border: 0; background: none; padding: 6px; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
+  .fd-item:hover, .fd-item:focus-visible { background: #f1f1f3; outline: none; }
+  .fd-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #ddd; }
+  .fd-item .t { font: 500 13.5px var(--sans); color: #111; margin-top: 8px; }
+  .fd-item .s { font: 12px var(--sans); color: #8a8a8a; margin-top: 2px; }
 
   /* preview-only background switcher (shown with ?preview; remove before merge) */
   .bg-switch { position: fixed; right: 16px; bottom: 16px; z-index: 10001; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(20,20,24,.85); border: 1px solid var(--line); font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; }
   .bg-switch button { border: 0; border-radius: 999px; padding: .5rem .8rem; background: transparent; color: var(--ink-dim); font: inherit; letter-spacing: inherit; cursor: pointer; }
   .bg-switch button.on { background: var(--amber); color: #17130c; }
 
-  /* medium screens: icons flow under the hero text instead of floating */
-  @media (max-width: 1100px) {
-    .dt-icons { position: relative; inset: auto; width: 100%; max-width: 1240px; margin: 2.8rem auto 0; padding: 0 clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px 6px; pointer-events: auto; }
-    .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
-    .dt-label { max-width: 100%; }
-  }
   @media (max-width: 700px) {
-    .dt-icons { grid-template-columns: repeat(3, 1fr); gap: 18px 6px; }
-    .dt-wins { position: fixed; z-index: 200; }
-    .dt-win { left: 12px !important; top: 12px !important; width: calc(100% - 24px); max-height: calc(100% - 24px); }
-    .dt-split { grid-template-columns: 1fr; }
+    .dt-win { left: 10px !important; top: 10px !important; width: calc(100% - 20px); max-height: calc(100% - 20px); }
+    .dt-win.finder { width: calc(100% - 20px); height: calc(100% - 20px); }
     .dt-lights { gap: 10px; }
     .dt-lights button { width: 16px; height: 16px; }
+    .dt-split { grid-template-columns: 1fr; }
     .dt-split .dt-media.vertical { max-width: 280px; width: 100%; margin: 0 auto; }
-    .dt-dock { bottom: 14px; gap: 9px; padding: 7px 9px; border-radius: 18px; }
-    .dt-tile { width: 44px; height: 44px; border-radius: 11px; }
-    .dt-tile svg { width: 20px; height: 20px; }
+    .fd { flex-direction: column; }
+    .fd-side { width: auto; flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid #ececec; padding: 8px; }
+    .fd-side .h { display: none; }
+    .fd-side button { white-space: nowrap; }
+    .fd-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) {
     .desk-bg, .dt-icons { transform: none; }
@@ -241,58 +283,21 @@
   .sec-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); letter-spacing: -0.02em; line-height: 1.05; }
   .sec-head .aside { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: right; white-space: nowrap; }
 
-  /* ---------- WORK ---------- */
-  .cat { margin-bottom: 4.5rem; }
-  .cat:last-child { margin-bottom: 0; }
-  .cat-head { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 1.8rem; }
-  .cat-num { font-family: var(--mono); font-size: .8rem; color: var(--amber); letter-spacing: .1em; }
-  .cat-name { font-family: var(--serif); font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 400; letter-spacing: -0.01em; }
-  .cat-desc { font-size: .92rem; color: var(--muted); max-width: 44ch; margin-left: auto; text-align: right; }
-
-  .grid { display: grid; gap: 1.4rem; }
-  .grid-2 { grid-template-columns: repeat(2, 1fr); }
-  .grid-shorts { grid-template-columns: repeat(3, 1fr); }
-
-  .card { position: relative; background: var(--bg-2); border: 1px solid var(--line-soft); border-radius: 4px; overflow: hidden; display: block; transition: border-color .3s ease, transform .3s ease; }
-  .card:hover { border-color: rgba(230,161,91,0.4); transform: translateY(-3px); }
-  .thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #000; }
-  .thumb.v { aspect-ratio: 9/16; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.82) saturate(.95); transition: transform .7s cubic-bezier(.22,1,.36,1), filter .4s ease; }
-  .card:hover .thumb img { filter: brightness(.4); transform: scale(1.04); }
-  .thumb .tc-badge { position: absolute; top: .7rem; right: .7rem; z-index: 6; font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink); background: rgba(0,0,0,.55); backdrop-filter: blur(4px); padding: .2rem .5rem; border-radius: 2px; border: 1px solid var(--line); }
-  .thumb .corner { position: absolute; width: 12px; height: 12px; border: 1px solid rgba(241,237,230,.5); z-index: 6; opacity: 0; transition: opacity .3s; }
-  .thumb .corner.tl { top: .6rem; left: .6rem; border-right: none; border-bottom: none; }
-  .thumb .corner.br { bottom: .6rem; right: .6rem; border-left: none; border-top: none; }
-  .card:hover .corner { opacity: 1; }
-  .hover-player { position: absolute; inset: 0; width: 100%; height: 100%; border: none; z-index: 5; opacity: 0; transition: opacity .5s ease; pointer-events: none; }
-  .card:hover .hover-player { opacity: 1; }
-  .play-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .3s ease; z-index: 7; pointer-events: none; }
-  .card:not(.is-playing):hover .play-icon { opacity: 1; }
-  .play-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 2px 10px rgba(0,0,0,.6)); }
-  .card-body { padding: 1.1rem 1.2rem 1.3rem; }
-  .card-tag { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin-bottom: .55rem; }
-  .card-title { font-family: var(--serif); font-size: 1.15rem; line-height: 1.3; }
-  .card-out { font-size: .82rem; color: var(--ink-dim); margin-top: .5rem; line-height: 1.5; }
-
-  /* title-card thumb (used when a video has no usable auto-thumbnail) */
-  .label-thumb { display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 40%, #1b2a33, #0d1519); }
-  .label-thumb .vl { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink-dim); text-align: center; padding: 1rem; line-height: 1.4; }
-
-  /* AI feature blocks */
-  .feat { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-  .feat + .feat { margin-top: 1.4rem; }
-  .feat-row { display: grid; grid-template-columns: 1fr 1fr; }
-  .feat-info { padding: 2.2rem clamp(1.4rem,2.5vw,2.4rem); border-right: 1px solid var(--line); }
+  /* ---------- SYSTEMS ---------- */
+  .sys-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 4px; }
+  .sys { padding: 2.2rem clamp(1.4rem, 2.5vw, 2.2rem); border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+  .sys:last-child { border-right: none; }
   .feat-cap { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: .9rem; }
   .feat-title { font-family: var(--serif); font-size: 1.45rem; font-weight: 400; margin-bottom: .8rem; }
   .feat-desc { font-size: .9rem; color: var(--ink-dim); line-height: 1.7; }
   .feat-out { font-size: .88rem; color: var(--amber); margin-top: 1rem; font-weight: 500; display: flex; gap: .5rem; align-items: baseline; }
   .feat-out::before { content: '→'; color: var(--amber); }
-  .tools { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .tools { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: auto; padding-top: 1.4rem; }
   .tool { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); }
-  .feat-media { padding: 1.4rem; background: rgba(0,0,0,.25); display: flex; gap: 1rem; align-items: center; }
-  .feat-media .card { flex: 1; min-width: 0; }
-  .feat-media.shorts .thumb { aspect-ratio: 9/16; }
+  .watch { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .watch-chip { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); background: var(--amber-soft); border: 1px solid rgba(230,161,91,.35); border-radius: 100px; padding: .45rem .85rem; cursor: pointer; transition: background .2s; }
+  .watch-chip::before { content: ''; border-style: solid; border-width: 4px 0 4px 7px; border-color: transparent transparent transparent var(--amber); }
+  .watch-chip:hover { background: rgba(230,161,91,.26); }
 
   /* ---------- BREAKAWAY (editing CTA) ---------- */
   .breakaway { padding: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(230,161,91,0.06), transparent 60%), var(--bg-2); }
@@ -387,20 +392,13 @@
     .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line-soft); }
     .sec-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .sec-head .aside { text-align: left; }
-    .cat-head { flex-direction: column; gap: .4rem; }
-    .cat-desc { margin-left: 0; text-align: left; }
-    .grid-2 { grid-template-columns: 1fr; }
-    .grid-shorts { grid-template-columns: repeat(2, 1fr); }
-    .feat-row { grid-template-columns: 1fr; }
-    .feat-info { border-right: none; border-bottom: 1px solid var(--line); }
+    .sys-grid { grid-template-columns: 1fr; }
+    .sys { border-right: none; border-bottom: 1px solid var(--line); }
+    .sys:last-child { border-bottom: none; }
     .vet-row { grid-template-columns: 1fr; gap: .6rem; }
     .svc-grid { grid-template-columns: 1fr; }
     .svc { border-right: none; border-bottom: 1px solid var(--line); }
     .about-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 520px) {
-    .grid-shorts { grid-template-columns: 1fr; }
-    .hero { padding-top: 7rem; }
   }
 </style>
 </head>
@@ -410,7 +408,7 @@
   <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
+      <li><a href="#top" data-open="finder">Work</a></li>
       <li><a href="#vetting">Tools</a></li>
       <li><a href="#approach">Approach</a></li>
       <li><a href="#services">Services</a></li>
@@ -423,40 +421,64 @@
 <!-- ---------- HERO ---------- -->
 <header class="hero" id="top" data-bg="ember">
   <div class="desk-bg" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
-    <h1 class="reveal">
-      I own the video pipeline end to end.
-      <span class="l2"><span class="ai">AI</span> has a defined place in it, and <span class="craft">I set</span> where that place is.</span>
-    </h1>
-    <p class="hero-sub reveal">Script to final master, one pipeline, one standard. Every AI decision inside it is tested and documented before it ships. Based in Ho Chi Minh City, working globally.</p>
-    <div class="hero-cta reveal">
-      <a href="#work" class="btn btn-primary">
-        View selected work
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-      </a>
-      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+  <div class="stage" id="stage">
+    <div class="stage-text">
+      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
+      <h1 class="reveal">
+        I own the video pipeline end to end.
+        <span class="l2"><span class="ai">AI</span> has a defined place in it, and <span class="craft">I set</span> where that place is.</span>
+      </h1>
+      <p class="hero-sub reveal">Script to final master, one pipeline, one standard. Every AI decision inside it is tested and documented before it ships. Based in Ho Chi Minh City, working globally.</p>
+      <div class="hero-cta reveal">
+        <button type="button" class="btn btn-primary" data-open="finder">
+          Browse the work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </button>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+      <div class="hero-status mono reveal"><span class="live"></span>Open to senior roles and select projects</div>
     </div>
-    <div class="hero-status mono reveal"><span class="live"></span>Open to senior roles and select projects</div>
-  </div>
-
-  <div class="dt-icons" role="group" aria-label="Featured work">
-    <button class="dt-icon" type="button" data-yt="jH6LaZDXNMs" style="left:76%;top:23%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Joe Schaeffer</span></button>
-    <button class="dt-icon" type="button" data-yt="J0j3ZWbqS5s" style="left:89%;top:17%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/J0j3ZWbqS5s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Feedflo</span></button>
-    <button class="dt-icon" type="button" data-yt="HBTfzwOwkxY" style="left:81%;top:42%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Powerlift Hangar</span></button>
-    <button class="dt-icon vertical" type="button" data-yt="vwf4U1WzQ0s" style="left:93%;top:38%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">No More Solo</span></button>
-    <button class="dt-icon" type="button" data-yt="pR03yYZbI8E" style="left:76%;top:62%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Founder Intro</span></button>
-    <button class="dt-icon vertical" type="button" data-yt="WlB4_OJTftM" style="left:90%;top:61%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/WlB4_OJTftM/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Executive Scale</span></button>
-  </div>
-  <div class="dt-wins"></div>
-  <div class="dt-dock" role="toolbar" aria-label="Dock">
-    <button class="dt-tile dt-avatar" type="button" data-open="about" aria-label="About">E<span class="dt-tip">About</span></button>
-    <button class="dt-tile dt-notes" type="button" data-open="contact" aria-label="Contact"><span class="dt-tip">Contact</span></button>
-    <span class="dt-sep"></span>
-    <a class="dt-tile" style="background:#0a66c2" href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg><span class="dt-tip">LinkedIn</span></a>
-    <a class="dt-tile" style="background:#1d1d1f" href="mailto:trbatrung@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg><span class="dt-tip">Email</span></a>
+    <div class="dt-icons" role="group" aria-label="Work">
+      <button class="dt-icon" type="button" data-project="jH6LaZDXNMs" style="left:1060px;top:215px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Joe Schaeffer</span></button>
+      <button class="dt-icon vertical" type="button" data-project="vwf4U1WzQ0s" style="left:1195px;top:290px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">No More Solo</span></button>
+      <button class="dt-icon" type="button" data-project="HBTfzwOwkxY" style="left:1060px;top:430px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Powerlift Hangar</span></button>
+      <button class="dt-icon" type="button" data-project="pR03yYZbI8E" style="left:1195px;top:505px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Founder Intro</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="brand" style="left:1335px;top:175px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Brand Film</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="client" style="left:1335px;top:295px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Client & Story</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="ads" style="left:1335px;top:415px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Video Ads</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="ai" style="left:1335px;top:535px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">AI Systems</span></button>
+    </div>
+    <div class="dt-dock" role="toolbar" aria-label="Dock">
+      <button class="dt-tile dt-work" type="button" data-open="finder" aria-label="Work"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg><span class="dt-tip">Work</span></button>
+      <button class="dt-tile dt-avatar" type="button" data-open="about" aria-label="About">E<span class="dt-tip">About</span></button>
+      <button class="dt-tile dt-notes" type="button" data-open="contact" aria-label="Contact"><span class="dt-tip">Contact</span></button>
+      <span class="dt-sep"></span>
+      <a class="dt-tile" style="background:#0a66c2" href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg><span class="dt-tip">LinkedIn</span></a>
+      <a class="dt-tile" style="background:#1d1d1f" href="mailto:trbatrung@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg><span class="dt-tip">Email</span></a>
+    </div>
   </div>
 </header>
+<div class="dt-wins" id="dtWins"></div>
+<noscript>
+<section class="wrap">
+  <h2>Work</h2>
+  <ul>
+    <li><a href="https://youtu.be/jH6LaZDXNMs">Joe Schaeffer</a> · Artist Film</li>
+    <li><a href="https://youtu.be/J0j3ZWbqS5s">Feedflo</a> · Impact Film · Mogler Farms</li>
+    <li><a href="https://youtu.be/HBTfzwOwkxY">Powerlift Hangar</a> · Product Showcase</li>
+    <li><a href="https://youtu.be/oUDLKNFswlQ">Plexus AV</a> · Company Values</li>
+    <li><a href="https://youtu.be/ieu7p3qum_s">Veterans Services</a> · Social Awareness</li>
+    <li><a href="https://youtu.be/pNw0LhYSSv4">Love Hay</a> · Testimonial · Operation of the Year</li>
+    <li><a href="https://youtube.com/shorts/vwf4U1WzQ0s">No More Solo</a> · Short · Ad</li>
+    <li><a href="https://youtube.com/shorts/W3KMqXGB6Qg">Short Ketone</a> · Short · Ad</li>
+    <li><a href="https://youtube.com/shorts/-toxHWQCe_w">Dental Ads</a> · Short · Ad</li>
+    <li><a href="https://youtu.be/pR03yYZbI8E">Founder Intro</a> · Infinite Leverage</li>
+    <li><a href="https://youtube.com/shorts/WlB4_OJTftM">Executive Scale</a> · HeyGen avatar</li>
+    <li><a href="https://youtube.com/shorts/3stIKPZL_00">Brand Presence</a> · HeyGen avatar</li>
+    <li><a href="https://youtu.be/8EKCg3SiSPI">AI Language Lesson</a> · Proof of Concept</li>
+  </ul>
+</section>
+</noscript>
 
 <!-- ---------- STATS ---------- -->
 <div class="stats">
@@ -468,151 +490,41 @@
   </div>
 </div>
 
-<!-- ---------- WORK ---------- -->
-<section id="work">
+<!-- ---------- SYSTEMS ---------- -->
+<section id="systems">
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
-        <div class="idx mono">01 — Selected Work</div>
-        <h2>The work speaks first.</h2>
+        <div class="idx mono">01 — Systems</div>
+        <h2>Systems I built, and what I changed when they broke.</h2>
       </div>
-      <div class="aside">Selected for<br>the calls inside</div>
+      <div class="aside">Every video lives<br>on the desktop above</div>
     </div>
-
-    <!-- 01 Brand Film -->
-    <div class="cat reveal">
-      <div class="cat-head">
-        <span class="cat-num">01</span>
-        <h3 class="cat-name">Brand Film</h3>
-        <p class="cat-desc">The story is a decision, not something you find in the footage. I make that call first, then build the film to it.</p>
+    <div class="sys-grid reveal">
+      <div class="sys" id="sys-01">
+        <div class="feat-cap">System 01 — Code-Based Animation</div>
+        <h4 class="feat-title">Code-based animation pipeline</h4>
+        <p class="feat-desc">Motion written as code. Generated in Claude Code, finished in Final Cut Pro, briefed through a structured context package. UI walkthroughs, data visualizations, brand motion.</p>
+        <div class="feat-out">Rebuilt around reusable components, so each job speeds up the next.</div>
+        <div class="feat-out">QC inline at every stage, no review team needed.</div>
+        <div class="tools"><span class="tool">Claude Code</span><span class="tool">Final Cut Pro</span><span class="tool">Context Packages</span><span class="tool">Inline QC</span></div>
+        <div class="watch"><button class="watch-chip" type="button" data-project="pR03yYZbI8E">Founder Intro</button></div>
       </div>
-      <div class="grid grid-2">
-        <a class="card" data-yt-id="jH6LaZDXNMs" href="https://youtu.be/jH6LaZDXNMs" target="_blank" rel="noopener">
-          <div class="thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/maxresdefault.jpg" alt="Joe Schaeffer Artist Film" loading="lazy"><span class="tc-badge">FILM</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Artist Film</p><p class="card-title">Joe Schaeffer</p></div>
-        </a>
-        <a class="card" data-yt-id="J0j3ZWbqS5s" href="https://youtu.be/J0j3ZWbqS5s" target="_blank" rel="noopener">
-          <div class="thumb"><img src="https://img.youtube.com/vi/J0j3ZWbqS5s/maxresdefault.jpg" alt="Feedflo Impact Film" loading="lazy"><span class="tc-badge">FILM</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Impact Film · Mogler Farms</p><p class="card-title">Feedflo</p></div>
-        </a>
+      <div class="sys" id="sys-02">
+        <div class="feat-cap">System 02 — Avatar Video</div>
+        <h4 class="feat-title">Avatar video at volume</h4>
+        <p class="feat-desc">One approved face and voice, a fixed look, consistent output across markets and platforms. Built for founders who can't hold a weekly shoot slot.</p>
+        <div class="feat-out">One founder, every market, without a shoot schedule.</div>
+        <div class="tools"><span class="tool">HeyGen</span><span class="tool">ElevenLabs</span><span class="tool">Avatar</span><span class="tool">Multi-market</span></div>
+        <div class="watch"><button class="watch-chip" type="button" data-project="WlB4_OJTftM">Executive Scale</button><button class="watch-chip" type="button" data-project="3stIKPZL_00">Brand Presence</button></div>
       </div>
-    </div>
-
-    <!-- 02 Client & Story -->
-    <div class="cat reveal">
-      <div class="cat-head">
-        <span class="cat-num">02</span>
-        <h3 class="cat-name">Client &amp; Story Work</h3>
-        <p class="cat-desc">Product, culture, community, testimonial. Same question every time: what does this audience need to believe, and what earns that.</p>
-      </div>
-      <div class="grid grid-2">
-        <a class="card" data-yt-id="HBTfzwOwkxY" href="https://youtu.be/HBTfzwOwkxY" target="_blank" rel="noopener">
-          <div class="thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/maxresdefault.jpg" alt="Powerlift Hangar Showcase" loading="lazy"><span class="tc-badge">SHOWCASE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Product Showcase</p><p class="card-title">Powerlift Hangar</p></div>
-        </a>
-        <a class="card" data-yt-id="oUDLKNFswlQ" href="https://youtu.be/oUDLKNFswlQ" target="_blank" rel="noopener">
-          <div class="thumb"><img src="https://img.youtube.com/vi/oUDLKNFswlQ/maxresdefault.jpg" alt="Plexus AV" loading="lazy"><span class="tc-badge">CULTURE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Company Values</p><p class="card-title">Plexus AV</p></div>
-        </a>
-        <a class="card" data-yt-id="ieu7p3qum_s" href="https://youtu.be/ieu7p3qum_s" target="_blank" rel="noopener">
-          <div class="thumb label-thumb"><div class="vl">Rise &amp; Shine 2025<br>VOA, Dakotas</div><span class="tc-badge">SOCIAL</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Social Awareness</p><p class="card-title">Veterans Services</p></div>
-        </a>
-        <a class="card" data-yt-id="pNw0LhYSSv4" href="https://youtu.be/pNw0LhYSSv4" target="_blank" rel="noopener">
-          <div class="thumb"><img src="https://img.youtube.com/vi/pNw0LhYSSv4/maxresdefault.jpg" alt="Love Hay Testimonial" loading="lazy"><span class="tc-badge">TESTIMONIAL</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Testimonial · Operation of the Year</p><p class="card-title">Love Hay</p></div>
-        </a>
-      </div>
-    </div>
-
-    <!-- 03 Advertisement -->
-    <div class="cat reveal">
-      <div class="cat-head">
-        <span class="cat-num">03</span>
-        <h3 class="cat-name">Video Advertisement</h3>
-        <p class="cat-desc">Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.</p>
-      </div>
-      <div class="grid grid-shorts">
-        <a class="card" data-yt-id="vwf4U1WzQ0s" href="https://youtube.com/shorts/vwf4U1WzQ0s" target="_blank" rel="noopener">
-          <div class="thumb v"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/maxresdefault.jpg" alt="No More Solo" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">No More Solo</p></div>
-        </a>
-        <a class="card" data-yt-id="W3KMqXGB6Qg" href="https://youtube.com/shorts/W3KMqXGB6Qg" target="_blank" rel="noopener">
-          <div class="thumb v"><img src="https://img.youtube.com/vi/W3KMqXGB6Qg/maxresdefault.jpg" alt="Short Ketone" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">Short Ketone</p></div>
-        </a>
-        <a class="card" data-yt-id="-toxHWQCe_w" href="https://youtube.com/shorts/-toxHWQCe_w" target="_blank" rel="noopener">
-          <div class="thumb v"><img src="https://img.youtube.com/vi/-toxHWQCe_w/maxresdefault.jpg" alt="Dental Ads" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">Dental Ads</p></div>
-        </a>
-      </div>
-    </div>
-
-    <!-- 04 AI-Augmented -->
-    <div class="cat reveal">
-      <div class="cat-head">
-        <span class="cat-num">04</span>
-        <h3 class="cat-name">AI-Augmented Production</h3>
-        <p class="cat-desc">Systems I built, and what I changed when they broke.</p>
-      </div>
-
-      <div class="feat">
-        <div class="feat-row">
-          <div class="feat-info">
-            <div class="feat-cap">System 01 — Code-Based Animation</div>
-            <h4 class="feat-title">Code-based animation pipeline</h4>
-            <p class="feat-desc">Motion written as code. Generated in Claude Code, finished in Final Cut Pro, briefed through a structured context package. UI walkthroughs, data visualizations, brand motion.</p>
-            <div class="feat-out">Rebuilt around reusable components, so each job speeds up the next.</div>
-            <div class="feat-out">QC inline at every stage, no review team needed.</div>
-            <div class="tools"><span class="tool">Claude Code</span><span class="tool">Final Cut Pro</span><span class="tool">Context Packages</span><span class="tool">Inline QC</span></div>
-          </div>
-          <div class="feat-media">
-            <a class="card" data-yt-id="pR03yYZbI8E" href="https://youtu.be/pR03yYZbI8E" target="_blank" rel="noopener">
-              <div class="thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="Infinite Leverage founder intro" loading="lazy"><span class="tc-badge">MOTION</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-              <div class="card-body"><p class="card-tag">Infinite Leverage</p><p class="card-title">Founder Intro</p></div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-row">
-          <div class="feat-info">
-            <div class="feat-cap">System 02 — Avatar Video</div>
-            <h4 class="feat-title">Avatar video at volume</h4>
-            <p class="feat-desc">One approved face and voice, a fixed look, consistent output across markets and platforms. Built for founders who can't hold a weekly shoot slot.</p>
-            <div class="feat-out">One founder, every market, without a shoot schedule.</div>
-            <div class="tools"><span class="tool">HeyGen</span><span class="tool">ElevenLabs</span><span class="tool">Avatar</span><span class="tool">Multi-market</span></div>
-          </div>
-          <div class="feat-media shorts">
-            <a class="card" data-yt-id="WlB4_OJTftM" href="https://youtube.com/shorts/WlB4_OJTftM" target="_blank" rel="noopener">
-              <div class="thumb v"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="AI Avatar Executive Scale" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-              <div class="card-body"><p class="card-tag">HeyGen</p><p class="card-title">Executive Scale</p></div>
-            </a>
-            <a class="card" data-yt-id="3stIKPZL_00" href="https://youtube.com/shorts/3stIKPZL_00" target="_blank" rel="noopener">
-              <div class="thumb v"><img src="https://img.youtube.com/vi/3stIKPZL_00/maxresdefault.jpg" alt="AI Avatar Brand Presence" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-              <div class="card-body"><p class="card-tag">HeyGen</p><p class="card-title">Brand Presence</p></div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-row">
-          <div class="feat-info">
-            <div class="feat-cap">System 03 — Full AI Pipeline</div>
-            <h4 class="feat-title">End-to-end AI lesson</h4>
-            <p class="feat-desc">A complete language lesson built end to end: HeyGen presenter, Veo3 b-roll. Every line proofed against a teaching-accuracy bar before it shipped.</p>
-            <div class="feat-out">A full lesson, no studio, no on-camera teacher.</div>
-            <div class="tools"><span class="tool">HeyGen</span><span class="tool">Veo3</span><span class="tool">Script Accuracy</span><span class="tool">Final Cut Pro</span></div>
-          </div>
-          <div class="feat-media">
-            <a class="card" data-yt-id="8EKCg3SiSPI" href="https://youtu.be/8EKCg3SiSPI" target="_blank" rel="noopener">
-              <div class="thumb"><img src="https://img.youtube.com/vi/8EKCg3SiSPI/maxresdefault.jpg" alt="AI Language Lesson" loading="lazy"><span class="tc-badge">FULL PIPELINE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
-              <div class="card-body"><p class="card-tag">Language Lesson</p><p class="card-title">Proof of Concept</p></div>
-            </a>
-          </div>
-        </div>
+      <div class="sys" id="sys-03">
+        <div class="feat-cap">System 03 — Full AI Pipeline</div>
+        <h4 class="feat-title">End-to-end AI lesson</h4>
+        <p class="feat-desc">A complete language lesson built end to end: HeyGen presenter, Veo3 b-roll. Every line proofed against a teaching-accuracy bar before it shipped.</p>
+        <div class="feat-out">A full lesson, no studio, no on-camera teacher.</div>
+        <div class="tools"><span class="tool">HeyGen</span><span class="tool">Veo3</span><span class="tool">Script Accuracy</span><span class="tool">Final Cut Pro</span></div>
+        <div class="watch"><button class="watch-chip" type="button" data-project="8EKCg3SiSPI">AI Language Lesson</button></div>
       </div>
     </div>
   </div>
@@ -828,18 +740,58 @@
     // note: the mailto navigation still fires for anyone with a mail client set up
   });
 
-  // ----- desktop hero: icons, windows, dock, scroll bleed -----
-  // Window copy is read from the Work / About / Contact sections, so the page stays the one source.
+  // ----- desktop hero -----
+  // The hero is one fixed screen, 1440x900 (390x844 on phones), scaled with --s to fit.
+  // Every video lives here: loose files on the desktop, the rest in folders, all in Finder.
+  // AI-system details are read from the Systems section, so that copy has one source.
+  const CATS = {
+    brand:  { name: 'Brand Film', desc: 'The story is a decision, not something you find in the footage. I make that call first, then build the film to it.' },
+    client: { name: 'Client & Story Work', desc: 'Product, culture, community, testimonial. Same question every time: what does this audience need to believe, and what earns that.' },
+    ads:    { name: 'Video Advertisement', desc: 'Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.' },
+    ai:     { name: 'AI Systems', desc: 'Systems I built, and what I changed when they broke.' },
+  };
+  const WORK = [
+    { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand' },
+    { id: 'J0j3ZWbqS5s', title: 'Feedflo', type: 'Impact Film · Mogler Farms', cat: 'brand' },
+    { id: 'HBTfzwOwkxY', title: 'Powerlift Hangar', type: 'Product Showcase', cat: 'client' },
+    { id: 'oUDLKNFswlQ', title: 'Plexus AV', type: 'Company Values', cat: 'client' },
+    { id: 'ieu7p3qum_s', title: 'Veterans Services', type: 'Social Awareness', cat: 'client' },
+    { id: 'pNw0LhYSSv4', title: 'Love Hay', type: 'Testimonial · Operation of the Year', cat: 'client' },
+    { id: 'vwf4U1WzQ0s', title: 'No More Solo', type: 'Short · Ad', cat: 'ads', short: true },
+    { id: 'W3KMqXGB6Qg', title: 'Short Ketone', type: 'Short · Ad', cat: 'ads', short: true },
+    { id: '-toxHWQCe_w', title: 'Dental Ads', type: 'Short · Ad', cat: 'ads', short: true },
+    { id: 'pR03yYZbI8E', title: 'Founder Intro', type: 'Infinite Leverage', cat: 'ai', sys: 'sys-01' },
+    { id: 'WlB4_OJTftM', title: 'Executive Scale', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true },
+    { id: '3stIKPZL_00', title: 'Brand Presence', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true },
+    { id: '8EKCg3SiSPI', title: 'AI Language Lesson', type: 'Proof of Concept', cat: 'ai', sys: 'sys-03' },
+  ];
+
   const hero = document.getElementById('top');
-  const winsEl = hero.querySelector('.dt-wins');
+  const winsEl = document.getElementById('dtWins');
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const txt = el => el ? el.textContent.trim() : '';
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const floating = () => !matchMedia('(max-width:1100px)').matches;   // icons float and drag only on wide screens
-  const sheet = () => matchMedia('(max-width:700px)').matches;         // windows become full-width sheets
-  const icons = [...hero.querySelectorAll('.dt-icon')];
-  const deselect = () => icons.forEach(i => i.classList.remove('selected'));
+  const thumb = (id, q = 'mqdefault') => `https://img.youtube.com/vi/${id}/${q}.jpg`;
+  const watchUrl = p => p.short ? `https://youtube.com/shorts/${p.id}` : `https://youtu.be/${p.id}`;
+  const sheet = () => matchMedia('(max-width:700px)').matches;      // windows become full-screen sheets
+  const isPhone = () => hero.classList.contains('is-phone');
+  const FOLDER_SVG = hero.querySelector('.dt-folder svg').outerHTML;
 
+  // fit the fixed screen to the viewport: as large as fits, never cropped, and the hero is
+  // exactly as tall as the scaled screen (any spare width shows the background)
+  let scale = 1;
+  function fit() {
+    const phone = innerWidth < 760 || innerWidth / innerHeight < 0.8;
+    const [w, h] = phone ? [390, 844] : [1440, 900];
+    hero.classList.toggle('is-phone', phone);
+    scale = phone ? Math.min(innerWidth / w, 1.4) : Math.min(innerWidth / w, innerHeight / h);
+    hero.style.height = Math.round(h * scale) + 'px';
+    hero.style.setProperty('--s', scale.toFixed(4));
+  }
+  addEventListener('resize', fit);
+  fit();
+
+  // ----- windows -----
   let z = 10;
   const openWins = new Map();
   function closeWin(w) {
@@ -849,69 +801,105 @@
     w.addEventListener('animationend', () => w.remove(), { once: true });
     if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
   }
-  function openWindow(key, title, html, opener) {
-    const existing = openWins.get(key);
-    if (existing) { existing.style.zIndex = ++z; existing.focus({ preventScroll: true }); return; }
-    const w = document.createElement('div');
-    w.className = 'dt-win';
-    w.dataset.key = key;
-    w.tabIndex = -1;
-    w.setAttribute('role', 'dialog');
-    w.setAttribute('aria-label', title);
-    w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div>`;
-    winsEl.appendChild(w);
-    w._opener = opener;
-    w.style.zIndex = ++z;
-    if (!sheet()) {   // center a little above middle of what's on screen, cascade if others are open
-      const n = openWins.size, vh = Math.min(hero.clientHeight, innerHeight);
-      w.style.left = Math.max(16, (hero.clientWidth - w.offsetWidth) / 2 + n * 28) + 'px';
-      w.style.top = Math.max(80, (vh - w.offsetHeight) / 2 - 30 + n * 28) + 'px';
+  function openWindow(key, title, html, opener, cls = '') {
+    let w = openWins.get(key);
+    if (w) {   // already open: refresh it and bring it forward
+      w.querySelector('.dt-title').textContent = title;
+      w.setAttribute('aria-label', title);
+      w.querySelector('.dt-body').innerHTML = html;
+    } else {
+      w = document.createElement('div');
+      w.className = 'dt-win ' + cls;
+      w.dataset.key = key;
+      w.tabIndex = -1;
+      w.setAttribute('role', 'dialog');
+      w.setAttribute('aria-label', title);
+      w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div>`;
+      winsEl.appendChild(w);
+      w._opener = opener;
+      if (!sheet()) {   // center a little above the middle of the screen, cascade if others are open
+        const n = openWins.size;
+        w.style.left = Math.max(16, (innerWidth - w.offsetWidth) / 2 + n * 28) + 'px';
+        w.style.top = Math.max(76, (innerHeight - w.offsetHeight) / 2 - 20 + n * 28) + 'px';
+      }
+      openWins.set(key, w);
     }
-    openWins.set(key, w);
+    w.style.zIndex = ++z;
     w.focus({ preventScroll: true });
-    w.addEventListener('pointerdown', () => { w.style.zIndex = ++z; });
-    w.querySelector('.dt-close').addEventListener('click', () => closeWin(w));
-    w.querySelector('.dt-max').addEventListener('click', () => w.classList.toggle('max'));
-    const bar = w.querySelector('.dt-bar');
-    bar.addEventListener('dblclick', e => { if (!e.target.closest('.dt-lights')) w.classList.toggle('max'); });
-    bar.addEventListener('pointerdown', e => {   // drag by the title bar
-      if (e.button !== 0 || e.target.closest('.dt-lights') || sheet() || w.classList.contains('max')) return;
-      const sx = e.clientX, sy = e.clientY, sl = w.offsetLeft, st = w.offsetTop;
-      bar.setPointerCapture(e.pointerId);
-      const move = ev => {
-        w.style.left = clamp(sl + ev.clientX - sx, 80 - w.offsetWidth, hero.clientWidth - 80) + 'px';
-        w.style.top = clamp(st + ev.clientY - sy, 0, hero.clientHeight - 60) + 'px';
-      };
-      const up = () => { bar.removeEventListener('pointermove', move); bar.removeEventListener('pointerup', up); bar.removeEventListener('pointercancel', up); };
-      bar.addEventListener('pointermove', move);
-      bar.addEventListener('pointerup', up);
-      bar.addEventListener('pointercancel', up);
-    });
-    w.querySelectorAll('.dt-poster').forEach(btn => btn.addEventListener('click', () => {   // poster swaps to the player
-      btn.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(btn.dataset.yt)}?autoplay=1&rel=0&playsinline=1&modestbranding=1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(title)}"></iframe>`;
-    }));
+    return w;
   }
 
+  winsEl.addEventListener('click', e => {
+    const w = e.target.closest('.dt-win');
+    if (!w) return;
+    if (e.target.closest('.dt-close')) return closeWin(w);
+    if (e.target.closest('.dt-max')) return w.classList.toggle('max');
+    const poster = e.target.closest('.dt-poster');
+    if (poster) {   // poster swaps to the player
+      poster.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(poster.dataset.yt)}?autoplay=1&rel=0&playsinline=1&modestbranding=1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(poster.getAttribute('aria-label'))}"></iframe>`;
+      return;
+    }
+    const item = e.target.closest('[data-project]');
+    if (item) return openProject(item.dataset.project, item);
+    const folder = e.target.closest('[data-cat]');
+    if (folder) return openFinder(folder.dataset.cat);
+  });
+  winsEl.addEventListener('dblclick', e => {
+    if (e.target.closest('.dt-bar') && !e.target.closest('.dt-lights')) e.target.closest('.dt-win').classList.toggle('max');
+  });
+  winsEl.addEventListener('pointerdown', e => {   // bring forward; drag by the title bar
+    const w = e.target.closest('.dt-win');
+    if (!w) return;
+    w.style.zIndex = ++z;
+    const bar = e.target.closest('.dt-bar');
+    if (!bar || e.button !== 0 || e.target.closest('.dt-lights') || sheet() || w.classList.contains('max')) return;
+    const sx = e.clientX, sy = e.clientY, sl = w.offsetLeft, st = w.offsetTop;
+    bar.setPointerCapture(e.pointerId);
+    const move = ev => {
+      w.style.left = clamp(sl + ev.clientX - sx, 80 - w.offsetWidth, innerWidth - 80) + 'px';
+      w.style.top = clamp(st + ev.clientY - sy, 0, innerHeight - 60) + 'px';
+    };
+    const up = () => { bar.removeEventListener('pointermove', move); bar.removeEventListener('pointerup', up); bar.removeEventListener('pointercancel', up); };
+    bar.addEventListener('pointermove', move);
+    bar.addEventListener('pointerup', up);
+    bar.addEventListener('pointercancel', up);
+  });
+  addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const front = [...openWins.values()].sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
+    if (front) closeWin(front);
+  });
+
+  // ----- window content -----
   function openProject(id, opener) {
-    const card = document.querySelector(`#work .card[data-yt-id="${CSS.escape(id)}"]`);
-    if (!card) return;
-    const cat = card.closest('.cat'), feat = card.closest('.feat');
-    const title = txt(card.querySelector('.card-title'));
-    const vertical = !!card.querySelector('.thumb.v');
+    const p = WORK.find(w => w.id === id);
+    if (!p) return;
+    const cat = CATS[p.cat];
+    const sys = p.sys ? document.getElementById(p.sys) : null;
     const rows = [
-      ['Type', txt(card.querySelector('.card-tag'))],
-      ['Category', txt(cat && cat.querySelector('.cat-name'))],
-      ['System', txt(feat && feat.querySelector('.feat-title'))],
-      ['Tools', feat ? [...feat.querySelectorAll('.tool')].map(txt).join(', ') : ''],
+      ['Type', p.type],
+      ['Category', cat.name],
+      ['System', txt(sys && sys.querySelector('.feat-title'))],
+      ['Tools', sys ? [...sys.querySelectorAll('.tool')].map(txt).join(', ') : ''],
     ].filter(r => r[1]);
-    const results = feat ? [...feat.querySelectorAll('.feat-out')].map(txt) : [];
-    const desc = txt((feat && feat.querySelector('.feat-desc')) || (cat && cat.querySelector('.cat-desc')));
-    const text = `<h2>${esc(title)}</h2><p class="dt-desc">${esc(desc)}</p>
+    const results = sys ? [...sys.querySelectorAll('.feat-out')].map(txt) : [];
+    const desc = sys ? txt(sys.querySelector('.feat-desc')) : cat.desc;
+    const text = `<h2>${esc(p.title)}</h2><p class="dt-desc">${esc(desc)}</p>
       <dl class="dt-meta">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
       ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}</dl>`;
-    const media = `<div class="dt-media${vertical ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(id)}" aria-label="Play ${esc(title)}"><img src="https://img.youtube.com/vi/${esc(id)}/maxresdefault.jpg" alt=""><span class="dt-play"></span></button></div>
-      <a class="dt-watch" href="${esc(card.href)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
-    openWindow(id, title, vertical ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media, opener);
+    const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>
+      <a class="dt-watch" href="${watchUrl(p)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
+    openWindow(p.id, p.title, p.short ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media, opener);
+  }
+
+  function openFinder(active = 'all', opener) {
+    const side = [['all', 'All work'], ...Object.entries(CATS).map(([k, c]) => [k, c.name])]
+      .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
+    const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="dt-desc">${esc(CATS[k].desc)}</p>
+      <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
+        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><img src="${thumb(p.id)}" alt="" loading="lazy"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
+    const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
+    openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd"><div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
   }
 
   function openAbout(opener) {
@@ -926,42 +914,47 @@
       <div class="dt-links"><a href="mailto:trbatrung@gmail.com">trbatrung@gmail.com</a><a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a></div>`, opener);
   }
 
-  // icons: click opens, drag moves (wide screens), a small wobble still counts as a click
+  // ----- openers outside the desktop: CTA, dock, nav, Systems chips -----
+  const OPENERS = { finder: el => openFinder('all', el), about: openAbout, contact: openContact };
+  document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
+    e.preventDefault();
+    if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
+    OPENERS[el.dataset.open](el);
+  }));
+  document.querySelectorAll('.watch-chip').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
+
+  // ----- desktop icons and folders: click opens, drag moves (desktop screen only) -----
+  const icons = [...hero.querySelectorAll('.dt-icon')];
+  const deselect = () => icons.forEach(i => i.classList.remove('selected'));
+  const activate = icon => icon.dataset.project ? openProject(icon.dataset.project, icon) : openFinder(icon.dataset.cat, icon);
   icons.forEach(icon => {
     icon.addEventListener('pointerdown', e => {
       if (e.button !== 0) return;
       deselect(); icon.classList.add('selected');
-      if (!floating()) return;
+      if (isPhone()) return;
       const sx = e.clientX, sy = e.clientY, sl = parseFloat(icon.style.left), st = parseFloat(icon.style.top);
       let moved = false;
       icon.setPointerCapture(e.pointerId);
       const move = ev => {
-        const dx = ev.clientX - sx, dy = ev.clientY - sy;
-        if (!moved && Math.hypot(dx, dy) < 4) return;
+        const dx = (ev.clientX - sx) / scale, dy = (ev.clientY - sy) / scale;
+        if (!moved && Math.hypot(dx, dy) < 4) return;   // a small wobble still counts as a click
         moved = true; icon.classList.add('dragging');
-        icon.style.left = clamp(sl + dx / hero.clientWidth * 100, 4, 96) + '%';
-        icon.style.top = clamp(st + dy / hero.clientHeight * 100, 10, 80) + '%';
+        icon.style.left = clamp(sl + dx, 60, 1380) + 'px';
+        icon.style.top = clamp(st + dy, 100, 790) + 'px';
       };
       const up = ev => {
         icon.removeEventListener('pointermove', move); icon.removeEventListener('pointerup', up); icon.removeEventListener('pointercancel', up);
         icon.classList.remove('dragging');
-        if (!moved && ev.type === 'pointerup') openProject(icon.dataset.yt, icon);
+        if (!moved && ev.type === 'pointerup') activate(icon);
       };
       icon.addEventListener('pointermove', move);
       icon.addEventListener('pointerup', up);
       icon.addEventListener('pointercancel', up);
     });
-    // keyboard (detail 0) and the flowing layout open on click
-    icon.addEventListener('click', e => { if (e.detail === 0 || !floating()) openProject(icon.dataset.yt, icon); });
+    // keyboard (detail 0) and phone taps open on click
+    icon.addEventListener('click', e => { if (e.detail === 0 || isPhone()) activate(icon); });
   });
   hero.addEventListener('pointerdown', e => { if (!e.target.closest('.dt-icon')) deselect(); });
-  hero.querySelector('[data-open="about"]').addEventListener('click', e => openAbout(e.currentTarget));
-  hero.querySelector('[data-open="contact"]').addEventListener('click', e => openContact(e.currentTarget));
-  addEventListener('keydown', e => {
-    if (e.key !== 'Escape') return;
-    const front = [...openWins.values()].sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
-    if (front) closeWin(front);
-  });
 
   // scroll bleed: --p runs 0 to 1 across the hero's height
   let bleedQueued = false;
@@ -987,31 +980,6 @@
     });
     document.body.appendChild(sw);
   }
-
-  // ----- hover-to-play video previews -----
-  document.querySelectorAll('.card[data-yt-id]').forEach(card => {
-    const thumb = card.querySelector('.thumb');
-    const ytId = card.getAttribute('data-yt-id');
-    let hoverTimeout;
-    card.addEventListener('mouseenter', () => {
-      hoverTimeout = setTimeout(() => {
-        if (!card.classList.contains('is-playing')) {
-          card.classList.add('is-playing');
-          const iframe = document.createElement('iframe');
-          iframe.className = 'hover-player';
-          iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&loop=1&playlist=${ytId}`;
-          iframe.allow = 'autoplay; encrypted-media';
-          thumb.appendChild(iframe);
-        }
-      }, 200);
-    });
-    card.addEventListener('mouseleave', () => {
-      clearTimeout(hoverTimeout);
-      card.classList.remove('is-playing');
-      const iframe = thumb.querySelector('iframe');
-      if (iframe) iframe.remove();
-    });
-  });
 </script>
 </body>
 </html>
