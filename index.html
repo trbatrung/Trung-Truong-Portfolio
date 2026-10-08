@@ -274,9 +274,10 @@
     .dt-win.project .dt-title { display: none; }
     .dt-win.project .dt-ctx { display: block; }
     .dt-done { display: block; grid-column: 3; justify-self: end; border: 0; background: none; padding: 8px 4px; font: 600 15px var(--sans); color: #0a5cd6; cursor: pointer; }
-    .dt-win.finder .dt-title { cursor: pointer; }
-    .dt-win.finder .dt-title::after { content: ' ▾'; color: #8a8a8a; }
-    .dt-win.finder.menu-open .dt-title::after { content: ' ▴'; }
+    /* the folder title is a pill button with a chevron, so it reads as "tap to switch" */
+    .dt-win.finder .dt-title { justify-self: center; position: relative; display: inline-block; max-width: 100%; padding: 7px 32px 7px 15px; border-radius: 999px; background: #efeff2; box-shadow: inset 0 0 0 1px #e2e2e7; cursor: pointer; }
+    .dt-win.finder .dt-title::after { content: ''; position: absolute; right: 14px; top: 50%; width: 6px; height: 6px; margin-top: -5px; border-right: 2px solid #111; border-bottom: 2px solid #111; transform: rotate(45deg); transition: transform .2s; }
+    .dt-win.finder.menu-open .dt-title::after { margin-top: -1px; transform: rotate(-135deg); }
     .fd-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 48px; left: 0; right: 0; z-index: 3; background: #fff; border-bottom: 1px solid #ececec; box-shadow: 0 12px 24px rgba(0,0,0,.12); padding: 6px 8px 10px; }
     .fd-menu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; text-align: left; padding: 12px 10px; border-radius: 10px; font: 500 16px var(--sans); color: #111; }
     .fd-menu button svg { width: 20px; height: 16px; }
@@ -1035,6 +1036,9 @@
     const menu = `<div class="fd-menu" hidden>${side}</div>`;
     const w = openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd">${menu}<div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
     w.classList.remove('menu-open');
+    const t = w.querySelector('.dt-title');   // the title doubles as the folder switcher on phones
+    t.setAttribute('role', 'button');
+    t.setAttribute('aria-label', 'Switch folder: ' + t.textContent);
   }
 
   function openNote(key, opener) {
