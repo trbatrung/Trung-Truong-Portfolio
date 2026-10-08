@@ -1,0 +1,5 @@
+# GitHub Pages (Jekyll). The site is index.html; these stay in the repo but are not published.
+# Folders starting with "_" (like _archive/) are never published.
+exclude:
+  - docs
+  - CLAUDE.md

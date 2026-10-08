@@ -50,9 +50,9 @@ followed only part of `copy-rewrite-brief.md`, and from the desktop prototype bu
 | "8+ years" | CV entries start Mar 2019 (about 7.5 years). Fine if there's earlier work. |
 
 ## Gotchas
-- **GitHub Pages publishes this repo with Jekyll.** `index.html` is the site, and the Markdown in
-  `docs/` is published as pages too (e.g. `/docs/positioning.html`). Folders starting with `_`
-  (like `_archive/`) are not published.
+- **GitHub Pages publishes this repo with Jekyll.** `index.html` is the site. `_config.yml` keeps
+  `docs/` and `CLAUDE.md` off the site (they were published as pages until 2026-10-08), and
+  folders starting with `_` (like `_archive/`) are never published.
 - **The GitHub repo is public.** Everything in `docs/` is readable by anyone. The testing PDF stays
   gitignored.
 - Thumbnails come from `img.youtube.com`. A video with no maxres thumbnail needs `hq: true` in
