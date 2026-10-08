@@ -239,7 +239,9 @@
   .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 12px; margin-top: 14px; }
   .fd-item { display: flex; flex-direction: column; border: 0; background: none; padding: 6px; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
   .fd-item:hover, .fd-item:focus-visible { background: #f1f1f3; outline: none; }
-  .fd-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #ddd; }
+  .fd-th { position: relative; display: block; }
+  .fd-item img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #ddd; }
+  .fd-len { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.75); color: #fff; font: 500 11px var(--mono); }
   .fd-item .t { font: 500 13.5px var(--sans); color: #111; margin-top: 8px; }
   .fd-item .s { font: 12px var(--sans); color: #8a8a8a; margin-top: 2px; }
 
@@ -775,39 +777,39 @@
     ai:     { name: 'AI Systems', desc: 'Systems I built, and what I changed when they broke.' },
   };
   const WORK = [
-    { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand' },
-    { id: 'J0j3ZWbqS5s', title: 'Feedflo', type: 'Impact Film · Mogler Farms', cat: 'brand' },
-    { id: 'HBTfzwOwkxY', title: 'Powerlift Hangar', type: 'Product Showcase', cat: 'client' },
-    { id: 'oUDLKNFswlQ', title: 'Plexus AV', type: 'Company Values', cat: 'client' },
-    { id: 'ieu7p3qum_s', title: 'Veterans Services', type: 'Social Awareness', cat: 'client' },
-    { id: 'pNw0LhYSSv4', title: 'Love Hay', type: 'Testimonial · Operation of the Year', cat: 'client' },
-    { id: 'Z5ZgsThn3nc', title: 'Hydaway Design Test', type: 'Product Showcase', cat: 'client' },
-    { id: 'E56W3HIF3ao', title: 'Sencore Brand', type: 'Company Values', cat: 'client' },
-    { id: 'Mh5BJ9R5pFw', title: 'Kore Cares', type: 'Company Culture', cat: 'client' },
-    { id: '7Ky4nM_jru4', title: 'DRA Testimonial', type: 'Testimonial', cat: 'client' },
-    { id: 'MTw-beRT1Ro', title: 'Easy Automation', type: 'Testimonial · Simplot Grower Solutions', cat: 'client' },
-    { id: 'op512g61BmI', title: 'CHAD Health Workers', type: 'Social Awareness · Testimonial', cat: 'client' },
-    { id: 'gom6gM6hxyU', title: 'SD Symphony Orchestra', type: 'Social Awareness · Gala 2024', cat: 'client' },
-    { id: 'WlpPZHtb2jc', title: 'Camp POSTCARD', type: 'Social Awareness · Rise and Shine 2024', cat: 'client' },
-    { id: 'RonJvUgm8JQ', title: 'Cats TNR', type: 'Social Awareness · Sioux Empire TNR Coalition', cat: 'client', hq: true },
-    { id: 'vwf4U1WzQ0s', title: 'No More Solo', type: 'Short · Ad', cat: 'ads', short: true },
-    { id: 'W3KMqXGB6Qg', title: 'Short Ketone', type: 'Short · Ad', cat: 'ads', short: true },
-    { id: '-toxHWQCe_w', title: 'Dental Ads', type: 'Short · Ad', cat: 'ads', short: true },
-    { id: 'eE9IeIG6HFU', title: 'Nailzy', type: 'Short · App Ad', cat: 'ads', short: true },
-    { id: 'iYsKXGBhExY', title: 'Keychron', type: 'Short · Social Ad', cat: 'ads', short: true },
-    { id: 'C0NH1Izy5zM', title: 'How to Absorb Everything You Read', type: 'YouTube · Mike Dee', cat: 'long' },
-    { id: 'bsSM3c1vdOY', title: 'Become a Full-Time Content Creator', type: 'YouTube · Rish from Mapplinks', cat: 'long' },
-    { id: 'a3mAARp5T98', title: 'Managing Employees Doesn\'t Have to Suck', type: 'YouTube · John T. Meyer', cat: 'long' },
-    { id: 'ORcY-A6fwG8', title: 'Nostalgia Street, Ep. 4', type: 'Podcast · 4Front Studios', cat: 'long' },
-    { id: 'Lgr4LS4ULw4', title: 'Tales From a Real Cowgirl', type: 'Podcast · 4Front Studios', cat: 'long' },
-    { id: '-MI2w6o8Tes', title: 'Robots Milking Cows?!', type: 'Podcast · 4Front Studios', cat: 'long' },
-    { id: 'ofQ9lYCnjjk', title: 'Revve Product Demo', type: 'Product Demo', cat: 'motion' },
-    { id: 'DV1G6hvNptI', title: 'What Is an NFT?', type: 'Motion Graphics · Ninja Ape', cat: 'motion' },
-    { id: '57Wtwlewnac', title: 'What Is Web 3.0?', type: 'Motion Graphics · Ninja Ape', cat: 'motion' },
-    { id: 'pR03yYZbI8E', title: 'Founder Intro', type: 'Infinite Leverage', cat: 'ai', sys: 'sys-01' },
-    { id: 'WlB4_OJTftM', title: 'Executive Scale', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true },
-    { id: '3stIKPZL_00', title: 'Brand Presence', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true },
-    { id: '8EKCg3SiSPI', title: 'AI Language Lesson', type: 'Proof of Concept', cat: 'ai', sys: 'sys-03' },
+    { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand', len: '5:59', desc: 'A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.' },
+    { id: 'J0j3ZWbqS5s', title: 'Feedflo', type: 'Impact Film · Mogler Farms', cat: 'brand', len: '5:45', desc: 'Feedflo\'s impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.' },
+    { id: 'HBTfzwOwkxY', title: 'Powerlift Hangar', type: 'Product Showcase', cat: 'client', len: '1:00', desc: 'A one-minute showcase for Powerlift\'s hangar doors, seen open on finished hangars with aircraft inside.' },
+    { id: 'oUDLKNFswlQ', title: 'Plexus AV', type: 'Company Values', cat: 'client', len: '1:59', desc: 'A two-minute company values film for Plexus AV, presented on camera and closing on one clear ask: visit the site.' },
+    { id: 'ieu7p3qum_s', title: 'Veterans Services', type: 'Social Awareness', cat: 'client', len: '4:13', desc: 'A four-minute story on VOA Dakotas\' veterans services, made for Rise and Shine 2025 and told through interviews.' },
+    { id: 'pNw0LhYSSv4', title: 'Love Hay', type: 'Testimonial · Operation of the Year', cat: 'client', len: '9:41', desc: 'A ten-minute feature on Love Hay as Operation of the Year, told on camera from inside the operation.' },
+    { id: 'Z5ZgsThn3nc', title: 'Hydaway Design Test', type: 'Product Showcase', cat: 'client', len: '1:00', desc: 'A one-minute product test film for Hydaway. One result carries it: built to withstand winds of 255 mph.' },
+    { id: 'E56W3HIF3ao', title: 'Sencore Brand', type: 'Company Values', cat: 'client', len: '1:46', desc: 'Sencore\'s 2024 brand film, under two minutes, built on its collaboration with key partners.' },
+    { id: 'Mh5BJ9R5pFw', title: 'Kore Cares', type: 'Company Culture', cat: 'client', len: '3:07', desc: 'A three-minute culture film for Kore Cares, filmed with the team at work.' },
+    { id: '7Ky4nM_jru4', title: 'DRA Testimonial', type: 'Testimonial', cat: 'client', len: '3:32', desc: 'A three-and-a-half-minute client testimonial for DRA, told on camera by Charlie.' },
+    { id: 'MTw-beRT1Ro', title: 'Easy Automation', type: 'Testimonial · Simplot Grower Solutions', cat: 'client', len: '4:28', desc: 'A customer testimonial for Easy Automation Inc. from Simplot Grower Solutions, filmed on site with the equipment in frame.' },
+    { id: 'op512g61BmI', title: 'CHAD Health Workers', type: 'Social Awareness · Testimonial', cat: 'client', len: '2:49', desc: 'A community health worker testimonial for CHAD. Under three minutes, one voice on camera.' },
+    { id: 'gom6gM6hxyU', title: 'SD Symphony Orchestra', type: 'Social Awareness · Gala 2024', cat: 'client', len: '5:37', desc: 'A film for the South Dakota Symphony Orchestra\'s 2024 gala, with the orchestra in performance.' },
+    { id: 'WlpPZHtb2jc', title: 'Camp POSTCARD', type: 'Social Awareness · Rise and Shine 2024', cat: 'client', len: '4:49', desc: 'Camp POSTCARD\'s story for Rise and Shine 2024, filmed at camp with the kids.' },
+    { id: 'RonJvUgm8JQ', title: 'Cats TNR', type: 'Social Awareness · Sioux Empire TNR Coalition', cat: 'client', hq: true, len: '4:24', desc: 'A film for the Sioux Empire TNR Coalition on its trap-neuter-return work with community cats.' },
+    { id: 'vwf4U1WzQ0s', title: 'No More Solo', type: 'Short · Ad', cat: 'ads', short: true, len: '1:15', desc: 'A 75-second vertical ad: one presenter to camera, with animated graphics carrying the numbers.' },
+    { id: 'W3KMqXGB6Qg', title: 'Short Ketone', type: 'Short · Ad', cat: 'ads', short: true, len: '0:33', desc: 'A 33-second vertical ad for a ketone product, cut from fitness footage with on-screen captions.' },
+    { id: '-toxHWQCe_w', title: 'Dental Ads', type: 'Short · Ad', cat: 'ads', short: true, len: '0:56', desc: 'A 56-second vertical ad for clinic marketing. The line on screen is the pitch: ad campaigns that take people from click to clinic.' },
+    { id: 'eE9IeIG6HFU', title: 'Nailzy', type: 'Short · App Ad', cat: 'ads', short: true, len: '0:42', desc: 'A 42-second ad for Nailzy, the app that helps nail technicians find salons fast. In Vietnamese.' },
+    { id: 'iYsKXGBhExY', title: 'Keychron', type: 'Short · Social Ad', cat: 'ads', short: true, len: '0:17', desc: 'A 17-second Instagram ad for Keychron, built around a desk setup.' },
+    { id: 'C0NH1Izy5zM', title: 'How to Absorb Everything You Read', type: 'YouTube · Mike Dee', cat: 'long', len: '8:44', desc: 'A nine-minute YouTube episode for Mike Dee on his FAST framework for learning: Forget, Active, State, Teach.' },
+    { id: 'bsSM3c1vdOY', title: 'Become a Full-Time Content Creator', type: 'YouTube · Rish from Mapplinks', cat: 'long', len: '10:00', desc: 'A ten-minute YouTube episode for Rish from Mapplinks on ways to earn as a content creator, from blogs and newsletters to online courses.' },
+    { id: 'a3mAARp5T98', title: 'Managing Employees Doesn\'t Have to Suck', type: 'YouTube · John T. Meyer', cat: 'long', len: '5:02', desc: 'A five-minute YouTube episode for John T. Meyer on three ways to make managing a team less painful and more productive.' },
+    { id: 'ORcY-A6fwG8', title: 'Nostalgia Street, Ep. 4', type: 'Podcast · 4Front Studios', cat: 'long', len: '57:21', desc: 'A 57-minute episode with Tory Haggerty on Mike Tyson\'s Punch-Out, arcades and 90s grunge.' },
+    { id: 'Lgr4LS4ULw4', title: 'Tales From a Real Cowgirl', type: 'Podcast · 4Front Studios', cat: 'long', len: '46:46', desc: 'A Nostalgia Street episode with Rebekah Scott of Rebekah Scott Designs, on growing up on a South Dakota farm and ranch.' },
+    { id: '-MI2w6o8Tes', title: 'Robots Milking Cows?!', type: 'Podcast · 4Front Studios', cat: 'long', len: '48:47', desc: 'A Nostalgia Street episode with Tanna Soukup of Strategie LLC, on growing up on a Minnesota dairy farm, robot milkers included.' },
+    { id: 'ofQ9lYCnjjk', title: 'Revve Product Demo', type: 'Product Demo', cat: 'motion', len: '2:53', desc: 'A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.' },
+    { id: 'DV1G6hvNptI', title: 'What Is an NFT?', type: 'Motion Graphics · Ninja Ape', cat: 'motion', len: '7:35', desc: 'A seven-minute motion graphics explainer for Ninja Ape on how NFTs work, in plain terms. The channel\'s first video.' },
+    { id: '57Wtwlewnac', title: 'What Is Web 3.0?', type: 'Motion Graphics · Ninja Ape', cat: 'motion', len: '10:37', desc: 'A ten-minute motion graphics explainer for Ninja Ape on Web 3.0, made for beginners.' },
+    { id: 'pR03yYZbI8E', title: 'Founder Intro', type: 'Infinite Leverage', cat: 'ai', sys: 'sys-01', len: '1:07', desc: 'A one-minute intro film, built with the code-based animation pipeline.' },
+    { id: 'WlB4_OJTftM', title: 'Executive Scale', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true, len: '1:19', desc: 'A 79-second avatar-led short arguing that launching an AI program is only the first step.' },
+    { id: '3stIKPZL_00', title: 'Brand Presence', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true, len: '0:43', desc: 'A 43-second avatar-led short built on one number: 64.8% of Vietnamese are looking for a new job.' },
+    { id: '8EKCg3SiSPI', title: 'AI Language Lesson', type: 'Proof of Concept', cat: 'ai', sys: 'sys-03', len: '1:11', desc: 'A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens\' office.' },
   ];
 
   const hero = document.getElementById('top');
@@ -922,13 +924,14 @@
     const sys = p.sys ? document.getElementById(p.sys) : null;
     const rows = [
       ['Type', p.type],
+      ['Length', p.len],
       ['Category', cat.name],
       ['System', txt(sys && sys.querySelector('.feat-title'))],
       ['Tools', sys ? [...sys.querySelectorAll('.tool')].map(txt).join(', ') : ''],
     ].filter(r => r[1]);
     const results = sys ? [...sys.querySelectorAll('.feat-out')].map(txt) : [];
-    const desc = sys ? txt(sys.querySelector('.feat-desc')) : cat.desc;
-    const text = `<h2>${esc(p.title)}</h2><p class="dt-desc">${esc(desc)}</p>
+    const paras = [p.desc || cat.desc, sys ? txt(sys.querySelector('.feat-desc')) : ''].filter(Boolean);
+    const text = `<h2>${esc(p.title)}</h2>${paras.map(t => `<p class="dt-desc">${esc(t)}</p>`).join('')}
       <dl class="dt-meta">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
       ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}</dl>`;
     const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, p.hq ? 'hqdefault' : 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>
@@ -941,7 +944,7 @@
       .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
     const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="dt-desc">${esc(CATS[k].desc)}</p>
       <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
-        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><img src="${thumb(p.id)}" alt="" loading="lazy"><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
+        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy"><span class="fd-len">${esc(p.len)}</span></span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
     const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
     openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd"><div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
   }

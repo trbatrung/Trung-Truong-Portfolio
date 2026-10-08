@@ -80,6 +80,61 @@ Three systems. Each needs a real "what broke, what I changed" line from Ethan.
    - Video: AI Language Lesson, Proof of Concept (`8EKCg3SiSPI`)
    - What broke: _pending_
 
+## Video descriptions (draft, 2026-10-08, needs sign-off)
+Shown in each video's window on the site. Written from the YouTube title, the YouTube description where there is one (only 9 of 33 have one), the thumbnail, and the runtime. They describe the video, not Ethan's role in it; role-level copy waits for step 2.
+
+
+**Brand Film**
+
+- **Joe Schaeffer** (5:59, `jH6LaZDXNMs`): A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.
+- **Feedflo** (5:45, `J0j3ZWbqS5s`): Feedflo's impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.
+
+**Client & Story**
+
+- **Powerlift Hangar** (1:00, `HBTfzwOwkxY`): A one-minute showcase for Powerlift's hangar doors, seen open on finished hangars with aircraft inside.
+- **Plexus AV** (1:59, `oUDLKNFswlQ`): A two-minute company values film for Plexus AV, presented on camera and closing on one clear ask: visit the site.
+- **Veterans Services** (4:13, `ieu7p3qum_s`): A four-minute story on VOA Dakotas' veterans services, made for Rise and Shine 2025 and told through interviews.
+- **Love Hay** (9:41, `pNw0LhYSSv4`): A ten-minute feature on Love Hay as Operation of the Year, told on camera from inside the operation.
+- **Hydaway Design Test** (1:00, `Z5ZgsThn3nc`): A one-minute product test film for Hydaway. One result carries it: built to withstand winds of 255 mph.
+- **Sencore Brand** (1:46, `E56W3HIF3ao`): Sencore's 2024 brand film, under two minutes, built on its collaboration with key partners.
+- **Kore Cares** (3:07, `Mh5BJ9R5pFw`): A three-minute culture film for Kore Cares, filmed with the team at work.
+- **DRA Testimonial** (3:32, `7Ky4nM_jru4`): A three-and-a-half-minute client testimonial for DRA, told on camera by Charlie.
+- **Easy Automation** (4:28, `MTw-beRT1Ro`): A customer testimonial for Easy Automation Inc. from Simplot Grower Solutions, filmed on site with the equipment in frame.
+- **CHAD Health Workers** (2:49, `op512g61BmI`): A community health worker testimonial for CHAD. Under three minutes, one voice on camera.
+- **SD Symphony Orchestra** (5:37, `gom6gM6hxyU`): A film for the South Dakota Symphony Orchestra's 2024 gala, with the orchestra in performance.
+- **Camp POSTCARD** (4:49, `WlpPZHtb2jc`): Camp POSTCARD's story for Rise and Shine 2024, filmed at camp with the kids.
+- **Cats TNR** (4:24, `RonJvUgm8JQ`): A film for the Sioux Empire TNR Coalition on its trap-neuter-return work with community cats.
+
+**Video Ads**
+
+- **No More Solo** (1:15, `vwf4U1WzQ0s`): A 75-second vertical ad: one presenter to camera, with animated graphics carrying the numbers.
+- **Short Ketone** (0:33, `W3KMqXGB6Qg`): A 33-second vertical ad for a ketone product, cut from fitness footage with on-screen captions.
+- **Dental Ads** (0:56, `-toxHWQCe_w`): A 56-second vertical ad for clinic marketing. The line on screen is the pitch: ad campaigns that take people from click to clinic.
+- **Nailzy** (0:42, `eE9IeIG6HFU`): A 42-second ad for Nailzy, the app that helps nail technicians find salons fast. In Vietnamese.
+- **Keychron** (0:17, `iYsKXGBhExY`): A 17-second Instagram ad for Keychron, built around a desk setup.
+
+**Long-form & Podcast**
+
+- **How to Absorb Everything You Read** (8:44, `C0NH1Izy5zM`): A nine-minute YouTube episode for Mike Dee on his FAST framework for learning: Forget, Active, State, Teach.
+- **Become a Full-Time Content Creator** (10:00, `bsSM3c1vdOY`): A ten-minute YouTube episode for Rish from Mapplinks on ways to earn as a content creator, from blogs and newsletters to online courses.
+- **Managing Employees Doesn't Have to Suck** (5:02, `a3mAARp5T98`): A five-minute YouTube episode for John T. Meyer on three ways to make managing a team less painful and more productive.
+- **Nostalgia Street, Ep. 4** (57:21, `ORcY-A6fwG8`): A 57-minute episode with Tory Haggerty on Mike Tyson's Punch-Out, arcades and 90s grunge.
+- **Tales From a Real Cowgirl** (46:46, `Lgr4LS4ULw4`): A Nostalgia Street episode with Rebekah Scott of Rebekah Scott Designs, on growing up on a South Dakota farm and ranch.
+- **Robots Milking Cows?!** (48:47, `-MI2w6o8Tes`): A Nostalgia Street episode with Tanna Soukup of Strategie LLC, on growing up on a Minnesota dairy farm, robot milkers included.
+
+**Motion & Explainers**
+
+- **Revve Product Demo** (2:53, `ofQ9lYCnjjk`): A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.
+- **What Is an NFT?** (7:35, `DV1G6hvNptI`): A seven-minute motion graphics explainer for Ninja Ape on how NFTs work, in plain terms. The channel's first video.
+- **What Is Web 3.0?** (10:37, `57Wtwlewnac`): A ten-minute motion graphics explainer for Ninja Ape on Web 3.0, made for beginners.
+
+**AI Systems**
+
+- **Founder Intro** (1:07, `pR03yYZbI8E`): A one-minute intro film, built with the code-based animation pipeline.
+- **Executive Scale** (1:19, `WlB4_OJTftM`): A 79-second avatar-led short arguing that launching an AI program is only the first step.
+- **Brand Presence** (0:43, `3stIKPZL_00`): A 43-second avatar-led short built on one number: 64.8% of Vietnamese are looking for a new job.
+- **AI Language Lesson** (1:11, `8EKCg3SiSPI`): A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens' office.
+
 ## Retired
 - **Dermatology Course · Module Intro** (`uGsAgs07RbU`). AI-directed b-roll (Veo 3, Kling),
   replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
