@@ -1,6 +1,9 @@
 # Projects: Canonical Work List
 
-The Selected Work section, in live site order. Video IDs are YouTube unless noted.
+Every video on the site. Since the October revamp they live in the desktop hero's folders and the
+Finder window (the `WORK` list in `../index.html`), not in a grid on the page. Video IDs are
+YouTube unless noted. Rows marked **deck** were pulled from Ethan's Pitch deck
+(pitch.com/v/editor-portfolio---trung-ethan-truong-m6k6nd) on 2026-10-08. Titles come from YouTube.
 **Role** and **For** are blank until Ethan confirms them (step 2 of `revamp-plan.md`). Copy for a
 project can't go above its confirmed role (see the credit rules in `positioning.md`).
 
@@ -17,9 +20,18 @@ project can't go above its confirmed role (see the credit rules in `positioning.
 | Plexus AV | Company Values | `oUDLKNFswlQ` | ? | ? |
 | Veterans Services | Social Awareness · VOA Dakotas ("Rise & Shine 2025") | `ieu7p3qum_s` | ? | ? |
 | Love Hay | Testimonial · Operation of the Year | `pNw0LhYSSv4` | ? | ? |
+| Hydaway Design Test (deck) | Product Showcase | `Z5ZgsThn3nc` | ? | ? |
+| Sencore Brand (deck) | Company Values | `E56W3HIF3ao` | ? | ? |
+| Kore Cares (deck) | Company Culture | `Mh5BJ9R5pFw` | ? | ? |
+| DRA Testimonial (deck) | Testimonial | `7Ky4nM_jru4` | ? | ? |
+| Easy Automation (deck) | Testimonial · Simplot Grower Solutions | `MTw-beRT1Ro` | ? | ? |
+| CHAD Health Workers (deck) | Social Awareness · Testimonial | `op512g61BmI` | ? | ? |
+| SD Symphony Orchestra (deck) | Social Awareness · Gala 2024 | `gom6gM6hxyU` | ? | ? |
+| Camp POSTCARD (deck) | Social Awareness · Rise and Shine 2024 | `WlpPZHtb2jc` | ? | ? |
+| Cats TNR (deck) | Social Awareness · Sioux Empire TNR Coalition | `RonJvUgm8JQ` (no maxres thumbnail, uses hq) | ? | ? |
 
-Veterans Services: the site still shows a title-card face. A real YouTube thumbnail is available
-as of 2026-10-08 (maxresdefault returns 200), so swap it in.
+The deck also links a Vimeo cut of Veterans Services (`vimeo.com/1078713150`). Same film as the
+YouTube `ieu7p3qum_s` above, so it isn't listed twice.
 
 ## 03 · Video Advertisement (Shorts)
 | Project | Video | Role | For |
@@ -27,8 +39,29 @@ as of 2026-10-08 (maxresdefault returns 200), so swap it in.
 | No More Solo | `vwf4U1WzQ0s` | ? | ? |
 | Short Ketone | `W3KMqXGB6Qg` | ? | ? |
 | Dental Ads | `-toxHWQCe_w` | ? | ? |
+| Nailzy (deck) | `eE9IeIG6HFU` | ? | ? |
+| Keychron (deck) | `iYsKXGBhExY` | ? | ? |
 
-## 04 · AI-Augmented Production (Edge8)
+## 04 · Long-form & Podcast (new folder, from the deck)
+| Project | Type | Video | Role | For |
+|---|---|---|---|---|
+| How to Absorb Everything You Read | YouTube · Mike Dee | `C0NH1Izy5zM` | ? | Mike Dee? |
+| Become a Full-Time Content Creator | YouTube · Rish from Mapplinks | `bsSM3c1vdOY` | ? | ? |
+| Managing Employees Doesn't Have to Suck | YouTube · John T. Meyer | `a3mAARp5T98` | ? | ? |
+| Nostalgia Street, Ep. 4 | Podcast · 4Front Studios | `ORcY-A6fwG8` | ? | 4Front? |
+| Tales From a Real Cowgirl | Podcast · 4Front Studios | `Lgr4LS4ULw4` | ? | 4Front? |
+| Robots Milking Cows?! | Podcast · 4Front Studios | `-MI2w6o8Tes` | ? | 4Front? |
+
+The deck calls the podcast work audio editing and sound design for Nostalgia Street.
+
+## 05 · Motion & Explainers (new folder, from the deck)
+| Project | Type | Video | Role | For |
+|---|---|---|---|---|
+| Revve Product Demo | Product Demo | `ofQ9lYCnjjk` | ? | ? |
+| What Is an NFT? | Motion Graphics · Ninja Ape | `DV1G6hvNptI` | ? | ? |
+| What Is Web 3.0? | Motion Graphics · Ninja Ape | `57Wtwlewnac` | ? | ? |
+
+## 06 · AI Systems (Edge8)
 Three systems. Each needs a real "what broke, what I changed" line from Ethan.
 
 1. **Code-based animation pipeline.** Claude Code + Final Cut Pro, briefed through context
@@ -52,5 +85,8 @@ Three systems. Each needs a real "what broke, what I changed" line from Ethan.
   replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
   Intro took its slot.
 
-## Desktop hero flagships
-5 or 6 of the projects above get an icon on the desktop hero. _To pick in step 1._
+## Desktop hero
+Loose files on the desktop: Joe Schaeffer, No More Solo, Powerlift Hangar, Founder Intro (pending
+Ethan's pick). Everything else sits in the six folders: Brand Film, Client & Story, Video Ads,
+Long-form, Motion, AI Systems. Folder descriptions for Long-form and Motion are new drafts and
+need sign-off.
