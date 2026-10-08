@@ -23,12 +23,14 @@ The page below the hero runs about 480 words (down from about 1,360 on 2026-10-0
 on the desktop: every video in Finder, the full point of view and the full tool tests as notes.
 Say each idea once. Before adding a line, check it isn't already said in another section.
 
-## Hero `#top` · Status: step 1 (H1 options pending)
+## Hero `#top` · Status: headline picked; background still open
 A fixed 1440x900 desktop screen (390x950 on phones), scaled to fit. See `positioning.md`.
 - Eyebrow: "Trung (Ethan) Truong · Creative Direction & Production Systems"
-- H1: "I own the video pipeline end to end." + "**AI** has a defined place in it, and **I set**
-  where that place is."
-- Sub: "Script to final master, one standard. Every AI decision is tested before it ships."
+- H1: "Where does **AI** belong in your video?" + "AI has a defined place in it. The **standard**
+  doesn't move." Picked 2026-10-08 from six neutral options: the headline from option 3, the
+  second line and sub from option 6. Replaces the first-person "I own the video pipeline end to
+  end." Ethan found it too self-focused.
+- Sub: "Script to final master, end to end."
 - CTAs: "Browse the work" (opens Finder) · "Get in touch"
 - Status: "Ho Chi Minh City · Open to senior roles and select projects"
 - Desktop: 4 loose videos, 2 notes (Tool tests, How I think), 6 folders, dock (Work, About,
