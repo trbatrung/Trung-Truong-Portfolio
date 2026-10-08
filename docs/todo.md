@@ -32,12 +32,15 @@ broken markup — these are content/polish items.
       testing log is Trung's private source of truth, not a public claim.
 - [ ] Fold in findings from future test batches (no public round/count badge — keep it as use-case findings).
 - [ ] Decision→outcome lines for the non-AI work cards (Brand Film / Ads / Client) — currently
-      just meta tags; add a short result line where one exists.
+      just meta tags; add a short result line where one exists. → Step 2 of `revamp-plan.md`.
 - [x] ~~Vimeo "Veterans Services" card~~ ✅ replaced with YouTube (`ieu7p3qum_s`), now has hover-play + click.
-- [ ] Swap Veterans card's title-card face for the real YouTube thumbnail once YouTube finishes
-      processing it (currently only serves the 120×90 generic placeholder).
+- [ ] Swap Veterans card's title-card face for the real YouTube thumbnail. Now available
+      (maxresdefault returned 200 on 2026-10-08). → Step 4 of `revamp-plan.md`.
 - [ ] Consider adding a GitHub link (still none on the site).
 - [ ] Phase 2 (later): case-study sub-pages for 2–3 flagship projects.
+
+## October 2026 revamp
+See `revamp-plan.md` for decisions, steps and the inputs still needed from Ethan.
 
 ## Watch-outs
 - [ ] Video card thumbnails rely on YouTube `maxresdefault.jpg` existing per video ID. Any video

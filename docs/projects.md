@@ -1,38 +1,56 @@
-# Projects — Canonical Work List
+# Projects: Canonical Work List
 
-From the "Selected Work" section ("Curated from 100+ Delivered"). Organized into 4 categories.
-Video IDs are YouTube unless noted.
+The Selected Work section, in live site order. Video IDs are YouTube unless noted.
+**Role** and **For** are blank until Ethan confirms them (step 2 of `revamp-plan.md`). Copy for a
+project can't go above its confirmed role (see the credit rules in `positioning.md`).
 
-## Nº01 — AI-Augmented Production
-Capability blocks demonstrating the full AI pipeline.
+## 01 · Brand Film
+| Project | Type | Video | Role | For |
+|---|---|---|---|---|
+| Joe Schaeffer | Artist Film | `jH6LaZDXNMs` | ? | ? |
+| Feedflo | Impact Film · Mogler Farms | `J0j3ZWbqS5s` | ? | ? |
 
-- **AI-Directed B-Roll** — Veo3/Kling generated footage.
-  - Tools: Veo3, Kling, Prompt Direction, Final Cut Pro
-  - Video: "Dermatology Course - Module Intro" — YouTube `uGsAgs07RbU`
-  - Note: AI-generated footage replacing a 2-day location shoot.
-- **Scalable Spokesperson** — HeyGen avatar production.
-  - Tools: HeyGen, ElevenLabs, Avatar Production, Multi-market Scale
-  - Videos: "AI Avatar - Executive Scale" (Shorts `WlB4_OJTftM`), "AI Avatar - Brand Presence" (Shorts `3stIKPZL_00`)
-- **Full AI Lesson Production** — end-to-end AI language lesson.
-  - Tools: HeyGen, Veo3, Script Accuracy, Final Cut Pro
-  - Video: "AI Language Lesson - Proof of Concept" — YouTube `8EKCg3SiSPI`
+## 02 · Client & Story Work
+| Project | Type | Video | Role | For |
+|---|---|---|---|---|
+| Powerlift Hangar | Product Showcase | `HBTfzwOwkxY` | ? | ? |
+| Plexus AV | Company Values | `oUDLKNFswlQ` | ? | ? |
+| Veterans Services | Social Awareness · VOA Dakotas ("Rise & Shine 2025") | `ieu7p3qum_s` | ? | ? |
+| Love Hay | Testimonial · Operation of the Year | `pNw0LhYSSv4` | ? | ? |
 
-## Nº02 — Brand Film
-- **Joe Schaeffer | Artist Film** — YouTube `jH6LaZDXNMs`
-- **Feedflo | Impact Film | Mogler Farms** — YouTube `J0j3ZWbqS5s`
+Veterans Services: the site still shows a title-card face. A real YouTube thumbnail is available
+as of 2026-10-08 (maxresdefault returns 200), so swap it in.
 
-## Nº03 — Video Advertisement (short-form)
-- **No More Solo** — Shorts `vwf4U1WzQ0s`
-- **SHORT KETONE** — Shorts `W3KMqXGB6Qg`
-- **Dental Ads** — Shorts `-toxHWQCe_w`
+## 03 · Video Advertisement (Shorts)
+| Project | Video | Role | For |
+|---|---|---|---|
+| No More Solo | `vwf4U1WzQ0s` | ? | ? |
+| Short Ketone | `W3KMqXGB6Qg` | ? | ? |
+| Dental Ads | `-toxHWQCe_w` | ? | ? |
 
-## Nº04 — Client & Story Work
-- **Powerlift Hangar Showcase** — Product Showcase — YouTube `HBTfzwOwkxY`
-- **Plexus AV** — Company Values — YouTube `oUDLKNFswlQ`
-- **Veterans Services** — Social Awareness, VOA Dakotas ("Rise & Shine 2025") — YouTube `ieu7p3qum_s`
-  (uses a title-card face until YouTube generates a usable auto-thumbnail; swap to real image once available)
-- **Love Hay - Operation of The Year** — Testimonial — YouTube `pNw0LhYSSv4`
+## 04 · AI-Augmented Production (Edge8)
+Three systems. Each needs a real "what broke, what I changed" line from Ethan.
 
-## Skills grid (About section)
-HeyGen · Veo3 · ElevenLabs · Final Cut Pro · Adobe Creative Cloud · AI Video Generation ·
-Short-form Editing · Long-form Editing · Brand Film · Motion Graphics
+1. **Code-based animation pipeline.** Claude Code + Final Cut Pro, briefed through context
+   packages, inline QC.
+   - Video: `pR03yYZbI8E`. Confirmed Edge8 code-animation output. Its YouTube title is "EO
+     Melboure Intro" (channel: AI Officer Institute). The site currently labels it "Infinite
+     Leverage · Founder Intro". **Label pending:** can it name EO Melbourne / AI Officer Institute,
+     or should it just say Edge8?
+   - "Rebuilt around reusable components" is on the site but not in the verified facts. Confirm
+     or cut.
+   - What broke: _pending_
+2. **Avatar video at volume.** HeyGen + ElevenLabs.
+   - Videos: Executive Scale (Shorts `WlB4_OJTftM`), Brand Presence (Shorts `3stIKPZL_00`)
+   - What broke: _pending_
+3. **End-to-end AI lesson.** HeyGen presenter, Veo 3 b-roll, script proofed for teaching accuracy.
+   - Video: AI Language Lesson, Proof of Concept (`8EKCg3SiSPI`)
+   - What broke: _pending_
+
+## Retired
+- **Dermatology Course · Module Intro** (`uGsAgs07RbU`). AI-directed b-roll (Veo 3, Kling),
+  replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
+  Intro took its slot.
+
+## Desktop hero flagships
+5 or 6 of the projects above get an icon on the desktop hero. _To pick in step 1._

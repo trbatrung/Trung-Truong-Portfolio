@@ -1,0 +1,112 @@
+:root{
+  --sel:#0a5cd6;            /* macOS selection blue for icon labels */
+  --ink:#111;
+  --muted:#6f6f6f;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:#0d0d0d;color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ---------- Desktop + wallpaper ---------- */
+.desktop{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;user-select:none;-webkit-user-select:none}
+.wallpaper{position:absolute;inset:0;background:#8b8b8b center/cover no-repeat;filter:grayscale(1) contrast(1.03)}
+.wallpaper::after{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(130% 95% at 50% 40%,transparent 55%,rgba(0,0,0,.28)),
+    linear-gradient(to bottom,rgba(255,255,255,.05),transparent 35%,rgba(0,0,0,.12))}
+
+/* ---------- Desktop icons ---------- */
+.icons{position:absolute;inset:0}
+.icon{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:5px;width:132px;
+      background:none;border:0;padding:0;font:inherit;color:inherit;cursor:default;touch-action:none;outline:none}
+.icon .thumb{padding:4px;border-radius:7px;border:1px solid transparent;transition:background .1s}
+.icon img{display:block;width:80px;height:52px;object-fit:cover;border-radius:4px;background:#333;box-shadow:0 2px 10px rgba(0,0,0,.28);pointer-events:none;-webkit-user-drag:none}
+.icon.vertical img{width:36px;height:56px}
+.icon .label{font-size:12.5px;font-weight:500;line-height:1.35;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6);padding:1px 6px;border-radius:4px;max-width:132px;text-align:center}
+.icon.selected .thumb{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.18)}
+.icon.selected .label{background:var(--sel);text-shadow:none}
+.icon.dragging{z-index:5;opacity:.9}
+.icon:focus-visible .thumb{outline:2px solid var(--sel);outline-offset:1px}
+
+/* ---------- Windows ---------- */
+.windows{position:absolute;inset:0;pointer-events:none}
+.win{position:absolute;pointer-events:auto;width:min(880px,calc(100vw - 48px));max-height:calc(100% - 150px);display:flex;flex-direction:column;
+     background:#fff;border-radius:12px;overflow:hidden;
+     box-shadow:0 30px 80px -12px rgba(0,0,0,.5),0 0 0 .5px rgba(0,0,0,.25);
+     transform-origin:50% 50%;animation:winIn .28s var(--ease-out) both}
+.win.closing{animation:winOut .14s ease-in both;pointer-events:none}
+.win.max{left:16px!important;top:16px!important;width:calc(100% - 32px);max-height:calc(100% - 130px)}
+@keyframes winIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes winOut{to{opacity:0;transform:scale(.97)}}
+
+.titlebar{flex:none;display:flex;align-items:center;gap:14px;height:38px;padding:0 14px;border-bottom:1px solid #efefef;cursor:default;touch-action:none}
+.lights{display:flex;gap:8px}
+.lights button{width:12px;height:12px;border-radius:50%;border:0;padding:0;position:relative;cursor:pointer;color:rgba(0,0,0,.55);font:700 9px/12px system-ui}
+.lights button::after{position:absolute;inset:0;text-align:center;opacity:0}
+.lights:hover button::after{opacity:1}
+.l-close{background:#ff5f57}.l-close::after{content:"\00d7";font-size:11px}
+.l-min{background:#febc2e;cursor:default!important}.l-min::after{content:"\2212"}
+.l-max{background:#28c840}.l-max::after{content:"+"}
+.wtitle{font-size:13px;font-weight:500;color:#8a8a8a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.wbody{overflow:auto;overscroll-behavior:contain;padding:22px 20px 20px;user-select:text;-webkit-user-select:text}
+.wbody h1{font-size:clamp(28px,4.2vw,44px);font-weight:600;letter-spacing:-.03em;line-height:1.05;margin-bottom:16px}
+.wbody .desc{font-size:15px;line-height:1.6;color:#555}
+.wbody .desc + .desc{margin-top:12px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;margin:22px 0 24px;text-align:center}
+.meta dt{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#1a1a1a;margin-bottom:4px}
+.meta dd{font-size:15px;color:var(--muted);margin:0}
+.meta .wide{grid-column:1/-1}
+
+/* Media: poster with play button, swaps to the player on click */
+.media{border-radius:10px;overflow:hidden;background:#111;aspect-ratio:16/9}
+.media.vertical{aspect-ratio:9/16}
+.media img,.media video,.media iframe{display:block;width:100%;height:100%;object-fit:cover;border:0}
+.poster{position:relative;display:block;width:100%;height:100%;border:0;padding:0;background:#000;cursor:pointer}
+.poster .play{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px 0 0 -34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .2s var(--ease-out)}
+.poster .play::before{content:"";margin-left:5px;border-style:solid;border-width:11px 0 11px 18px;border-color:transparent transparent transparent #fff}
+.poster:hover .play{transform:scale(1.08)}
+.watch{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted);text-decoration:none}
+.watch:hover{color:#111}
+
+/* Shorts: text left, vertical player right */
+.split{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start}
+.split .meta{text-align:left}
+
+/* About / Contact windows */
+.about{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+.about img{width:72px;height:72px;border-radius:50%;object-fit:cover}
+.about h1{margin:0}
+.about .role{color:var(--muted);font-size:15px;margin-top:6px}
+.initials{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:#111;color:#fff;font-weight:600;font-size:24px;flex:none}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.links a{font-size:14px;font-weight:500;color:#111;text-decoration:none;padding:8px 14px;border-radius:999px;background:#f1f1f1}
+.links a:hover{background:#e6e6e6}
+
+/* ---------- Dock ---------- */
+.dock{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:9999;display:flex;align-items:flex-end;gap:12px;padding:9px 12px;
+      border-radius:22px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);
+      -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.dock .sep{width:1px;align-self:stretch;margin:4px 2px;background:rgba(255,255,255,.4)}
+.tile{position:relative;width:52px;height:52px;border-radius:13px;display:grid;place-items:center;border:0;padding:0;cursor:pointer;color:#fff;font-size:25px;text-decoration:none;
+      box-shadow:0 2px 6px rgba(0,0,0,.22);transition:transform .2s var(--ease-out)}
+.tile:hover,.tile:focus-visible{transform:translateY(-7px) scale(1.12);outline:none}
+.tile .tip{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);padding:4px 9px;border-radius:6px;background:rgba(28,28,28,.88);color:#fff;font:500 12px Inter,system-ui;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s}
+.tile:hover .tip,.tile:focus-visible .tip{opacity:1}
+.tile.avatar{background:#fff center/cover;color:#111;font:600 18px Inter,system-ui;letter-spacing:-.02em}
+.tile.notes{background:linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat,repeating-linear-gradient(to bottom,transparent 0 9px,#e4dfd2 9px 10px) 0 100%/100% 68% no-repeat,#fcfbf7}
+
+/* ---------- Phone: icons flow into a grid, windows become sheets ---------- */
+@media (max-width:700px){
+  .icons{position:relative;inset:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px 6px;padding:24px 14px 120px;max-height:100%;overflow:auto}
+  .icon{position:static;transform:none;width:auto;touch-action:manipulation}
+  .icon .label{max-width:100%}
+  .win{left:12px!important;top:12px!important;width:calc(100% - 24px);max-height:calc(100% - 112px)}
+  .split{grid-template-columns:1fr}
+  .split .media.vertical{max-width:300px;width:100%;margin:0 auto}
+  .dock{bottom:14px;gap:9px;padding:7px 9px;border-radius:18px}
+  .tile{width:44px;height:44px;border-radius:11px;font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){ .win,.win.closing{animation-duration:1ms} .tile{transition:none} }
