@@ -74,16 +74,10 @@
   .nav-tc::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 2s infinite; }
 
   /* ---------- HERO ---------- */
-  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; padding: 8rem 0 4rem; }
-  .hero::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse at 78% 25%, var(--amber-soft) 0%, transparent 45%),
-      radial-gradient(ellipse at 12% 80%, var(--teal-soft) 0%, transparent 45%);
-  }
+  .hero { --p: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; padding: 8rem 0 8.5rem; }
   .hero::after { /* vignette */
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    box-shadow: inset 0 0 220px 40px rgba(0,0,0,0.7);
+    box-shadow: inset 0 0 200px 30px rgba(0,0,0,0.45);
   }
   .hero .wrap { position: relative; z-index: 2; width: 100%; }
   .hero-eyebrow { color: var(--teal); margin-bottom: 1.6rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
@@ -105,15 +99,132 @@
   .btn-ghost { border-color: var(--line); color: var(--ink-dim); }
   .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
 
-  /* hero HUD readout */
-  .hero-hud { position: absolute; left: clamp(1.25rem,4vw,3rem); bottom: 2rem; z-index: 2; display: flex; gap: 2.2rem; flex-wrap: wrap; color: var(--muted); }
-  .hud-item { display: flex; flex-direction: column; gap: .3rem; }
-  .hud-item .k { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
-  .hud-item .v { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; color: var(--ink-dim); }
-  .hud-item .v.tc { color: var(--teal); }
-  .hud-item .v .live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); margin-right: .45rem; animation: pulse 2s infinite; }
-  /* crop marks */
-  .hero-hud::before, .cropmark { }
+  .hero-status { margin-top: 2.2rem; color: rgba(241,237,230,.78); display: flex; align-items: center; gap: .6rem; }
+  .hero-status .live { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 2s infinite; }
+  .hero h1 .l2, .hero-sub { color: rgba(241,237,230,.8); }
+  .hero .btn-ghost { color: rgba(241,237,230,.85); border-color: rgba(241,237,230,.28); }
+
+  /* ---------- DESKTOP HERO ----------
+     The hero is a desktop: a color / ombre background, flagship project icons,
+     Mac-style windows, and a dock. --p (0 to 1, set on scroll) bleeds it into the page. */
+  .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; transform: translateY(calc(var(--p) * 22%)); }
+  .desk-bg::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: calc(var(--p) * .85); }
+  .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 26%; background: linear-gradient(to bottom, transparent, var(--bg)); }
+  /* background options (data-bg on .hero) */
+  .hero[data-bg="ember"] .desk-bg { background:
+      radial-gradient(55% 55% at 82% 72%, rgba(230,161,91,.55), transparent 70%),
+      radial-gradient(50% 55% at 10% 15%, rgba(87,203,187,.30), transparent 70%),
+      linear-gradient(155deg, #0f2a2c 0%, #142229 48%, #2b1c15 100%); }
+  .hero[data-bg="teal"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #156560, transparent 75%), #0e4542; }
+  .hero[data-bg="teal"] h1 .ai, .hero[data-bg="teal"] .hero-eyebrow { color: #a6efe4; }
+  .hero[data-bg="teal"] .hero-eyebrow .bar { background: #a6efe4; }
+  .hero[data-bg="amber"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #a65a26, transparent 75%), #8a471c; }
+  .hero[data-bg="amber"] h1 .craft { color: #ffd6a6; }
+  .hero[data-bg="amber"] h1 .ai, .hero[data-bg="amber"] .hero-eyebrow { color: #c6fff6; }
+  .hero[data-bg="amber"] .hero-eyebrow .bar { background: #c6fff6; }
+  .hero[data-bg="amber"] .btn-primary { background: var(--paper); }
+  .hero[data-bg="dusk"] .desk-bg { background:
+      radial-gradient(45% 50% at 18% 22%, #3e2b5e, transparent 70%),
+      radial-gradient(48% 55% at 88% 28%, #1f5a55, transparent 70%),
+      radial-gradient(55% 50% at 68% 88%, #b4642e, transparent 70%),
+      #17141d; }
+
+  /* icons: scattered on the right like a Mac desktop, draggable */
+  .dt-icons { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: calc(1 - var(--p) * 1.8); transform: translateY(calc(var(--p) * -50px)); }
+  .dt-icon { position: absolute; transform: translate(-50%,-50%); pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 128px; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: default; touch-action: none; outline: none; user-select: none; -webkit-user-select: none; }
+  .dt-thumb { padding: 4px; border-radius: 7px; border: 1px solid transparent; transition: background .1s; }
+  .dt-icon img { width: 80px; height: 52px; object-fit: cover; border-radius: 4px; background: #333; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; -webkit-user-drag: none; }
+  .dt-icon.vertical img { width: 36px; height: 56px; }
+  .dt-label { font-size: 12.5px; font-weight: 500; line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); padding: 1px 6px; border-radius: 4px; max-width: 128px; text-align: center; }
+  .dt-icon.selected .dt-thumb { background: rgba(0,0,0,.22); border-color: rgba(255,255,255,.18); }
+  .dt-icon.selected .dt-label { background: #0a5cd6; text-shadow: none; }
+  .dt-icon.dragging { z-index: 5; opacity: .9; }
+  .dt-icon:focus-visible .dt-thumb { outline: 2px solid #0a5cd6; outline-offset: 1px; }
+
+  /* windows */
+  .dt-wins { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+  .dt-win { position: absolute; pointer-events: auto; width: min(860px, calc(100vw - 48px)); max-height: calc(100vh - 200px); display: flex; flex-direction: column;
+    background: #fff; color: #111; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -12px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.25);
+    animation: dtIn .28s cubic-bezier(.16,1,.3,1) both; outline: none; }
+  .dt-win.closing { animation: dtOut .14s ease-in both; pointer-events: none; }
+  .dt-win.max { left: 16px !important; top: 80px !important; width: calc(100% - 32px); max-height: calc(100vh - 200px); }
+  @keyframes dtIn { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+  @keyframes dtOut { to { opacity: 0; transform: scale(.97); } }
+  .dt-bar { flex: none; display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 14px; border-bottom: 1px solid #efefef; cursor: default; touch-action: none; }
+  .dt-lights { display: flex; gap: 8px; }
+  .dt-lights button { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; position: relative; cursor: pointer; color: rgba(0,0,0,.55); font: 700 9px/12px system-ui; }
+  .dt-lights button::after { position: absolute; inset: 0; text-align: center; opacity: 0; }
+  .dt-lights:hover button::after { opacity: 1; }
+  .dt-close { background: #ff5f57; } .dt-close::after { content: "\00d7"; font-size: 11px; }
+  .dt-min { background: #febc2e; cursor: default !important; } .dt-min::after { content: "\2212"; }
+  .dt-max { background: #28c840; } .dt-max::after { content: "+"; }
+  .dt-title { font-size: 13px; font-weight: 500; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dt-body { overflow: auto; overscroll-behavior: contain; padding: 24px 22px 22px; }
+  .dt-body h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.02em; line-height: 1.05; margin-bottom: 14px; }
+  .dt-body .dt-desc { font-size: 15px; line-height: 1.6; color: #555; }
+  .dt-body .dt-desc + .dt-desc { margin-top: 12px; }
+  .dt-body .dt-desc b { color: #111; font-weight: 600; }
+  .dt-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 20px 0 22px; }
+  .dt-meta dt { font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1a1a1a; margin-bottom: 4px; }
+  .dt-meta dd { font-size: 15px; color: #6f6f6f; margin: 0; }
+  .dt-meta .wide { grid-column: 1 / -1; }
+  .dt-meta .wide dd { color: #b26a24; }
+  .dt-media { border-radius: 10px; overflow: hidden; background: #111; aspect-ratio: 16/9; }
+  .dt-media.vertical { aspect-ratio: 9/16; }
+  .dt-media img, .dt-media iframe { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
+  .dt-poster { position: relative; display: block; width: 100%; height: 100%; border: 0; padding: 0; background: #000; cursor: pointer; }
+  .dt-poster .dt-play { position: absolute; left: 50%; top: 50%; width: 68px; height: 68px; margin: -34px 0 0 -34px; border-radius: 50%; background: rgba(255,255,255,.22); border: 1px solid rgba(255,255,255,.45); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .2s cubic-bezier(.16,1,.3,1); }
+  .dt-poster .dt-play::before { content: ''; position: absolute; left: 26px; top: 23px; border-style: solid; border-width: 11px 0 11px 18px; border-color: transparent transparent transparent #fff; }
+  .dt-poster:hover .dt-play { transform: scale(1.08); }
+  .dt-watch { display: inline-block; margin-top: 10px; font-size: 13px; color: #6f6f6f; }
+  .dt-watch:hover { color: #111; }
+  .dt-split { display: grid; grid-template-columns: 1fr 280px; gap: 28px; align-items: start; }
+  .dt-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .dt-links a { font-size: 14px; font-weight: 500; color: #111; padding: 8px 14px; border-radius: 999px; background: #f1f1f1; }
+  .dt-links a:hover { background: #e6e6e6; }
+
+  /* dock */
+  .dt-dock { position: absolute; left: 50%; bottom: 22px; transform: translate(-50%, calc(var(--p) * 40px)); opacity: calc(1 - var(--p) * 2); z-index: 6; display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
+    border-radius: 22px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.26);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+  .dt-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.4); }
+  .dt-tile { position: relative; width: 52px; height: 52px; border-radius: 13px; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.22); transition: transform .2s cubic-bezier(.16,1,.3,1); }
+  .dt-tile svg { width: 24px; height: 24px; }
+  .dt-tile:hover, .dt-tile:focus-visible { transform: translateY(-7px) scale(1.12); outline: none; }
+  .dt-tip { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); padding: 4px 9px; border-radius: 6px; background: rgba(28,28,28,.88); color: #fff; font: 500 12px var(--sans); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
+  .dt-tile:hover .dt-tip, .dt-tile:focus-visible .dt-tip { opacity: 1; }
+  .dt-avatar { background: var(--paper); color: #111; font: 500 19px var(--serif); font-style: italic; }
+  .dt-notes { background: linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat, repeating-linear-gradient(to bottom, transparent 0 9px, #e4dfd2 9px 10px) 0 100%/100% 68% no-repeat, #fcfbf7; }
+
+  /* preview-only background switcher (shown with ?preview; remove before merge) */
+  .bg-switch { position: fixed; right: 16px; bottom: 16px; z-index: 10001; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(20,20,24,.85); border: 1px solid var(--line); font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; }
+  .bg-switch button { border: 0; border-radius: 999px; padding: .5rem .8rem; background: transparent; color: var(--ink-dim); font: inherit; letter-spacing: inherit; cursor: pointer; }
+  .bg-switch button.on { background: var(--amber); color: #17130c; }
+
+  /* medium screens: icons flow under the hero text instead of floating */
+  @media (max-width: 1100px) {
+    .dt-icons { position: relative; inset: auto; width: 100%; max-width: 1240px; margin: 2.8rem auto 0; padding: 0 clamp(1.25rem, 4vw, 3rem); display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px 6px; pointer-events: auto; }
+    .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
+    .dt-label { max-width: 100%; }
+  }
+  @media (max-width: 700px) {
+    .dt-icons { grid-template-columns: repeat(3, 1fr); gap: 18px 6px; }
+    .dt-wins { position: fixed; z-index: 200; }
+    .dt-win { left: 12px !important; top: 12px !important; width: calc(100% - 24px); max-height: calc(100% - 24px); }
+    .dt-split { grid-template-columns: 1fr; }
+    .dt-lights { gap: 10px; }
+    .dt-lights button { width: 16px; height: 16px; }
+    .dt-split .dt-media.vertical { max-width: 280px; width: 100%; margin: 0 auto; }
+    .dt-dock { bottom: 14px; gap: 9px; padding: 7px 9px; border-radius: 18px; }
+    .dt-tile { width: 44px; height: 44px; border-radius: 11px; }
+    .dt-tile svg { width: 20px; height: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .desk-bg, .dt-icons { transform: none; }
+    .dt-dock { transform: translateX(-50%); }
+    .dt-win, .dt-win.closing { animation-duration: 1ms; }
+    .dt-tile { transition: none; }
+  }
 
   /* ---------- STAT STRIP ---------- */
   .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-2); }
@@ -255,8 +366,8 @@
   footer .fr a:hover { color: var(--amber); }
 
   /* ---------- TOAST ---------- */
-  .toast { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%) translateY(150%); z-index: 10000; background: var(--amber); color: #17130c; font-family: var(--mono); font-size: .74rem; letter-spacing: .06em; padding: .8rem 1.3rem; border-radius: 3px; box-shadow: 0 8px 30px rgba(0,0,0,.5); transition: transform .35s cubic-bezier(.22,1,.36,1); pointer-events: none; white-space: nowrap; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%) translateY(calc(100% + 3rem)); visibility: hidden; z-index: 10000; background: var(--amber); color: #17130c; font-family: var(--mono); font-size: .74rem; letter-spacing: .06em; padding: .8rem 1.3rem; border-radius: 3px; box-shadow: 0 8px 30px rgba(0,0,0,.5); transition: transform .35s cubic-bezier(.22,1,.36,1), visibility .35s; pointer-events: none; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); visibility: visible; }
 
   /* ---------- ANIM ---------- */
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
@@ -286,7 +397,6 @@
     .svc-grid { grid-template-columns: 1fr; }
     .svc { border-right: none; border-bottom: 1px solid var(--line); }
     .about-grid { grid-template-columns: 1fr; }
-    .hero-hud { position: static; margin-top: 3rem; }
   }
   @media (max-width: 520px) {
     .grid-shorts { grid-template-columns: 1fr; }
@@ -311,7 +421,8 @@
 </nav>
 
 <!-- ---------- HERO ---------- -->
-<header class="hero" id="top">
+<header class="hero" id="top" data-bg="ember">
+  <div class="desk-bg" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
     <h1 class="reveal">
@@ -326,11 +437,24 @@
       </a>
       <a href="#contact" class="btn btn-ghost">Get in touch</a>
     </div>
+    <div class="hero-status mono reveal"><span class="live"></span>Open to senior roles and select projects</div>
   </div>
-  <div class="hero-hud">
-    <div class="hud-item"><span class="k">Timecode</span><span class="v tc" id="hudTc">00:00:00:00</span></div>
-    <div class="hud-item"><span class="k">Base</span><span class="v">HCMC · UTC+7</span></div>
-    <div class="hud-item"><span class="k">Status</span><span class="v"><span class="live"></span>Open to senior roles and select projects</span></div>
+
+  <div class="dt-icons" role="group" aria-label="Featured work">
+    <button class="dt-icon" type="button" data-yt="jH6LaZDXNMs" style="left:76%;top:23%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Joe Schaeffer</span></button>
+    <button class="dt-icon" type="button" data-yt="J0j3ZWbqS5s" style="left:89%;top:17%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/J0j3ZWbqS5s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Feedflo</span></button>
+    <button class="dt-icon" type="button" data-yt="HBTfzwOwkxY" style="left:81%;top:42%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Powerlift Hangar</span></button>
+    <button class="dt-icon vertical" type="button" data-yt="vwf4U1WzQ0s" style="left:93%;top:38%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">No More Solo</span></button>
+    <button class="dt-icon" type="button" data-yt="pR03yYZbI8E" style="left:76%;top:62%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Founder Intro</span></button>
+    <button class="dt-icon vertical" type="button" data-yt="WlB4_OJTftM" style="left:90%;top:61%"><span class="dt-thumb"><img src="https://img.youtube.com/vi/WlB4_OJTftM/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Executive Scale</span></button>
+  </div>
+  <div class="dt-wins"></div>
+  <div class="dt-dock" role="toolbar" aria-label="Dock">
+    <button class="dt-tile dt-avatar" type="button" data-open="about" aria-label="About">E<span class="dt-tip">About</span></button>
+    <button class="dt-tile dt-notes" type="button" data-open="contact" aria-label="Contact"><span class="dt-tip">Contact</span></button>
+    <span class="dt-sep"></span>
+    <a class="dt-tile" style="background:#0a66c2" href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg><span class="dt-tip">LinkedIn</span></a>
+    <a class="dt-tile" style="background:#1d1d1f" href="mailto:trbatrung@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg><span class="dt-tip">Email</span></a>
   </div>
 </header>
 
@@ -657,14 +781,12 @@
 <script>
   // ----- running timecode (HH:MM:SS:FF @ 24fps feel) -----
   const navTc = document.getElementById('navTc');
-  const hudTc = document.getElementById('hudTc');
   const pad = n => String(n).padStart(2, '0');
   function tick() {
     const d = new Date();
     const ff = Math.floor((d.getMilliseconds() / 1000) * 24);
     const s = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}:${pad(ff)}`;
     if (navTc) navTc.textContent = s;
-    if (hudTc) hudTc.textContent = s;
   }
   setInterval(tick, 42); tick();
 
@@ -690,20 +812,181 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
   }
-  document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
-    link.addEventListener('click', () => {
-      const addr = link.getAttribute('href').replace('mailto:', '');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(addr).then(
-          () => showToast('Email copied ✓  ' + addr),
-          () => showToast(addr)
-        );
-      } else {
-        showToast(addr);
-      }
-      // note: the mailto navigation still fires for anyone with a mail client set up
-    });
+  // delegated, so mailto links inside desktop windows get it too
+  document.addEventListener('click', e => {
+    const link = e.target.closest('a[href^="mailto:"]');
+    if (!link) return;
+    const addr = link.getAttribute('href').replace('mailto:', '');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(addr).then(
+        () => showToast('Email copied ✓  ' + addr),
+        () => showToast(addr)
+      );
+    } else {
+      showToast(addr);
+    }
+    // note: the mailto navigation still fires for anyone with a mail client set up
   });
+
+  // ----- desktop hero: icons, windows, dock, scroll bleed -----
+  // Window copy is read from the Work / About / Contact sections, so the page stays the one source.
+  const hero = document.getElementById('top');
+  const winsEl = hero.querySelector('.dt-wins');
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const txt = el => el ? el.textContent.trim() : '';
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const floating = () => !matchMedia('(max-width:1100px)').matches;   // icons float and drag only on wide screens
+  const sheet = () => matchMedia('(max-width:700px)').matches;         // windows become full-width sheets
+  const icons = [...hero.querySelectorAll('.dt-icon')];
+  const deselect = () => icons.forEach(i => i.classList.remove('selected'));
+
+  let z = 10;
+  const openWins = new Map();
+  function closeWin(w) {
+    if (w.classList.contains('closing')) return;
+    w.classList.add('closing');
+    openWins.delete(w.dataset.key);
+    w.addEventListener('animationend', () => w.remove(), { once: true });
+    if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
+  }
+  function openWindow(key, title, html, opener) {
+    const existing = openWins.get(key);
+    if (existing) { existing.style.zIndex = ++z; existing.focus({ preventScroll: true }); return; }
+    const w = document.createElement('div');
+    w.className = 'dt-win';
+    w.dataset.key = key;
+    w.tabIndex = -1;
+    w.setAttribute('role', 'dialog');
+    w.setAttribute('aria-label', title);
+    w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div>`;
+    winsEl.appendChild(w);
+    w._opener = opener;
+    w.style.zIndex = ++z;
+    if (!sheet()) {   // center a little above middle of what's on screen, cascade if others are open
+      const n = openWins.size, vh = Math.min(hero.clientHeight, innerHeight);
+      w.style.left = Math.max(16, (hero.clientWidth - w.offsetWidth) / 2 + n * 28) + 'px';
+      w.style.top = Math.max(80, (vh - w.offsetHeight) / 2 - 30 + n * 28) + 'px';
+    }
+    openWins.set(key, w);
+    w.focus({ preventScroll: true });
+    w.addEventListener('pointerdown', () => { w.style.zIndex = ++z; });
+    w.querySelector('.dt-close').addEventListener('click', () => closeWin(w));
+    w.querySelector('.dt-max').addEventListener('click', () => w.classList.toggle('max'));
+    const bar = w.querySelector('.dt-bar');
+    bar.addEventListener('dblclick', e => { if (!e.target.closest('.dt-lights')) w.classList.toggle('max'); });
+    bar.addEventListener('pointerdown', e => {   // drag by the title bar
+      if (e.button !== 0 || e.target.closest('.dt-lights') || sheet() || w.classList.contains('max')) return;
+      const sx = e.clientX, sy = e.clientY, sl = w.offsetLeft, st = w.offsetTop;
+      bar.setPointerCapture(e.pointerId);
+      const move = ev => {
+        w.style.left = clamp(sl + ev.clientX - sx, 80 - w.offsetWidth, hero.clientWidth - 80) + 'px';
+        w.style.top = clamp(st + ev.clientY - sy, 0, hero.clientHeight - 60) + 'px';
+      };
+      const up = () => { bar.removeEventListener('pointermove', move); bar.removeEventListener('pointerup', up); bar.removeEventListener('pointercancel', up); };
+      bar.addEventListener('pointermove', move);
+      bar.addEventListener('pointerup', up);
+      bar.addEventListener('pointercancel', up);
+    });
+    w.querySelectorAll('.dt-poster').forEach(btn => btn.addEventListener('click', () => {   // poster swaps to the player
+      btn.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(btn.dataset.yt)}?autoplay=1&rel=0&playsinline=1&modestbranding=1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(title)}"></iframe>`;
+    }));
+  }
+
+  function openProject(id, opener) {
+    const card = document.querySelector(`#work .card[data-yt-id="${CSS.escape(id)}"]`);
+    if (!card) return;
+    const cat = card.closest('.cat'), feat = card.closest('.feat');
+    const title = txt(card.querySelector('.card-title'));
+    const vertical = !!card.querySelector('.thumb.v');
+    const rows = [
+      ['Type', txt(card.querySelector('.card-tag'))],
+      ['Category', txt(cat && cat.querySelector('.cat-name'))],
+      ['System', txt(feat && feat.querySelector('.feat-title'))],
+      ['Tools', feat ? [...feat.querySelectorAll('.tool')].map(txt).join(', ') : ''],
+    ].filter(r => r[1]);
+    const results = feat ? [...feat.querySelectorAll('.feat-out')].map(txt) : [];
+    const desc = txt((feat && feat.querySelector('.feat-desc')) || (cat && cat.querySelector('.cat-desc')));
+    const text = `<h2>${esc(title)}</h2><p class="dt-desc">${esc(desc)}</p>
+      <dl class="dt-meta">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
+      ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}</dl>`;
+    const media = `<div class="dt-media${vertical ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(id)}" aria-label="Play ${esc(title)}"><img src="https://img.youtube.com/vi/${esc(id)}/maxresdefault.jpg" alt=""><span class="dt-play"></span></button></div>
+      <a class="dt-watch" href="${esc(card.href)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
+    openWindow(id, title, vertical ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media, opener);
+  }
+
+  function openAbout(opener) {
+    const paras = [...document.querySelectorAll('#about .about-body p')].map(p => `<p class="dt-desc">${p.innerHTML}</p>`).join('');
+    const stats = [...document.querySelectorAll('.stats .stat')].map(s => `<div><dt>${esc(txt(s.querySelector('.l')))}</dt><dd>${esc(txt(s.querySelector('.n')))}</dd></div>`).join('');
+    openWindow('about', 'About', `<h2>Trung (Ethan) Truong</h2>${paras}<dl class="dt-meta">${stats}</dl>
+      <div class="dt-links"><a href="#about">Read more ↓</a><a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a></div>`, opener);
+  }
+  function openContact(opener) {
+    const c = document.getElementById('contact');
+    openWindow('contact', 'Notes', `<h2>${esc(txt(c.querySelector('h2')))}</h2><p class="dt-desc">${esc(txt(c.querySelector('p')))}</p>
+      <div class="dt-links"><a href="mailto:trbatrung@gmail.com">trbatrung@gmail.com</a><a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a></div>`, opener);
+  }
+
+  // icons: click opens, drag moves (wide screens), a small wobble still counts as a click
+  icons.forEach(icon => {
+    icon.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      deselect(); icon.classList.add('selected');
+      if (!floating()) return;
+      const sx = e.clientX, sy = e.clientY, sl = parseFloat(icon.style.left), st = parseFloat(icon.style.top);
+      let moved = false;
+      icon.setPointerCapture(e.pointerId);
+      const move = ev => {
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if (!moved && Math.hypot(dx, dy) < 4) return;
+        moved = true; icon.classList.add('dragging');
+        icon.style.left = clamp(sl + dx / hero.clientWidth * 100, 4, 96) + '%';
+        icon.style.top = clamp(st + dy / hero.clientHeight * 100, 10, 80) + '%';
+      };
+      const up = ev => {
+        icon.removeEventListener('pointermove', move); icon.removeEventListener('pointerup', up); icon.removeEventListener('pointercancel', up);
+        icon.classList.remove('dragging');
+        if (!moved && ev.type === 'pointerup') openProject(icon.dataset.yt, icon);
+      };
+      icon.addEventListener('pointermove', move);
+      icon.addEventListener('pointerup', up);
+      icon.addEventListener('pointercancel', up);
+    });
+    // keyboard (detail 0) and the flowing layout open on click
+    icon.addEventListener('click', e => { if (e.detail === 0 || !floating()) openProject(icon.dataset.yt, icon); });
+  });
+  hero.addEventListener('pointerdown', e => { if (!e.target.closest('.dt-icon')) deselect(); });
+  hero.querySelector('[data-open="about"]').addEventListener('click', e => openAbout(e.currentTarget));
+  hero.querySelector('[data-open="contact"]').addEventListener('click', e => openContact(e.currentTarget));
+  addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const front = [...openWins.values()].sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
+    if (front) closeWin(front);
+  });
+
+  // scroll bleed: --p runs 0 to 1 across the hero's height
+  let bleedQueued = false;
+  function bleed() {
+    bleedQueued = false;
+    hero.style.setProperty('--p', clamp(scrollY / hero.offsetHeight, 0, 1).toFixed(3));
+  }
+  addEventListener('scroll', () => { if (!bleedQueued) { bleedQueued = true; requestAnimationFrame(bleed); } }, { passive: true });
+  bleed();
+
+  // preview only: background switcher, shown with ?preview (remove before merge)
+  const params = new URLSearchParams(location.search);
+  if (params.get('bg')) hero.dataset.bg = params.get('bg');
+  if (params.has('preview')) {
+    const sw = document.createElement('div');
+    sw.className = 'bg-switch';
+    ['ember', 'teal', 'amber', 'dusk'].forEach(name => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = name;
+      b.classList.toggle('on', hero.dataset.bg === name);
+      b.addEventListener('click', () => { hero.dataset.bg = name; sw.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); });
+      sw.appendChild(b);
+    });
+    document.body.appendChild(sw);
+  }
 
   // ----- hover-to-play video previews -----
   document.querySelectorAll('.card[data-yt-id]').forEach(card => {
