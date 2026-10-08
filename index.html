@@ -458,6 +458,7 @@
   <h2>Work</h2>
   <ul>
     <li><a href="https://youtu.be/jH6LaZDXNMs">Joe Schaeffer</a> · Artist Film</li>
+    <li><a href="https://youtu.be/wEyszIni9cs">Willow's Story</a> · Awareness Film · Drug Use</li>
     <li><a href="https://youtu.be/J0j3ZWbqS5s">Feedflo</a> · Impact Film · Mogler Farms</li>
     <li><a href="https://youtu.be/HBTfzwOwkxY">Powerlift Hangar</a> · Product Showcase</li>
     <li><a href="https://youtu.be/oUDLKNFswlQ">Plexus AV</a> · Company Values</li>
@@ -767,6 +768,7 @@
   const WORK = [
     { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand', len: '5:59', desc: 'A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.' },
     { id: 'J0j3ZWbqS5s', title: 'Feedflo', type: 'Impact Film · Mogler Farms', cat: 'brand', len: '5:45', desc: 'Feedflo\'s impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.' },
+    { id: 'wEyszIni9cs', title: 'Willow\'s Story', type: 'Awareness Film · Drug Use', cat: 'brand', len: '', desc: 'An awareness film on drug use, told through Willow\'s story.' },
     { id: 'HBTfzwOwkxY', title: 'Powerlift Hangar', type: 'Product Showcase', cat: 'client', len: '1:00', desc: 'A one-minute showcase for Powerlift\'s hangar doors, seen open on finished hangars with aircraft inside.' },
     { id: 'oUDLKNFswlQ', title: 'Plexus AV', type: 'Company Values', cat: 'client', len: '1:59', desc: 'A two-minute company values film for Plexus AV, presented on camera and closing on one clear ask: visit the site.' },
     { id: 'ieu7p3qum_s', title: 'Veterans Services', type: 'Social Awareness', cat: 'client', len: '4:13', desc: 'A four-minute story on VOA Dakotas\' veterans services, made for Rise and Shine 2025 and told through interviews.' },
@@ -936,7 +938,7 @@
       .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
     const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="fd-role">Role · ${esc(CATS[k].role)}</p><p class="dt-desc">${esc(CATS[k].desc)}</p>
       <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
-        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy"><span class="fd-len">${esc(p.len)}</span></span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
+        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy">${p.len ? `<span class="fd-len">${esc(p.len)}</span>` : ''}</span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
     const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
     openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd"><div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
   }
