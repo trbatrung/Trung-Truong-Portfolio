@@ -38,13 +38,13 @@ and has the systems to show for it.
   a gap. Failure stories in particular come from Ethan, never from the writer.
 
 ## Page structure
-**Hero (desktop) → Work → Tools I've Vetted → How I Think → What I Do → About → Contact.**
-- **Hero is the desktop.** A Pantone-style color or ombre background (no photos), the H1 in clear
-  space, 5 or 6 flagship project icons, and the dock. It bleeds into the long-form page on scroll.
-  The H1 is read first; the icons come second.
-- **Open:** whether Tools I've Vetted and How I Think move above Work. The brief suggests it,
-  because they are the strongest proof for leadership roles. The July principle says proof before
-  philosophy. Decide in step 4 of `revamp-plan.md`.
+**Hero (desktop) → Systems → How I Choose Tools → What I Do + About → Contact.**
+- **Hero is the desktop.** One fixed screen (1440x900, 390x950 on phones) scaled to fit, on a
+  color or ombre background (no photos). The H1 is read first, the icons second.
+- **All work lives on the desktop:** loose files, six folders, and Finder. No video grid on the
+  page.
+- **Depth lives on the desktop too.** The page carries one line per idea, about 480 words below
+  the hero. The full point of view and the full tool tests open as notes.
 
 ## The two-layer read (revised)
 - **Skim layer (first 5 seconds):** ownership and standard-setting in plain words. No buzzwords.

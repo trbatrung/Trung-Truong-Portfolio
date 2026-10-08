@@ -12,6 +12,9 @@ followed only part of `copy-rewrite-brief.md`, and from the desktop prototype bu
 - **Founder Intro video** (`pR03yYZbI8E`): confirmed Edge8 code-animation output. Keep it, fix
   the label.
 - **AI-Augmented Production:** keep three systems, and give each a real failure line.
+- **2026-10-08, later:** fixed-size desktop screen; the video grid is gone and all 33 videos
+  (20 pulled from the Pitch deck) live in desktop folders with descriptions; the page was cut
+  from about 1,360 words to about 480 (see `content.md`).
 
 ## How we work
 - One section at a time. Ethan signs off before the next one starts (the brief requires this).
