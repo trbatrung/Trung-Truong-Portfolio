@@ -12,8 +12,8 @@ then mirror them into the HTML. **Status** says where each section stands in the
 - **Motifs:** film grain, vignette, live running timecode, crop-mark corners, mono spec-sheet labels.
 - Entrance motion is enhancement only (guarded by `prefers-reduced-motion`, `<noscript>` fallback).
   Content is never hidden if JS or animation don't run.
-- **Coming:** the hero becomes a desktop (see `positioning.md` and `../desktop/`). Pantone-style
-  color or ombre background, no photos.
+- **Hero:** a fixed-size desktop on the Ember ombre (teal to amber). Other palettes stay in the
+  CSS as `data-bg` options (`teal`, `amber`, `dusk`). No photos.
 
 ## Nav (fixed)
 Logo "Ethan." · Work (opens Finder) · Systems · Approach · About · Contact · live timecode (teal).

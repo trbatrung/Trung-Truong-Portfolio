@@ -16,7 +16,7 @@ const PORTFOLIO = {
   initials: 'ET',
   avatar: '',                        // photo path, or leave empty to show initials
   email: 'trbatrung@gmail.com',
-  wallpaper: '',                     // no photo: background becomes a color / ombre (step 1 of ../docs/revamp-plan.md)
+  wallpaper: 'media/wallpaper.jpg',  // placeholder from Unsplash, swap for your own still
   wallpaperPosition: 'center',
 
   about: [

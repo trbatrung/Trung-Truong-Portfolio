@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trung (Ethan) Truong. Creative Direction & Production Systems</title>
+<meta name="description" content="Trung (Ethan) Truong. Creative direction and production systems. I own the video pipeline end to end, script to final master, and I set where AI belongs in it.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0b0d'/%3E%3Ctext x='50' y='55' font-family='Georgia,serif' font-size='56' font-style='italic' font-weight='600' fill='%23e6a15b' text-anchor='middle' dominant-baseline='central'%3ETT%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<style>
+  :root {
+    --bg: #0a0b0d;
+    --bg-2: #101216;
+    --bg-3: #15181d;
+    --paper: #f1ede6;
+    --ink: #f1ede6;
+    --ink-dim: #a8a29a;      /* warm gray (film) */
+    --muted: #767b84;        /* cool gray (tech) */
+    --line: rgba(255,255,255,0.09);
+    --line-soft: rgba(255,255,255,0.05);
+    --amber: #e6a15b;        /* film craft */
+    --amber-soft: rgba(230,161,91,0.14);
+    --teal: #57cbbb;         /* AI / tech */
+    --teal-soft: rgba(87,203,187,0.12);
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #2a2d33 var(--bg); }
+  body {
+    font-family: var(--sans); background: var(--bg); color: var(--ink);
+    overflow-x: hidden; -webkit-font-smoothing: antialiased; position: relative;
+    line-height: 1.6;
+  }
+  /* film grain */
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E');
+    opacity: 0.04; mix-blend-mode: overlay;
+  }
+  ::selection { background: var(--amber); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 3rem); }
+
+  /* generic mono label */
+  .mono { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem clamp(1.25rem, 4vw, 3rem);
+    background: rgba(10,11,13,0.6); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid transparent; transition: padding .4s ease, border-color .4s ease, background .4s ease;
+  }
+  nav.scrolled { padding-top: .75rem; padding-bottom: .75rem; border-bottom-color: var(--line); background: rgba(10,11,13,0.82); }
+  .nav-logo { font-family: var(--serif); font-size: 1.3rem; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: .1rem; }
+  .nav-logo b { font-weight: 500; }
+  .nav-logo i { font-style: normal; color: var(--amber); }
+  .nav-right { display: flex; align-items: center; gap: 2rem; }
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); position: relative; padding-bottom: 3px; transition: color .25s; }
+  .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--amber); transition: width .3s ease; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-tc { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--teal); display: flex; align-items: center; gap: .5rem; }
+  .nav-tc::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 2s infinite; }
+
+  /* ---------- HERO ---------- */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; padding: 8rem 0 4rem; }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 78% 25%, var(--amber-soft) 0%, transparent 45%),
+      radial-gradient(ellipse at 12% 80%, var(--teal-soft) 0%, transparent 45%);
+  }
+  .hero::after { /* vignette */
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    box-shadow: inset 0 0 220px 40px rgba(0,0,0,0.7);
+  }
+  .hero .wrap { position: relative; z-index: 2; width: 100%; }
+  .hero-eyebrow { color: var(--teal); margin-bottom: 1.6rem; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+  .hero-eyebrow .bar { width: 26px; height: 1px; background: var(--teal); display: inline-block; }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.7rem, 7vw, 6rem); line-height: 1.02; letter-spacing: -0.025em;
+    max-width: 15ch; margin-bottom: 2rem;
+  }
+  .hero h1 .l2 { display: block; font-family: var(--sans); font-size: clamp(1.3rem, 2.5vw, 2rem); font-style: normal; font-weight: 500; color: var(--ink-dim); letter-spacing: -0.01em; margin-top: 1.5rem; line-height: 1.3; max-width: 30ch; }
+  .hero h1 .ai { color: var(--teal); font-weight: 600; }
+  .hero h1 .craft { color: var(--amber); font-weight: 600; }
+  .hero-sub { font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--ink-dim); max-width: 52ch; margin-bottom: 2.6rem; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+  .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-primary { background: var(--amber); color: #17130c; font-weight: 600; }
+  .btn-primary:hover { background: #f0b273; transform: translateY(-2px); }
+  .btn-ghost { border-color: var(--line); color: var(--ink-dim); }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* hero HUD readout */
+  .hero-hud { position: absolute; left: clamp(1.25rem,4vw,3rem); bottom: 2rem; z-index: 2; display: flex; gap: 2.2rem; flex-wrap: wrap; color: var(--muted); }
+  .hud-item { display: flex; flex-direction: column; gap: .3rem; }
+  .hud-item .k { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .hud-item .v { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; color: var(--ink-dim); }
+  .hud-item .v.tc { color: var(--teal); }
+  .hud-item .v .live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); margin-right: .45rem; animation: pulse 2s infinite; }
+  /* crop marks */
+  .hero-hud::before, .cropmark { }
+
+  /* ---------- STAT STRIP ---------- */
+  .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-2); }
+  .stats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 2rem 1rem; text-align: center; border-right: 1px solid var(--line-soft); }
+  .stat:last-child { border-right: none; }
+  .stat .n { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.6rem); color: var(--amber); line-height: 1; }
+  .stat .l { font-family: var(--mono); font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: .6rem; }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section { padding: clamp(4.5rem, 9vw, 8rem) 0; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 3.5rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line); }
+  .sec-head .idx { color: var(--teal); margin-bottom: .9rem; }
+  .sec-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4.5vw, 3.4rem); letter-spacing: -0.02em; line-height: 1.05; }
+  .sec-head .aside { font-family: var(--mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: right; white-space: nowrap; }
+
+  /* ---------- WORK ---------- */
+  .cat { margin-bottom: 4.5rem; }
+  .cat:last-child { margin-bottom: 0; }
+  .cat-head { display: flex; align-items: baseline; gap: 1.2rem; margin-bottom: 1.8rem; }
+  .cat-num { font-family: var(--mono); font-size: .8rem; color: var(--amber); letter-spacing: .1em; }
+  .cat-name { font-family: var(--serif); font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 400; letter-spacing: -0.01em; }
+  .cat-desc { font-size: .92rem; color: var(--muted); max-width: 44ch; margin-left: auto; text-align: right; }
+
+  .grid { display: grid; gap: 1.4rem; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-shorts { grid-template-columns: repeat(3, 1fr); }
+
+  .card { position: relative; background: var(--bg-2); border: 1px solid var(--line-soft); border-radius: 4px; overflow: hidden; display: block; transition: border-color .3s ease, transform .3s ease; }
+  .card:hover { border-color: rgba(230,161,91,0.4); transform: translateY(-3px); }
+  .thumb { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+  .thumb.v { aspect-ratio: 9/16; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.82) saturate(.95); transition: transform .7s cubic-bezier(.22,1,.36,1), filter .4s ease; }
+  .card:hover .thumb img { filter: brightness(.4); transform: scale(1.04); }
+  .thumb .tc-badge { position: absolute; top: .7rem; right: .7rem; z-index: 6; font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink); background: rgba(0,0,0,.55); backdrop-filter: blur(4px); padding: .2rem .5rem; border-radius: 2px; border: 1px solid var(--line); }
+  .thumb .corner { position: absolute; width: 12px; height: 12px; border: 1px solid rgba(241,237,230,.5); z-index: 6; opacity: 0; transition: opacity .3s; }
+  .thumb .corner.tl { top: .6rem; left: .6rem; border-right: none; border-bottom: none; }
+  .thumb .corner.br { bottom: .6rem; right: .6rem; border-left: none; border-top: none; }
+  .card:hover .corner { opacity: 1; }
+  .hover-player { position: absolute; inset: 0; width: 100%; height: 100%; border: none; z-index: 5; opacity: 0; transition: opacity .5s ease; pointer-events: none; }
+  .card:hover .hover-player { opacity: 1; }
+  .play-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .3s ease; z-index: 7; pointer-events: none; }
+  .card:not(.is-playing):hover .play-icon { opacity: 1; }
+  .play-icon svg { width: 46px; height: 46px; filter: drop-shadow(0 2px 10px rgba(0,0,0,.6)); }
+  .card-body { padding: 1.1rem 1.2rem 1.3rem; }
+  .card-tag { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin-bottom: .55rem; }
+  .card-title { font-family: var(--serif); font-size: 1.15rem; line-height: 1.3; }
+  .card-out { font-size: .82rem; color: var(--ink-dim); margin-top: .5rem; line-height: 1.5; }
+
+  /* title-card thumb (used when a video has no usable auto-thumbnail) */
+  .label-thumb { display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 40%, #1b2a33, #0d1519); }
+  .label-thumb .vl { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--ink-dim); text-align: center; padding: 1rem; line-height: 1.4; }
+
+  /* AI feature blocks */
+  .feat { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .feat + .feat { margin-top: 1.4rem; }
+  .feat-row { display: grid; grid-template-columns: 1fr 1fr; }
+  .feat-info { padding: 2.2rem clamp(1.4rem,2.5vw,2.4rem); border-right: 1px solid var(--line); }
+  .feat-cap { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: .9rem; }
+  .feat-title { font-family: var(--serif); font-size: 1.45rem; font-weight: 400; margin-bottom: .8rem; }
+  .feat-desc { font-size: .9rem; color: var(--ink-dim); line-height: 1.7; }
+  .feat-out { font-size: .88rem; color: var(--amber); margin-top: 1rem; font-weight: 500; display: flex; gap: .5rem; align-items: baseline; }
+  .feat-out::before { content: '→'; color: var(--amber); }
+  .tools { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .tool { font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); }
+  .feat-media { padding: 1.4rem; background: rgba(0,0,0,.25); display: flex; gap: 1rem; align-items: center; }
+  .feat-media .card { flex: 1; min-width: 0; }
+  .feat-media.shorts .thumb { aspect-ratio: 9/16; }
+
+  /* ---------- BREAKAWAY (editing CTA) ---------- */
+  .breakaway { padding: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(230,161,91,0.06), transparent 60%), var(--bg-2); }
+  .breakaway .wrap { display: flex; align-items: center; justify-content: space-between; gap: 2.5rem; padding-top: clamp(3rem, 6vw, 4.5rem); padding-bottom: clamp(3rem, 6vw, 4.5rem); flex-wrap: wrap; }
+  .breakaway .eye { font-family: var(--mono); font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; display: block; }
+  .breakaway h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1rem; max-width: 18ch; }
+  .breakaway h2 em { font-style: italic; color: var(--amber); }
+  .breakaway p { color: var(--ink-dim); font-size: 1.02rem; line-height: 1.65; max-width: 50ch; }
+  .breakaway-cta { flex-shrink: 0; }
+  @media (max-width: 760px) { .breakaway h2 { max-width: none; } }
+
+  /* ---------- VETTING (spec sheet) ---------- */
+  .vetting { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .vet-intro { font-size: clamp(1.05rem, 1.7vw, 1.3rem); color: var(--ink-dim); max-width: 62ch; margin-bottom: 3rem; line-height: 1.7; }
+  .vet-intro b { color: var(--ink); font-weight: 500; }
+  .vet-table { border-top: 1px solid var(--line); }
+  .vet-row { display: grid; grid-template-columns: 1.1fr 1.6fr; gap: 2rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); align-items: start; transition: background .25s; }
+  .vet-row:hover { background: rgba(255,255,255,.015); }
+  .vet-use { display: flex; gap: 1rem; align-items: baseline; }
+  .vet-use .rn { font-family: var(--mono); font-size: .72rem; color: var(--teal); }
+  .vet-use .ut { font-family: var(--serif); font-size: 1.2rem; }
+  .vet-call { font-size: .95rem; color: var(--ink-dim); line-height: 1.65; }
+  .vet-row.no-ai .vet-use .ut, .vet-row.no-ai .vet-call { color: var(--amber); }
+  .vet-row.no-ai .vet-use .rn { color: var(--amber); }
+
+  /* ---------- POV ---------- */
+  .pov { position: relative; }
+  .pov-inner { max-width: 760px; }
+  .pov h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 2.5rem; }
+  .pov p { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-dim); line-height: 1.8; margin-bottom: 1.5rem; }
+  .pov p b { color: var(--ink); font-weight: 500; }
+  .pov p em { color: var(--ink); font-style: italic; }
+  .pov .pull { font-family: var(--serif); font-style: italic; font-size: clamp(1.4rem, 2.6vw, 2rem); color: var(--amber); line-height: 1.4; border-left: 2px solid var(--amber); padding-left: 1.6rem; margin: 2.5rem 0; }
+  .pov .kicker { color: var(--ink); font-family: var(--serif); }
+  .pov .close { color: var(--ink); }
+
+  /* ---------- SERVICES ---------- */
+  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .svc { padding: 2.4rem clamp(1.4rem,2vw,2rem); border-right: 1px solid var(--line); transition: background .3s; }
+  .svc:last-child { border-right: none; }
+  .svc:hover { background: var(--bg-2); }
+  .svc .step { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; color: var(--teal); margin-bottom: 1.4rem; display: flex; justify-content: space-between; }
+  .svc .step .ph { color: var(--muted); }
+  .svc h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: .9rem; }
+  .svc p { font-size: .9rem; color: var(--ink-dim); line-height: 1.65; }
+  .svc-note { font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; color: var(--muted); margin-top: 1.8rem; text-align: center; }
+  .svc-note b { color: var(--amber); }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .about-side .mono { color: var(--teal); }
+  .about-portrait { font-family: var(--serif); font-size: clamp(2.1rem,4.5vw,3.2rem); font-style: italic; color: var(--amber); line-height: 1.05; margin-top: 1rem; }
+  .about-body p { font-size: clamp(1.05rem,1.6vw,1.2rem); color: var(--ink-dim); line-height: 1.8; }
+  .about-body p + p { margin-top: 1.3rem; }
+  .about-body b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- CONTACT ---------- */
+  .contact { text-align: center; border-top: 1px solid var(--line); }
+  .contact .idx { color: var(--teal); margin-bottom: 1.5rem; }
+  .contact h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 6vw, 5rem); letter-spacing: -0.03em; line-height: 1.02; margin-bottom: 1.4rem; }
+  .contact h2 em { font-style: italic; color: var(--amber); }
+  .contact p { color: var(--ink-dim); max-width: 46ch; margin: 0 auto 2.8rem; font-size: 1.05rem; }
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  /* ---------- FOOTER ---------- */
+  footer { border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; padding: 1.6rem clamp(1.25rem,4vw,3rem); flex-wrap: wrap; gap: 1rem; }
+  footer .fl { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; color: var(--muted); }
+  footer .fr { display: flex; gap: 1.5rem; align-items: center; }
+  footer .fr a { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); transition: color .25s; }
+  footer .fr a:hover { color: var(--amber); }
+
+  /* ---------- TOAST ---------- */
+  .toast { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%) translateY(150%); z-index: 10000; background: var(--amber); color: #17130c; font-family: var(--mono); font-size: .74rem; letter-spacing: .06em; padding: .8rem 1.3rem; border-radius: 3px; box-shadow: 0 8px 30px rgba(0,0,0,.5); transition: transform .35s cubic-bezier(.22,1,.36,1); pointer-events: none; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ---------- ANIM ---------- */
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  /* content is visible by default; motion is pure enhancement (never leaves anything hidden) */
+  .reveal { transition: opacity .7s ease, transform .7s ease; }
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(28px); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-tc { display: none; }
+    .stats .wrap { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line-soft); }
+    .sec-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .sec-head .aside { text-align: left; }
+    .cat-head { flex-direction: column; gap: .4rem; }
+    .cat-desc { margin-left: 0; text-align: left; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-shorts { grid-template-columns: repeat(2, 1fr); }
+    .feat-row { grid-template-columns: 1fr; }
+    .feat-info { border-right: none; border-bottom: 1px solid var(--line); }
+    .vet-row { grid-template-columns: 1fr; gap: .6rem; }
+    .svc-grid { grid-template-columns: 1fr; }
+    .svc { border-right: none; border-bottom: 1px solid var(--line); }
+    .about-grid { grid-template-columns: 1fr; }
+    .hero-hud { position: static; margin-top: 3rem; }
+  }
+  @media (max-width: 520px) {
+    .grid-shorts { grid-template-columns: 1fr; }
+    .hero { padding-top: 7rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#vetting">Tools</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <span class="nav-tc" id="navTc">00:00:00:00</span>
+  </div>
+</nav>
+
+<!-- ---------- HERO ---------- -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
+    <h1 class="reveal">
+      I own the video pipeline end to end.
+      <span class="l2"><span class="ai">AI</span> has a defined place in it, and <span class="craft">I set</span> where that place is.</span>
+    </h1>
+    <p class="hero-sub reveal">Script to final master, one pipeline, one standard. Every AI decision inside it is tested and documented before it ships. Based in Ho Chi Minh City, working globally.</p>
+    <div class="hero-cta reveal">
+      <a href="#work" class="btn btn-primary">
+        View selected work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-hud">
+    <div class="hud-item"><span class="k">Timecode</span><span class="v tc" id="hudTc">00:00:00:00</span></div>
+    <div class="hud-item"><span class="k">Base</span><span class="v">HCMC · UTC+7</span></div>
+    <div class="hud-item"><span class="k">Status</span><span class="v"><span class="live"></span>Open to senior roles and select projects</span></div>
+  </div>
+</header>
+
+<!-- ---------- STATS ---------- -->
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><div class="n">8+</div><div class="l">Years in production</div></div>
+    <div class="stat"><div class="n">10+</div><div class="l">Team built &amp; directed</div></div>
+    <div class="stat"><div class="n">Full</div><div class="l">Pipeline ownership</div></div>
+    <div class="stat"><div class="n">Both</div><div class="l">AI &amp; real production</div></div>
+  </div>
+</div>
+
+<!-- ---------- WORK ---------- -->
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="idx mono">01 — Selected Work</div>
+        <h2>The work speaks first.</h2>
+      </div>
+      <div class="aside">Selected for<br>the calls inside</div>
+    </div>
+
+    <!-- 01 Brand Film -->
+    <div class="cat reveal">
+      <div class="cat-head">
+        <span class="cat-num">01</span>
+        <h3 class="cat-name">Brand Film</h3>
+        <p class="cat-desc">The story is a decision, not something you find in the footage. I make that call first, then build the film to it.</p>
+      </div>
+      <div class="grid grid-2">
+        <a class="card" data-yt-id="jH6LaZDXNMs" href="https://youtu.be/jH6LaZDXNMs" target="_blank" rel="noopener">
+          <div class="thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/maxresdefault.jpg" alt="Joe Schaeffer Artist Film" loading="lazy"><span class="tc-badge">FILM</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Artist Film</p><p class="card-title">Joe Schaeffer</p></div>
+        </a>
+        <a class="card" data-yt-id="J0j3ZWbqS5s" href="https://youtu.be/J0j3ZWbqS5s" target="_blank" rel="noopener">
+          <div class="thumb"><img src="https://img.youtube.com/vi/J0j3ZWbqS5s/maxresdefault.jpg" alt="Feedflo Impact Film" loading="lazy"><span class="tc-badge">FILM</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Impact Film · Mogler Farms</p><p class="card-title">Feedflo</p></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 02 Client & Story -->
+    <div class="cat reveal">
+      <div class="cat-head">
+        <span class="cat-num">02</span>
+        <h3 class="cat-name">Client &amp; Story Work</h3>
+        <p class="cat-desc">Product, culture, community, testimonial. Same question every time: what does this audience need to believe, and what earns that.</p>
+      </div>
+      <div class="grid grid-2">
+        <a class="card" data-yt-id="HBTfzwOwkxY" href="https://youtu.be/HBTfzwOwkxY" target="_blank" rel="noopener">
+          <div class="thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/maxresdefault.jpg" alt="Powerlift Hangar Showcase" loading="lazy"><span class="tc-badge">SHOWCASE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Product Showcase</p><p class="card-title">Powerlift Hangar</p></div>
+        </a>
+        <a class="card" data-yt-id="oUDLKNFswlQ" href="https://youtu.be/oUDLKNFswlQ" target="_blank" rel="noopener">
+          <div class="thumb"><img src="https://img.youtube.com/vi/oUDLKNFswlQ/maxresdefault.jpg" alt="Plexus AV" loading="lazy"><span class="tc-badge">CULTURE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Company Values</p><p class="card-title">Plexus AV</p></div>
+        </a>
+        <a class="card" data-yt-id="ieu7p3qum_s" href="https://youtu.be/ieu7p3qum_s" target="_blank" rel="noopener">
+          <div class="thumb label-thumb"><div class="vl">Rise &amp; Shine 2025<br>VOA, Dakotas</div><span class="tc-badge">SOCIAL</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Social Awareness</p><p class="card-title">Veterans Services</p></div>
+        </a>
+        <a class="card" data-yt-id="pNw0LhYSSv4" href="https://youtu.be/pNw0LhYSSv4" target="_blank" rel="noopener">
+          <div class="thumb"><img src="https://img.youtube.com/vi/pNw0LhYSSv4/maxresdefault.jpg" alt="Love Hay Testimonial" loading="lazy"><span class="tc-badge">TESTIMONIAL</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Testimonial · Operation of the Year</p><p class="card-title">Love Hay</p></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 03 Advertisement -->
+    <div class="cat reveal">
+      <div class="cat-head">
+        <span class="cat-num">03</span>
+        <h3 class="cat-name">Video Advertisement</h3>
+        <p class="cat-desc">Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.</p>
+      </div>
+      <div class="grid grid-shorts">
+        <a class="card" data-yt-id="vwf4U1WzQ0s" href="https://youtube.com/shorts/vwf4U1WzQ0s" target="_blank" rel="noopener">
+          <div class="thumb v"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/maxresdefault.jpg" alt="No More Solo" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">No More Solo</p></div>
+        </a>
+        <a class="card" data-yt-id="W3KMqXGB6Qg" href="https://youtube.com/shorts/W3KMqXGB6Qg" target="_blank" rel="noopener">
+          <div class="thumb v"><img src="https://img.youtube.com/vi/W3KMqXGB6Qg/maxresdefault.jpg" alt="Short Ketone" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">Short Ketone</p></div>
+        </a>
+        <a class="card" data-yt-id="-toxHWQCe_w" href="https://youtube.com/shorts/-toxHWQCe_w" target="_blank" rel="noopener">
+          <div class="thumb v"><img src="https://img.youtube.com/vi/-toxHWQCe_w/maxresdefault.jpg" alt="Dental Ads" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+          <div class="card-body"><p class="card-tag">Short · Ad</p><p class="card-title">Dental Ads</p></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 04 AI-Augmented -->
+    <div class="cat reveal">
+      <div class="cat-head">
+        <span class="cat-num">04</span>
+        <h3 class="cat-name">AI-Augmented Production</h3>
+        <p class="cat-desc">Systems I built, and what I changed when they broke.</p>
+      </div>
+
+      <div class="feat">
+        <div class="feat-row">
+          <div class="feat-info">
+            <div class="feat-cap">System 01 — Code-Based Animation</div>
+            <h4 class="feat-title">Code-based animation pipeline</h4>
+            <p class="feat-desc">Motion written as code. Generated in Claude Code, finished in Final Cut Pro, briefed through a structured context package. UI walkthroughs, data visualizations, brand motion.</p>
+            <div class="feat-out">Rebuilt around reusable components, so each job speeds up the next.</div>
+            <div class="feat-out">QC inline at every stage, no review team needed.</div>
+            <div class="tools"><span class="tool">Claude Code</span><span class="tool">Final Cut Pro</span><span class="tool">Context Packages</span><span class="tool">Inline QC</span></div>
+          </div>
+          <div class="feat-media">
+            <a class="card" data-yt-id="pR03yYZbI8E" href="https://youtu.be/pR03yYZbI8E" target="_blank" rel="noopener">
+              <div class="thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="Infinite Leverage founder intro" loading="lazy"><span class="tc-badge">MOTION</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+              <div class="card-body"><p class="card-tag">Infinite Leverage</p><p class="card-title">Founder Intro</p></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-row">
+          <div class="feat-info">
+            <div class="feat-cap">System 02 — Avatar Video</div>
+            <h4 class="feat-title">Avatar video at volume</h4>
+            <p class="feat-desc">One approved face and voice, a fixed look, consistent output across markets and platforms. Built for founders who can't hold a weekly shoot slot.</p>
+            <div class="feat-out">One founder, every market, without a shoot schedule.</div>
+            <div class="tools"><span class="tool">HeyGen</span><span class="tool">ElevenLabs</span><span class="tool">Avatar</span><span class="tool">Multi-market</span></div>
+          </div>
+          <div class="feat-media shorts">
+            <a class="card" data-yt-id="WlB4_OJTftM" href="https://youtube.com/shorts/WlB4_OJTftM" target="_blank" rel="noopener">
+              <div class="thumb v"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="AI Avatar Executive Scale" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+              <div class="card-body"><p class="card-tag">HeyGen</p><p class="card-title">Executive Scale</p></div>
+            </a>
+            <a class="card" data-yt-id="3stIKPZL_00" href="https://youtube.com/shorts/3stIKPZL_00" target="_blank" rel="noopener">
+              <div class="thumb v"><img src="https://img.youtube.com/vi/3stIKPZL_00/maxresdefault.jpg" alt="AI Avatar Brand Presence" loading="lazy"><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+              <div class="card-body"><p class="card-tag">HeyGen</p><p class="card-title">Brand Presence</p></div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-row">
+          <div class="feat-info">
+            <div class="feat-cap">System 03 — Full AI Pipeline</div>
+            <h4 class="feat-title">End-to-end AI lesson</h4>
+            <p class="feat-desc">A complete language lesson built end to end: HeyGen presenter, Veo3 b-roll. Every line proofed against a teaching-accuracy bar before it shipped.</p>
+            <div class="feat-out">A full lesson, no studio, no on-camera teacher.</div>
+            <div class="tools"><span class="tool">HeyGen</span><span class="tool">Veo3</span><span class="tool">Script Accuracy</span><span class="tool">Final Cut Pro</span></div>
+          </div>
+          <div class="feat-media">
+            <a class="card" data-yt-id="8EKCg3SiSPI" href="https://youtu.be/8EKCg3SiSPI" target="_blank" rel="noopener">
+              <div class="thumb"><img src="https://img.youtube.com/vi/8EKCg3SiSPI/maxresdefault.jpg" alt="AI Language Lesson" loading="lazy"><span class="tc-badge">FULL PIPELINE</span><span class="corner tl"></span><span class="corner br"></span><div class="play-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" stroke="#e6a15b" stroke-width="2"/><path d="M20 16l12 8-12 8V16z" fill="#e6a15b"/></svg></div></div>
+              <div class="card-body"><p class="card-tag">Language Lesson</p><p class="card-title">Proof of Concept</p></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- BREAKAWAY ---------- -->
+<section class="breakaway">
+  <div class="wrap reveal">
+    <div class="breakaway-text">
+      <span class="eye">Straight production, too</span>
+      <h2>Want your video to look like <em>that</em>?</h2>
+      <p>A lot of this work needs no AI at all. Brand films, ads, social cuts, long-form, the full post workflow. Same standard either way, and I set it before anyone picks a tool.</p>
+    </div>
+    <a href="#contact" class="btn btn-primary breakaway-cta">
+      Let's talk about your edit
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ---------- VETTING ---------- -->
+<section class="vetting" id="vetting">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="idx mono">02 — Tools I've Vetted</div>
+        <h2>I've already broken it, so you don't have to.</h2>
+      </div>
+      <div class="aside">Judgment,<br>not button-pushing</div>
+    </div>
+    <p class="vet-intro reveal">There are thousands of AI video tools, all charging premium fees, each marketed like a specialist. Strip the wrapper and <b>most are the same engine in different packaging.</b> So I test them the same way every time: same product, same brief, head to head, and log exactly where each one breaks. The findings by use case are below. This is the standard I hold tooling to before it touches a deliverable. The named tool-by-tool breakdown stays with the client work it came from.</p>
+    <div class="vet-table reveal">
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">01</span><span class="ut">Product → ad creatives</span></div>
+        <p class="vet-call">Fed one product through the "one prompt, 12 concepts" generators. Fully-automated mode is hit or miss: a few concepts land, most come out formulaic. The reliable path is the mode that pulls real product data and still lets you steer, which is where shippable A/B variants actually come from.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">02</span><span class="ut">UGC actor / spokesperson ads</span></div>
+        <p class="vet-call">Built product-in-hand actor ads end to end: generate the actor, composite the real product, animate, lip-sync. The best tools even infer their own context b-roll. Two catches worth knowing: branding garbles in motion on the cheap engine tiers, and "swap the actor in an existing clip" is still unreliable, cheaper to regenerate per actor.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">03</span><span class="ut">A/B testing &amp; localization at scale</span></div>
+        <p class="vet-call">Ran one script against several actors in parallel to find the winner before spending on a full run, then spun up multilingual versions fast and cheap. That combo is where AI genuinely wins on volume.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">04</span><span class="ut">Long-form → short-form repurposing</span></div>
+        <p class="vet-call">Dropped a 16-minute talking head into a node canvas: it pulled clean, self-contained clips without cutting mid-sentence and synced pop-up graphics to the speaker's gestures. This class is a repurposing accelerator for hours of existing footage, not an ad-from-nothing generator.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">05</span><span class="ut">Relighting &amp; look-dev on real footage</span></div>
+        <p class="vet-call">Tested relighting and compositing on real clips: dropping a subject into a new environment, rebuilding flat 8-bit into true HDR, lighting a flat clip as a rough 3D object. Great for whole-scene mood and fast product lighting on solid packaging. It breaks on glass, liquid, fine hair, and fast camera moves, and the reference image drives the look far more than the prompt.</p>
+      </div>
+      <div class="vet-row">
+        <div class="vet-use"><span class="rn">06</span><span class="ut">Trusting the "agent" builders</span></div>
+        <p class="vet-call">The conversational builders quietly pick the lazy default, an aspect ratio, an engine, and won't flag it. Ask the good ones to explain a choice and they genuinely reconsider; the best lays out a full spec and cost table before spending a credit. Either way, the output is only as good as the brief.</p>
+      </div>
+      <div class="vet-row no-ai">
+        <div class="vet-use"><span class="rn">07</span><span class="ut">When NOT to use AI</span></div>
+        <p class="vet-call">The one hero film that has to be perfect. AI video is built for scale, not for that. It's still limited, and I'll tell you plainly when it's the wrong call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- APPROACH / POV ---------- -->
+<section class="pov" id="approach">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="idx mono">03 — How I Think</div>
+        <h2>Slop or salvation. Both are wrong.</h2>
+      </div>
+    </div>
+    <div class="pov-inner reveal">
+      <p>People treat AI video like it's either garbage or magic. Lean too hard either way and you ship something bad.</p>
+      <p>The market doesn't help. Thousands of AI tools, all charging premium fees, each marketed like a specialist: Tool A "best for UGC," Tool B "best for long-form." Strip the wrapper and most do the same thing. Most of the job is picking the right one for <em>your</em> use case, and knowing where it breaks <b>before</b> you've burned a month and a budget finding out.</p>
+      <p>So I don't start with a tool. I start with a question: <b>what is this video actually for?</b> Pushing a product with UGC is a different problem than scaling short-form, and each has a different right answer. Give me the use case and I'll test five tools that claim to do the same thing and tell you exactly where each one falls apart.</p>
+      <p>I'll also tell you when <em>not</em> to use AI. It's built for scale, not the one hero film that has to be perfect. It won't run your whole pipeline, and for most companies it doesn't need to. Knowing that line is the value.</p>
+      <p class="pull">AI gets you to 80% fast. Knowing when that 80% is the finish line, instead of chasing a perfection that quietly ruins the work, is the difference between shipping and spinning.</p>
+      <p>The rest is taste. I can usually tell what's wrong with a video in the first few seconds, and I know that past a point, fixing it makes it worse.</p>
+      <p class="close">Most producers see the picture through one lens: AI <em>or</em> real production. I see both. That's the whole job.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- SERVICES ---------- -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="idx mono">04 — What I Do</div>
+        <h2>Define, own, deliver.</h2>
+      </div>
+      <div class="aside">From the call<br>to the final cut</div>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc">
+        <div class="step">STRATEGY <span class="ph">Phase 01</span></div>
+        <h3>Tool &amp; use-case strategy</h3>
+        <p>Define what the video is actually for, then set the tooling for that use case. Includes the call on when AI is the wrong answer.</p>
+      </div>
+      <div class="svc">
+        <div class="step">PRODUCTION <span class="ph">Phase 02</span></div>
+        <h3>Full-pipeline production</h3>
+        <p>Script to final master, one owner, no handoff gaps. AI where I have proven it holds up, real production where it doesn't.</p>
+      </div>
+      <div class="svc">
+        <div class="step">POST <span class="ph">Phase 03</span></div>
+        <h3>Editing &amp; post</h3>
+        <p>The finishing layer, where the standard either holds or it doesn't. Short-form, long-form, brand film, motion. Cut to land, delivered on time.</p>
+      </div>
+    </div>
+    <p class="svc-note reveal">Straight editing job or a bigger production question, <b>either one starts the same way.</b></p>
+  </div>
+</section>
+
+<!-- ---------- ABOUT ---------- -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-side reveal">
+        <div class="mono">05 — About</div>
+        <div class="about-portrait">Trung Truong</div>
+      </div>
+      <div class="about-body reveal">
+        <p>I'm Trung, and most people call me <b>Ethan</b>. Eight years in production. I founded and ran a <b>10+ person multimedia agency</b>, and today I own a full production pipeline end to end, script to final master.</p>
+        <p>The last stretch I've spent defining exactly where AI belongs in that pipeline, and where it doesn't. That's the part most producers miss: they either treat AI as a threat or a shortcut. I treat it as one more tool on the bench, and I set which job each one is for.</p>
+        <p>Based in <b>Ho Chi Minh City</b>, working globally on select projects and senior roles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- CONTACT ---------- -->
+<section class="contact" id="contact">
+  <div class="wrap reveal">
+    <div class="idx mono">06 — Contact</div>
+    <h2>Tell me what you're <em>making</em>.</h2>
+    <p>A senior role, a full production, or a question about which AI tool actually fits your use case. Start here.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:trbatrung@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
+        trbatrung@gmail.com
+      </a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer>
+  <div class="wrap">
+    <span class="fl">© 2026 Trung (Ethan) Truong · HCMC</span>
+    <div class="fr">
+      <a href="mailto:trbatrung@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ----- running timecode (HH:MM:SS:FF @ 24fps feel) -----
+  const navTc = document.getElementById('navTc');
+  const hudTc = document.getElementById('hudTc');
+  const pad = n => String(n).padStart(2, '0');
+  function tick() {
+    const d = new Date();
+    const ff = Math.floor((d.getMilliseconds() / 1000) * 24);
+    const s = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}:${pad(ff)}`;
+    if (navTc) navTc.textContent = s;
+    if (hudTc) hudTc.textContent = s;
+  }
+  setInterval(tick, 42); tick();
+
+  // ----- nav condense on scroll -----
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 50));
+
+  // ----- reveal on scroll -----
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 70); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ----- email links: copy address as a safety net, still open mail client -----
+  const toast = document.getElementById('toast');
+  let toastTimer = null;
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+  document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const addr = link.getAttribute('href').replace('mailto:', '');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(addr).then(
+          () => showToast('Email copied ✓  ' + addr),
+          () => showToast(addr)
+        );
+      } else {
+        showToast(addr);
+      }
+      // note: the mailto navigation still fires for anyone with a mail client set up
+    });
+  });
+
+  // ----- hover-to-play video previews -----
+  document.querySelectorAll('.card[data-yt-id]').forEach(card => {
+    const thumb = card.querySelector('.thumb');
+    const ytId = card.getAttribute('data-yt-id');
+    let hoverTimeout;
+    card.addEventListener('mouseenter', () => {
+      hoverTimeout = setTimeout(() => {
+        if (!card.classList.contains('is-playing')) {
+          card.classList.add('is-playing');
+          const iframe = document.createElement('iframe');
+          iframe.className = 'hover-player';
+          iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1&loop=1&playlist=${ytId}`;
+          iframe.allow = 'autoplay; encrypted-media';
+          thumb.appendChild(iframe);
+        }
+      }, 200);
+    });
+    card.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimeout);
+      card.classList.remove('is-playing');
+      const iframe = thumb.querySelector('iframe');
+      if (iframe) iframe.remove();
+    });
+  });
+</script>
+</body>
+</html>

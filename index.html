@@ -112,7 +112,7 @@
   .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; transform: translateY(calc(var(--p) * 22%)); }
   .desk-bg::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: calc(var(--p) * .85); }
   .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to bottom, transparent, var(--bg)); }
-  /* background options (data-bg on .hero) */
+  /* background: set data-bg on .hero. ember is live; teal, amber and dusk are kept as options */
   .hero[data-bg="ember"] .desk-bg { background:
       radial-gradient(55% 55% at 82% 72%, rgba(230,161,91,.55), transparent 70%),
       radial-gradient(50% 55% at 10% 15%, rgba(87,203,187,.30), transparent 70%),
@@ -256,11 +256,6 @@
   .fd-len { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.75); color: #fff; font: 500 11px var(--mono); }
   .fd-item .t { font: 500 13.5px var(--sans); color: #111; margin-top: 8px; }
   .fd-item .s { font: 12px var(--sans); color: #8a8a8a; margin-top: 2px; }
-
-  /* preview-only background switcher (shown with ?preview; remove before merge) */
-  .bg-switch { position: fixed; right: 16px; bottom: 16px; z-index: 10001; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(20,20,24,.85); border: 1px solid var(--line); font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; }
-  .bg-switch button { border: 0; border-radius: 999px; padding: .5rem .8rem; background: transparent; color: var(--ink-dim); font: inherit; letter-spacing: inherit; cursor: pointer; }
-  .bg-switch button.on { background: var(--amber); color: #17130c; }
 
   @media (max-width: 700px) {
     .dt-win { left: 10px !important; top: 10px !important; width: calc(100% - 20px); max-height: calc(100% - 20px); }
@@ -1016,21 +1011,6 @@
   addEventListener('scroll', () => { if (!bleedQueued) { bleedQueued = true; requestAnimationFrame(bleed); } }, { passive: true });
   bleed();
 
-  // preview only: background switcher, shown with ?preview (remove before merge)
-  const params = new URLSearchParams(location.search);
-  if (params.get('bg')) hero.dataset.bg = params.get('bg');
-  if (params.has('preview')) {
-    const sw = document.createElement('div');
-    sw.className = 'bg-switch';
-    ['ember', 'teal', 'amber', 'dusk'].forEach(name => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.textContent = name;
-      b.classList.toggle('on', hero.dataset.bg === name);
-      b.addEventListener('click', () => { hero.dataset.bg = name; sw.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); });
-      sw.appendChild(b);
-    });
-    document.body.appendChild(sw);
-  }
 </script>
 </body>
 </html>

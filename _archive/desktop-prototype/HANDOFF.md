@@ -2,13 +2,6 @@
 
 Built in a Claude (Cowork) session outside this repo. This file is everything that session knew. Read it before changing anything in `desktop/`.
 
-## Update 2026-10-08 (repo session)
-- Brought into the repo on branch `claude/latest-update-review-f6010f`.
-- **Role decided:** this becomes the hero of the main site and bleeds into the long-form page on scroll. It is not a separate page. Only 5 or 6 flagship icons, so the H1 stays readable.
-- **Background decided:** a Pantone-style solid color or an ombre gradient. No photos. The Unsplash `media/wallpaper.jpg` was left out of git, and `wallpaper` in `projects.js` is now empty.
-- The copy in `projects.js` mirrors the 2026-08 site copy, which is being revised. Re-sync it after each section of `../docs/revamp-plan.md` is signed off.
-- Open items 1, 2 and 7 below are superseded by these decisions.
-
 ## What this is
 A second version of Ethan's portfolio, styled as a computer desktop. Reverse-engineered from an 8 second screen recording of an Aura template ("Interactive Portfolio", Hero category). Their source is paywalled, so this is a from-scratch rebuild, not their code. The main site at `../index.html` is untouched.
 

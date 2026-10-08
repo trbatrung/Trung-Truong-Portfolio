@@ -4,7 +4,7 @@ This `docs/` folder is the **single source of truth** for the content and voice 
 Trung (Ethan) Truong portfolio site (`../index.html`).
 
 The site is a single self-contained `index.html` (dark theme, amber + teal, vanilla JS, no build
-tooling). A desktop-style hero is in progress in `../desktop/`. These docs keep copy, positioning
+tooling). The hero is a desktop: folders, a Finder window and notes hold the work. These docs keep copy, positioning
 and project details consistent as the site evolves.
 
 ## How to use it
@@ -26,5 +26,6 @@ and project details consistent as the site evolves.
 | [`content.md`](content.md) | Section-by-section live copy mapped to `index.html`, with revamp status |
 | [`copy-rewrite-brief.md`](copy-rewrite-brief.md) | Ethan's 2026-08 brief for the leadership-altitude rewrite |
 | [`todo.md`](todo.md) | Known gaps and backlog |
+| [`../_archive/`](../_archive/README.md) | Retired versions: the pre-revamp site and the Cowork desktop prototype (not published) |
 
 _Last synced with `index.html` on 2026-10-08._

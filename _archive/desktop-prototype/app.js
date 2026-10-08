@@ -10,7 +10,7 @@ const ytUrl = p => p.vertical ? `https://youtube.com/shorts/${p.youtube}` : `htt
 
 /* ---------- Wallpaper ---------- */
 const wp = $('#wallpaper');
-if (P.wallpaper) wp.style.backgroundImage = `url("${P.wallpaper}")`;
+wp.style.backgroundImage = `url("${P.wallpaper}")`;
 wp.style.backgroundPosition = P.wallpaperPosition || 'center';
 
 /* ---------- Desktop icons: click to open, drag to move ---------- */
