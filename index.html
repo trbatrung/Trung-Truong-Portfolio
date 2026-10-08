@@ -179,7 +179,9 @@
   .hero.is-phone .dt-icon img, .hero.is-phone .dt-icon.vertical img { width: 60px; height: 60px; border-radius: 14px; }
   .hero.is-phone .dt-folder svg, .hero.is-phone .dt-doc svg { width: 60px; height: 60px; }
   .hero.is-phone .dt-label { font-size: 11px; max-width: 86px; }
-  .hero.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; }
+  .hero.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; opacity: 1; transform: translateX(-50%); }
+  .hero.is-phone .dt-icons { opacity: 1; transform: none; }
+  .hero.is-phone .desk-bg::before { opacity: calc(var(--p) * .6); }
 
   /* windows: a fixed layer, so they open at real size from anywhere on the page */
   .dt-wins { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
@@ -194,7 +196,7 @@
   .dt-lights { display: flex; gap: 8px; }
   .dt-lights button { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; position: relative; cursor: pointer; color: rgba(0,0,0,.55); font: 700 9px/12px system-ui; }
   .dt-lights button::after { position: absolute; inset: 0; text-align: center; opacity: 0; }
-  .dt-lights:hover button::after { opacity: 1; }
+  .dt-lights:hover button::after, .dt-lights .dt-close::after { opacity: 1; }
   .dt-close { background: #ff5f57; } .dt-close::after { content: "\00d7"; font-size: 11px; }
   .dt-min { background: #febc2e; cursor: default !important; } .dt-min::after { content: "\2212"; }
   .dt-max { background: #28c840; } .dt-max::after { content: "+"; }
@@ -223,6 +225,7 @@
   .dt-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .dt-links a { font-size: 14px; font-weight: 500; color: #111; padding: 8px 14px; border-radius: 999px; background: #f1f1f1; }
   .dt-links a:hover { background: #e6e6e6; }
+  .dt-sheetbar { display: none; }
 
   /* notes: the full point of view and the full tool tests */
   .dt-win.note { width: min(680px, calc(100vw - 48px)); }
@@ -258,10 +261,16 @@
   .fd-item .s { font: 12px var(--sans); color: #8a8a8a; margin-top: 2px; }
 
   @media (max-width: 700px) {
-    .dt-win { left: 10px !important; top: 10px !important; width: calc(100% - 20px); max-height: calc(100% - 20px); }
-    .dt-win.finder { width: calc(100% - 20px); height: calc(100% - 20px); }
-    .dt-lights { gap: 10px; }
-    .dt-lights button { width: 16px; height: 16px; }
+    /* full-screen sheets with a bottom action bar; no traffic lights */
+    .dt-win, .dt-win.finder, .dt-win.note { left: 8px !important; top: 8px !important; width: calc(100% - 16px); height: calc(100% - 16px); max-height: none; border-radius: 14px; }
+    .dt-bar { justify-content: center; height: 46px; }
+    .dt-lights { display: none; }
+    .dt-title { font-size: 15px; font-weight: 600; color: #111; }
+    .dt-body { flex: 1; min-height: 0; }
+    .dt-sheetbar { display: flex; gap: 8px; flex: none; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid #ececec; background: #fafafa; }
+    .dt-sheetbar button { flex: 1; min-width: 0; height: 48px; border: 0; border-radius: 12px; background: #111; color: #fff; font: 600 15px var(--sans); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 14px; }
+    .dt-sheetbar button.ghost { flex: none; background: #e9e9ec; color: #111; }
+    html.sheet-open, html.sheet-open body { overflow: hidden; }
     .dt-split { grid-template-columns: 1fr; }
     .dt-split .dt-media.vertical { max-width: 280px; width: 100%; margin: 0 auto; }
     .fd { flex-direction: column; }
@@ -768,7 +777,7 @@
   const WORK = [
     { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand', len: '5:59', desc: 'A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.' },
     { id: 'J0j3ZWbqS5s', title: 'Feedflo', type: 'Impact Film · Mogler Farms', cat: 'brand', len: '5:45', desc: 'Feedflo\'s impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.' },
-    { id: 'wEyszIni9cs', title: 'Willow\'s Story', type: 'Awareness Film · Drug Use', cat: 'brand', len: '', desc: 'An awareness film on drug use, told through Willow\'s story.' },
+    { id: 'wEyszIni9cs', title: 'Willow\'s Story', type: 'Awareness Film · Drug Use', cat: 'brand', len: '4:10', desc: 'A four-minute awareness film on drug use, told through Willow\'s story.' },
     { id: 'HBTfzwOwkxY', title: 'Powerlift Hangar', type: 'Product Showcase', cat: 'client', len: '1:00', desc: 'A one-minute showcase for Powerlift\'s hangar doors, seen open on finished hangars with aircraft inside.' },
     { id: 'oUDLKNFswlQ', title: 'Plexus AV', type: 'Company Values', cat: 'client', len: '1:59', desc: 'A two-minute company values film for Plexus AV, presented on camera and closing on one clear ask: visit the site.' },
     { id: 'ieu7p3qum_s', title: 'Veterans Services', type: 'Social Awareness', cat: 'client', len: '4:13', desc: 'A four-minute story on VOA Dakotas\' veterans services, made for Rise and Shine 2025 and told through interviews.' },
@@ -831,13 +840,43 @@
   // ----- windows -----
   let z = 10;
   const openWins = new Map();
-  function closeWin(w) {
+  const stack = () => [...openWins.values()].sort((a, b) => a.style.zIndex - b.style.zIndex);   // back to front
+  // On phones every window is a full-screen sheet with a bar at the bottom: "Back" to the window
+  // underneath (or to the desktop), plus "Desktop" when windows are stacked. Each sheet also adds
+  // a history entry, so the phone's own back gesture closes it instead of leaving the site.
+  let skipPop = 0;
+  function updateBars() {
+    const wins = stack();
+    const onHero = scrollY < hero.offsetHeight / 2;
+    wins.forEach((w, i) => {
+      const prev = wins[i - 1];
+      w.querySelector('.dt-sheetbar').innerHTML = prev
+        ? `<button type="button" data-act="back">← ${esc(prev.getAttribute('aria-label'))}</button><button type="button" class="ghost" data-act="all">${onHero ? 'Desktop' : 'Close all'}</button>`
+        : `<button type="button" data-act="back">← ${onHero ? 'Back to desktop' : 'Close'}</button>`;
+    });
+    document.documentElement.classList.toggle('sheet-open', sheet() && wins.length > 0);
+  }
+  function closeWin(w, fromHistory) {
     if (w.classList.contains('closing')) return;
     w.classList.add('closing');
     openWins.delete(w.dataset.key);
     w.addEventListener('animationend', () => w.remove(), { once: true });
     if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
+    if (w._hist && !fromHistory) { skipPop++; history.back(); }
+    w._hist = false;
+    updateBars();
   }
+  function closeAll() {
+    const wins = stack();
+    const n = wins.filter(w => w._hist).length;
+    wins.forEach(w => closeWin(w, true));
+    if (n) { skipPop++; history.go(-n); }
+  }
+  addEventListener('popstate', () => {
+    if (skipPop) { skipPop--; return; }
+    const front = stack().pop();
+    if (front && front._hist) closeWin(front, true);
+  });
   function openWindow(key, title, html, opener, cls = '') {
     let w = openWins.get(key);
     if (w) {   // already open: refresh it and bring it forward
@@ -851,7 +890,7 @@
       w.tabIndex = -1;
       w.setAttribute('role', 'dialog');
       w.setAttribute('aria-label', title);
-      w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div>`;
+      w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close" title="Close (Esc)"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div><div class="dt-sheetbar"></div>`;
       winsEl.appendChild(w);
       w._opener = opener;
       if (!sheet()) {   // center a little above the middle of the screen, cascade if others are open
@@ -860,16 +899,19 @@
         w.style.top = Math.max(76, (innerHeight - w.offsetHeight) / 2 - 20 + n * 28) + 'px';
       }
       openWins.set(key, w);
+      if (sheet()) { history.pushState({ dtWin: key }, ''); w._hist = true; }
     }
     w.style.zIndex = ++z;
     w.focus({ preventScroll: true });
+    updateBars();
     return w;
   }
 
   winsEl.addEventListener('click', e => {
     const w = e.target.closest('.dt-win');
     if (!w) return;
-    if (e.target.closest('.dt-close')) return closeWin(w);
+    if (e.target.closest('.dt-close, [data-act="back"]')) return closeWin(w);
+    if (e.target.closest('[data-act="all"]')) return closeAll();
     if (e.target.closest('.dt-max')) return w.classList.toggle('max');
     const poster = e.target.closest('.dt-poster');
     if (poster) {   // poster swaps to the player
@@ -1006,9 +1048,13 @@
 
   // scroll bleed: --p runs 0 to 1 across the hero's height
   let bleedQueued = false;
+  // On phones the hero is taller than the screen and the icons sit low, so the bleed waits until
+  // the bottom of the hero is on screen and then runs over a full screen of scrolling.
   function bleed() {
     bleedQueued = false;
-    hero.style.setProperty('--p', clamp(scrollY / hero.offsetHeight, 0, 1).toFixed(3));
+    const h = hero.offsetHeight;
+    const [start, span] = isPhone() ? [Math.max(0, h - innerHeight), innerHeight] : [0, h];
+    hero.style.setProperty('--p', clamp((scrollY - start) / span, 0, 1).toFixed(3));
   }
   addEventListener('scroll', () => { if (!bleedQueued) { bleedQueued = true; requestAnimationFrame(bleed); } }, { passive: true });
   bleed();

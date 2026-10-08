@@ -13,7 +13,7 @@ can't go above its role (see the credit rules in `positioning.md`).
 |---|---|---|---|---|
 | Joe Schaeffer | Artist Film | `jH6LaZDXNMs` | Edit & planning | ? |
 | Feedflo | Impact Film · Mogler Farms | `J0j3ZWbqS5s` | Edit & planning | ? |
-| Willow's Story | Awareness Film · Drug Use | `wEyszIni9cs` (uploaded 2026-10-08; length and thumbnail pending YouTube processing) | Edit & planning | ? |
+| Willow's Story | Awareness Film · Drug Use | `wEyszIni9cs` | Edit & planning | ? |
 
 ## 02 · Client & Story Work
 | Project | Type | Video | Role | For |
@@ -99,7 +99,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 
 - **Joe Schaeffer** (5:59, `jH6LaZDXNMs`): A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.
 - **Feedflo** (5:45, `J0j3ZWbqS5s`): Feedflo's impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.
-- **Willow's Story** (length pending, `wEyszIni9cs`): An awareness film on drug use, told through Willow's story. (From the title and Ethan's note; YouTube had no description yet.)
+- **Willow's Story** (4:10, `wEyszIni9cs`): A four-minute awareness film on drug use, told through Willow's story. (From the title and Ethan's note; YouTube had no description yet.)
 
 **Client & Story**
 
