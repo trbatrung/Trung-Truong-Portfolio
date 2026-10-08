@@ -201,6 +201,11 @@
   .dt-min { background: #febc2e; cursor: default !important; } .dt-min::after { content: "\2212"; }
   .dt-max { background: #28c840; } .dt-max::after { content: "+"; }
   .dt-title { font-size: 13px; font-weight: 500; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dt-ctx, .dt-nav, .dt-done, .fd-menu { display: none; }
+  .dt-win.project .dt-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .dt-nav button { width: 26px; height: 24px; border: 0; border-radius: 6px; background: #f0f0f2; color: #333; font: 600 13px/1 var(--sans); cursor: pointer; }
+  .dt-nav button:hover { background: #e4e4e8; }
+  .dt-count { font: 500 11px var(--mono); color: #8a8a8a; min-width: 38px; text-align: center; }
   .dt-body { overflow: auto; overscroll-behavior: contain; padding: 24px 22px 22px; }
   .dt-body h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.02em; line-height: 1.05; margin-bottom: 14px; }
   .dt-body .dt-desc { font-size: 15px; line-height: 1.6; color: #555; }
@@ -263,20 +268,28 @@
   @media (max-width: 700px) {
     /* full-screen sheets with a bottom action bar; no traffic lights */
     .dt-win, .dt-win.finder, .dt-win.note { left: 8px !important; top: 8px !important; width: calc(100% - 16px); height: calc(100% - 16px); max-height: none; border-radius: 14px; }
-    .dt-bar { justify-content: center; height: 46px; }
-    .dt-lights { display: none; }
-    .dt-title { font-size: 15px; font-weight: 600; color: #111; }
+    .dt-bar { display: grid; grid-template-columns: 64px 1fr 64px; align-items: center; gap: 0; height: 48px; padding: 0 8px; }
+    .dt-lights, .dt-nav, .dt-win.project .dt-nav { display: none; }
+    .dt-title, .dt-ctx { grid-column: 2; text-align: center; font-size: 15px; font-weight: 600; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dt-win.project .dt-title { display: none; }
+    .dt-win.project .dt-ctx { display: block; }
+    .dt-done { display: block; grid-column: 3; justify-self: end; border: 0; background: none; padding: 8px 4px; font: 600 15px var(--sans); color: #0a5cd6; cursor: pointer; }
+    .dt-win.finder .dt-title { cursor: pointer; }
+    .dt-win.finder .dt-title::after { content: ' ▾'; color: #8a8a8a; }
+    .dt-win.finder.menu-open .dt-title::after { content: ' ▴'; }
+    .fd-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 48px; left: 0; right: 0; z-index: 3; background: #fff; border-bottom: 1px solid #ececec; box-shadow: 0 12px 24px rgba(0,0,0,.12); padding: 6px 8px 10px; }
+    .fd-menu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; text-align: left; padding: 12px 10px; border-radius: 10px; font: 500 16px var(--sans); color: #111; }
+    .fd-menu button svg { width: 20px; height: 16px; }
+    .fd-menu button.on { background: #f0f0f2; }
     .dt-body { flex: 1; min-height: 0; }
     .dt-sheetbar { display: flex; gap: 8px; flex: none; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid #ececec; background: #fafafa; }
     .dt-sheetbar button { flex: 1; min-width: 0; height: 48px; border: 0; border-radius: 12px; background: #111; color: #fff; font: 600 15px var(--sans); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 14px; }
-    .dt-sheetbar button.ghost { flex: none; background: #e9e9ec; color: #111; }
+    .dt-sheetbar button.ghost { flex: none; max-width: 55%; background: #e9e9ec; color: #111; }
     html.sheet-open, html.sheet-open body { overflow: hidden; }
     .dt-split { grid-template-columns: 1fr; }
     .dt-split .dt-media.vertical { max-width: 280px; width: 100%; margin: 0 auto; }
     .fd { flex-direction: column; }
-    .fd-side { width: auto; flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid #ececec; padding: 8px; }
-    .fd-side .h { display: none; }
-    .fd-side button { white-space: nowrap; }
+    .fd-side { display: none; }
     .fd-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -841,18 +854,19 @@
   let z = 10;
   const openWins = new Map();
   const stack = () => [...openWins.values()].sort((a, b) => a.style.zIndex - b.style.zIndex);   // back to front
-  // On phones every window is a full-screen sheet with a bar at the bottom: "Back" to the window
-  // underneath (or to the desktop), plus "Desktop" when windows are stacked. Each sheet also adds
-  // a history entry, so the phone's own back gesture closes it instead of leaving the site.
+  // On phones every window is a full-screen sheet. The top bar says where you are and has Done
+  // (back to the desktop); the bottom bar has Back (to the window underneath, or the desktop) and,
+  // for videos, Next. Each sheet adds a history entry, so the phone's back gesture closes it.
   let skipPop = 0;
   function updateBars() {
     const wins = stack();
     const onHero = scrollY < hero.offsetHeight / 2;
     wins.forEach((w, i) => {
       const prev = wins[i - 1];
-      w.querySelector('.dt-sheetbar').innerHTML = prev
-        ? `<button type="button" data-act="back">← ${esc(prev.getAttribute('aria-label'))}</button><button type="button" class="ghost" data-act="all">${onHero ? 'Desktop' : 'Close all'}</button>`
-        : `<button type="button" data-act="back">← ${onHero ? 'Back to desktop' : 'Close'}</button>`;
+      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onHero ? '← Back to desktop' : '← Close';
+      const video = w.classList.contains('project');
+      w.querySelector('.dt-sheetbar').innerHTML = `<button type="button" data-act="back"${video ? ' class="ghost"' : ''}>${back}</button>`
+        + (video ? '<button type="button" data-act="next">Next →</button>' : '');
     });
     document.documentElement.classList.toggle('sheet-open', sheet() && wins.length > 0);
   }
@@ -890,7 +904,7 @@
       w.tabIndex = -1;
       w.setAttribute('role', 'dialog');
       w.setAttribute('aria-label', title);
-      w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close" title="Close (Esc)"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span></div><div class="dt-body">${html}</div><div class="dt-sheetbar"></div>`;
+      w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close" title="Close (Esc)"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span><span class="dt-ctx"></span><span class="dt-nav"><button type="button" data-act="prev" aria-label="Previous video" title="Previous (←)">←</button><span class="dt-count"></span><button type="button" data-act="next" aria-label="Next video" title="Next (→)">→</button></span><button type="button" class="dt-done" data-act="all">Done</button></div><div class="dt-body">${html}</div><div class="dt-sheetbar"></div>`;
       winsEl.appendChild(w);
       w._opener = opener;
       if (!sheet()) {   // center a little above the middle of the screen, cascade if others are open
@@ -912,6 +926,14 @@
     if (!w) return;
     if (e.target.closest('.dt-close, [data-act="back"]')) return closeWin(w);
     if (e.target.closest('[data-act="all"]')) return closeAll();
+    if (e.target.closest('[data-act="next"]')) return stepProject(w, 1);
+    if (e.target.closest('[data-act="prev"]')) return stepProject(w, -1);
+    if (e.target.closest('.dt-title') && w.classList.contains('finder') && sheet()) {
+      const menu = w.querySelector('.fd-menu');
+      menu.hidden = !menu.hidden;
+      w.classList.toggle('menu-open', !menu.hidden);
+      return;
+    }
     if (e.target.closest('.dt-max')) return w.classList.toggle('max');
     const poster = e.target.closest('.dt-poster');
     if (poster) {   // poster swaps to the player
@@ -931,7 +953,7 @@
     if (!w) return;
     w.style.zIndex = ++z;
     const bar = e.target.closest('.dt-bar');
-    if (!bar || e.button !== 0 || e.target.closest('.dt-lights') || sheet() || w.classList.contains('max')) return;
+    if (!bar || e.button !== 0 || e.target.closest('.dt-lights, button') || sheet() || w.classList.contains('max')) return;
     const sx = e.clientX, sy = e.clientY, sl = w.offsetLeft, st = w.offsetTop;
     bar.setPointerCapture(e.pointerId);
     const move = ev => {
@@ -944,15 +966,14 @@
     bar.addEventListener('pointercancel', up);
   });
   addEventListener('keydown', e => {
-    if (e.key !== 'Escape') return;
-    const front = [...openWins.values()].sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
-    if (front) closeWin(front);
+    const front = stack().pop();
+    if (!front) return;
+    if (e.key === 'Escape') closeWin(front);
+    else if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && front.classList.contains('project')) stepProject(front, e.key === 'ArrowRight' ? 1 : -1);
   });
 
   // ----- window content -----
-  function openProject(id, opener) {
-    const p = WORK.find(w => w.id === id);
-    if (!p) return;
+  function buildProject(p) {
     const cat = CATS[p.cat];
     const sys = p.sys ? document.getElementById(p.sys) : null;
     const rows = [
@@ -972,7 +993,36 @@
       ${fix ? `<div class="wide fix"><dt>What changed</dt><dd>${esc(fix)}</dd></div>` : ''}</dl>`;
     const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, p.hq ? 'hqdefault' : 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>
       <a class="dt-watch" href="${watchUrl(p)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
-    openWindow(p.id, p.title, p.short ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media, opener);
+    return p.short ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media;
+  }
+  // where this video sits in its folder: "Brand Film · 1 of 3" on phones, "1 / 3" on desktop
+  function setPlace(w, p) {
+    const list = WORK.filter(x => x.cat === p.cat), i = list.indexOf(p);
+    w.querySelector('.dt-ctx').textContent = `${CATS[p.cat].name} · ${i + 1} of ${list.length}`;
+    w.querySelector('.dt-count').textContent = `${i + 1} / ${list.length}`;
+  }
+  function openProject(id, opener) {
+    const p = WORK.find(w => w.id === id);
+    if (!p) return;
+    setPlace(openWindow(p.id, p.title, buildProject(p), opener, 'project'), p);
+  }
+  // Next / Previous swap the video in place, wrapping around the folder
+  function stepProject(w, dir) {
+    const p = WORK.find(x => x.id === w.dataset.key);
+    if (!p) return;
+    const list = WORK.filter(x => x.cat === p.cat);
+    const n = list[(list.indexOf(p) + dir + list.length) % list.length];
+    const other = openWins.get(n.id);
+    if (other && other !== w) { other.style.zIndex = ++z; updateBars(); return; }
+    openWins.delete(w.dataset.key);
+    w.dataset.key = n.id;
+    openWins.set(n.id, w);
+    w.setAttribute('aria-label', n.title);
+    w.querySelector('.dt-title').textContent = n.title;
+    w.querySelector('.dt-body').innerHTML = buildProject(n);
+    w.querySelector('.dt-body').scrollTop = 0;
+    setPlace(w, n);
+    updateBars();
   }
 
   function openFinder(active = 'all', opener) {
@@ -982,7 +1032,9 @@
       <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
         `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy">${p.len ? `<span class="fd-len">${esc(p.len)}</span>` : ''}</span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
     const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
-    openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd"><div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
+    const menu = `<div class="fd-menu" hidden>${side}</div>`;
+    const w = openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd">${menu}<div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
+    w.classList.remove('menu-open');
   }
 
   function openNote(key, opener) {
