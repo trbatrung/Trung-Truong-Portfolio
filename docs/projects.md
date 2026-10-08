@@ -70,8 +70,11 @@ Three systems. Each needs a real "what broke, what I changed" line from Ethan.
      Melboure Intro" (channel: AI Officer Institute). The site currently labels it "Infinite
      Leverage · Founder Intro". **Label pending:** can it name EO Melbourne / AI Officer Institute,
      or should it just say Edge8?
-   - "Rebuilt around reusable components" is on the site but not in the verified facts. Confirm
-     or cut.
+   - "Rebuilt around reusable components" was cut on 2026-10-08 (not in the verified facts).
+   - Video: "Install the Stack on a Mac" (`PQWu7NOOTFc`, 10:21, AI Officer Institute, published
+     2026-09-22). A UI walkthrough. Placed here on 2026-10-08 because it's the same channel as
+     Founder Intro and matches "UI walkthroughs" in the CV. **Confirm it came out of this pipeline**;
+     if not, it moves to Motion & Explainers.
    - What broke: _pending_
 2. **Avatar video at volume.** HeyGen + ElevenLabs.
    - Videos: Executive Scale (Shorts `WlB4_OJTftM`), Brand Presence (Shorts `3stIKPZL_00`)
@@ -131,6 +134,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 **AI Systems**
 
 - **Founder Intro** (1:07, `pR03yYZbI8E`): A one-minute intro film, built with the code-based animation pipeline.
+- **Install the Stack on a Mac** (10:21, `PQWu7NOOTFc`): A ten-minute walkthrough for setting up a full AI development stack on a Mac: Homebrew, Claude Desktop, GitHub, Supabase and Vercel, verified with three checks.
 - **Executive Scale** (1:19, `WlB4_OJTftM`): A 79-second avatar-led short arguing that launching an AI program is only the first step.
 - **Brand Presence** (0:43, `3stIKPZL_00`): A 43-second avatar-led short built on one number: 64.8% of Vietnamese are looking for a new job.
 - **AI Language Lesson** (1:11, `8EKCg3SiSPI`): A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens' office.
