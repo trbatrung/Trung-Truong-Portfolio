@@ -142,6 +142,16 @@
   .dt-icon img { width: 80px; height: 52px; object-fit: cover; border-radius: 4px; background: #333; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; -webkit-user-drag: none; }
   .dt-icon.vertical img { width: 36px; height: 56px; }
   .dt-folder svg { display: block; width: 70px; height: 57px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+  /* AI Systems: a red folder with a slow glow, so it reads as the one to open */
+  [data-cat="ai"] svg path { fill: #c33a28; }
+  [data-cat="ai"] svg rect:nth-of-type(1) { fill: #e8573f; }
+  [data-cat="ai"] svg rect:nth-of-type(2) { fill: #f8977f; }
+  .dt-folder[data-cat="ai"] svg { animation: aiGlow 2.8s ease-in-out infinite; }
+  @keyframes aiGlow {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(232,87,63,.45)) drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+    50% { filter: drop-shadow(0 0 20px rgba(232,87,63,.85)) drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+  }
+  .dt-folder[data-cat="ai"] .dt-label::after { content: ' ✦'; color: #ffb39d; }
   .dt-doc svg { display: block; width: 44px; height: 56px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.3)); }
   .dt-label { font-size: 12.5px; font-weight: 500; line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); padding: 1px 6px; border-radius: 4px; max-width: 128px; text-align: center; }
   .dt-icon.selected .dt-thumb { background: rgba(0,0,0,.22); border-color: rgba(255,255,255,.18); }
@@ -217,6 +227,11 @@
   .dt-meta .wide { grid-column: 1 / -1; }
   .dt-meta .wide dd { color: #b26a24; }
   .dt-meta .wide.fix dd { color: #444; }
+  .dt-win.project .dt-body h2 { margin-bottom: 14px; }
+  .dt-win.project .dt-media { margin-bottom: 14px; }
+  .dt-win.project .dt-split .dt-media { margin-bottom: 0; }
+  .dt-facts { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: #8a8a8a; margin-top: 10px; }
+  .dt-win.project .dt-links { margin-top: 14px; }
   .dt-media { border-radius: 10px; overflow: hidden; background: #111; aspect-ratio: 16/9; }
   .dt-media.vertical { aspect-ratio: 9/16; }
   .dt-media img, .dt-media iframe { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
@@ -295,6 +310,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .desk-bg, .dt-icons { transform: none; }
+    .dt-folder[data-cat="ai"] svg { animation: none; filter: drop-shadow(0 0 12px rgba(232,87,63,.6)); }
     .dt-dock { transform: translateX(-50%); }
     .dt-win, .dt-win.closing { animation-duration: 1ms; }
     .dt-tile { transition: none; }
@@ -392,6 +408,8 @@
   .sys-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 4px; }
   .sys { padding: 2.2rem clamp(1.4rem, 2.5vw, 2.2rem); border-right: 1px solid var(--line); display: flex; flex-direction: column; }
   .sys:last-child { border-right: none; }
+  .sys { scroll-margin-top: 96px; transition: background .6s; }
+  .sys.flash { background: rgba(230,161,91,.09); }
   .feat-cap { font-family: var(--mono); font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); margin-bottom: .9rem; }
   .feat-title { font-family: var(--serif); font-size: 1.45rem; font-weight: 400; margin-bottom: .8rem; }
   .feat-desc { font-size: .9rem; color: var(--ink-dim); line-height: 1.7; }
@@ -531,12 +549,11 @@
       <button class="dt-icon" type="button" data-project="pR03yYZbI8E" style="left:1195px;top:505px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Founder Intro</span></button>
       <button class="dt-icon dt-doc" type="button" data-note="tests" style="left:1060px;top:645px"><span class="dt-thumb"><svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg></span><span class="dt-label">Tool tests</span></button>
       <button class="dt-icon dt-doc" type="button" data-note="pov" style="left:1195px;top:720px"><span class="dt-thumb"><svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg></span><span class="dt-label">How I think</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="brand" style="left:1335px;top:160px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Brand Film</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="client" style="left:1335px;top:268px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Client &amp; Story</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="ads" style="left:1335px;top:376px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Video Ads</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="long" style="left:1335px;top:484px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Long-form</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="motion" style="left:1335px;top:592px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Motion</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="ai" style="left:1335px;top:700px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">AI Systems</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="ai" style="left:1335px;top:160px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">AI Systems</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="brand" style="left:1335px;top:272px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Brand Film</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="client" style="left:1335px;top:384px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Client &amp; Story</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="ads" style="left:1335px;top:496px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Video Ads</span></button>
+      <button class="dt-icon dt-folder" type="button" data-cat="long" style="left:1335px;top:608px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Long-form</span></button>
     </div>
     <div class="dt-dock" role="toolbar" aria-label="Dock">
       <button class="dt-tile dt-work" type="button" data-open="finder" aria-label="Work"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg><span class="dt-tip">Work</span></button>
@@ -586,8 +603,7 @@
     <li><a href="https://youtu.be/Lgr4LS4ULw4">Tales From a Real Cowgirl</a> · Podcast · 4Front Studios</li>
     <li><a href="https://youtu.be/-MI2w6o8Tes">Robots Milking Cows?!</a> · Podcast · 4Front Studios</li>
     <li><a href="https://youtu.be/ofQ9lYCnjjk">Revve Product Demo</a> · Product Demo</li>
-    <li><a href="https://youtu.be/DV1G6hvNptI">What Is an NFT?</a> · Motion Graphics · Ninja Ape</li>
-    <li><a href="https://youtu.be/57Wtwlewnac">What Is Web 3.0?</a> · Motion Graphics · Ninja Ape</li>
+    <li><a href="https://youtu.be/57Wtwlewnac">What Is Web 3.0?</a> · YouTube · Ninja Ape</li>
     <li><a href="https://youtu.be/PQWu7NOOTFc">Install the Stack on a Mac</a> · UI Walkthrough</li>
   </ul>
 </section>
@@ -855,12 +871,11 @@
   // Every video lives here: loose files on the desktop, the rest in folders, all in Finder.
   // AI-system details are read from the Systems section, so that copy has one source.
   const CATS = {
+    ai:     { name: 'AI Systems', role: 'Director, end to end', desc: 'Each system was designed, directed and delivered end to end, and each one solves a specific production problem.' },
     brand:  { name: 'Brand Film', role: 'Edit & planning', desc: 'The calls here are structure and pace: which story the footage holds, and what gets cut to tell it.' },
     client: { name: 'Client & Story Work', role: 'Edit & planning', desc: 'Product, culture, community, testimonial. Every cut answers one question: what does this audience need to believe?' },
     ads:    { name: 'Video Advertisement', role: 'Edit & planning', desc: 'Conversion sets the standard here, not taste. Platform-native, and the first two seconds carry the whole thing.' },
     long:   { name: 'Long-form & Podcast', role: 'Edit & planning', desc: 'YouTube episodes and podcasts. At this length, pacing is the call that keeps the audience.' },
-    motion: { name: 'Motion & Explainers', role: 'Edit & planning', desc: 'Explainers and product demos built in motion. The animation has to carry the argument, not decorate it.' },
-    ai:     { name: 'AI Systems', role: 'Director, end to end', desc: 'Each system was designed, directed and delivered end to end, and each one solves a specific production problem.' },
   };
   const WORK = [
     { id: 'jH6LaZDXNMs', title: 'Joe Schaeffer', type: 'Artist Film', cat: 'brand', len: '5:59', desc: 'A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.' },
@@ -884,15 +899,14 @@
     { id: '-toxHWQCe_w', title: 'Dental Ads', type: 'Short · Ad', cat: 'ads', short: true, len: '0:56', desc: 'A 56-second vertical ad for clinic marketing. The line on screen is the pitch: ad campaigns that take people from click to clinic.' },
     { id: 'eE9IeIG6HFU', title: 'Nailzy', type: 'Short · App Ad', cat: 'ads', short: true, len: '0:42', desc: 'A 42-second ad for Nailzy, the app that helps nail technicians find salons fast. In Vietnamese.' },
     { id: 'iYsKXGBhExY', title: 'Keychron', type: 'Short · Social Ad', cat: 'ads', short: true, len: '0:17', desc: 'A 17-second Instagram ad for Keychron, built around a desk setup.' },
+    { id: 'ofQ9lYCnjjk', title: 'Revve Product Demo', type: 'Product Demo', cat: 'ads', len: '2:53', desc: 'A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.' },
     { id: 'C0NH1Izy5zM', title: 'How to Absorb Everything You Read', type: 'YouTube · Mike Dee', cat: 'long', len: '8:44', desc: 'A nine-minute YouTube episode for Mike Dee on his FAST framework for learning: Forget, Active, State, Teach.' },
     { id: 'bsSM3c1vdOY', title: 'Become a Full-Time Content Creator', type: 'YouTube · Rish from Mapplinks', cat: 'long', len: '10:00', desc: 'A ten-minute YouTube episode for Rish from Mapplinks on ways to earn as a content creator, from blogs and newsletters to online courses.' },
     { id: 'a3mAARp5T98', title: 'Managing Employees Doesn\'t Have to Suck', type: 'YouTube · John T. Meyer', cat: 'long', len: '5:02', desc: 'A five-minute YouTube episode for John T. Meyer on three ways to make managing a team less painful and more productive.' },
     { id: 'ORcY-A6fwG8', title: 'Nostalgia Street, Ep. 4', type: 'Podcast · 4Front Studios', cat: 'long', len: '57:21', desc: 'A 57-minute episode with Tory Haggerty on Mike Tyson\'s Punch-Out, arcades and 90s grunge.' },
     { id: 'Lgr4LS4ULw4', title: 'Tales From a Real Cowgirl', type: 'Podcast · 4Front Studios', cat: 'long', len: '46:46', desc: 'A Nostalgia Street episode with Rebekah Scott of Rebekah Scott Designs, on growing up on a South Dakota farm and ranch.' },
     { id: '-MI2w6o8Tes', title: 'Robots Milking Cows?!', type: 'Podcast · 4Front Studios', cat: 'long', len: '48:47', desc: 'A Nostalgia Street episode with Tanna Soukup of Strategie LLC, on growing up on a Minnesota dairy farm, robot milkers included.' },
-    { id: 'ofQ9lYCnjjk', title: 'Revve Product Demo', type: 'Product Demo', cat: 'motion', len: '2:53', desc: 'A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.' },
-    { id: 'DV1G6hvNptI', title: 'What Is an NFT?', type: 'Motion Graphics · Ninja Ape', cat: 'motion', len: '7:35', desc: 'A seven-minute motion graphics explainer for Ninja Ape on how NFTs work, in plain terms. The channel\'s first video.' },
-    { id: '57Wtwlewnac', title: 'What Is Web 3.0?', type: 'Motion Graphics · Ninja Ape', cat: 'motion', len: '10:37', desc: 'A ten-minute motion graphics explainer for Ninja Ape on Web 3.0, made for beginners.' },
+    { id: '57Wtwlewnac', title: 'What Is Web 3.0?', type: 'YouTube · Ninja Ape', cat: 'long', len: '10:37', desc: 'A ten-minute motion graphics explainer for Ninja Ape on Web 3.0, made for beginners.' },
     { id: 'pR03yYZbI8E', title: 'Founder Intro', type: 'Infinite Leverage', cat: 'ai', sys: 'sys-01', len: '1:07', desc: 'A one-minute intro film, built with the code-based animation pipeline.' },
     { id: 'PQWu7NOOTFc', title: 'Install the Stack on a Mac', type: 'UI Walkthrough', cat: 'ai', sys: 'sys-01', len: '10:21', desc: 'A ten-minute walkthrough for setting up a full AI development stack on a Mac: Homebrew, Claude Desktop, GitHub, Supabase and Vercel, verified with three checks.' },
     { id: 'WlB4_OJTftM', title: 'Executive Scale', type: 'HeyGen avatar', cat: 'ai', sys: 'sys-02', short: true, len: '1:19', desc: 'A 79-second avatar-led short arguing that launching an AI program is only the first step.' },
@@ -909,7 +923,7 @@
   const watchUrl = p => p.short ? `https://youtube.com/shorts/${p.id}` : `https://youtu.be/${p.id}`;
   const sheet = () => matchMedia('(max-width:700px)').matches;      // windows become full-screen sheets
   const isPhone = () => hero.classList.contains('is-phone');
-  const FOLDER_SVG = hero.querySelector('.dt-folder svg').outerHTML;
+  const FOLDER_SVG = hero.querySelector('.dt-folder svg').outerHTML;   // AI Systems is recoloured in CSS via [data-cat="ai"]
   // only Chromium renders SVG filters inside backdrop-filter; everyone else keeps the plain glass
   if (navigator.userAgentData && navigator.userAgentData.brands.some(b => b.brand === 'Chromium')) document.documentElement.classList.add('refract');
 
@@ -1003,6 +1017,14 @@
     if (!w) return;
     if (e.target.closest('.dt-close, [data-act="back"]')) return closeWin(w);
     if (e.target.closest('[data-act="all"]')) return closeAll();
+    const sysLink = e.target.closest('[data-act="system"]');
+    if (sysLink) {   // close everything, then scroll to that system on the page
+      e.preventDefault();
+      closeAll();
+      const target = document.querySelector(sysLink.getAttribute('href'));
+      setTimeout(() => { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); target.classList.add('flash'); setTimeout(() => target.classList.remove('flash'), 1800); }, 80);
+      return;
+    }
     if (e.target.closest('[data-act="next"]')) return stepProject(w, 1);
     if (e.target.closest('[data-act="prev"]')) return stepProject(w, -1);
     if (e.target.closest('.dt-title') && w.classList.contains('finder') && sheet()) {
@@ -1050,27 +1072,20 @@
   });
 
   // ----- window content -----
+  // Kept short on purpose: title, the video, one line, one line of facts. AI-system details live in
+  // the Systems section, one tap away, instead of being repeated here.
   function buildProject(p) {
     const cat = CATS[p.cat];
     const sys = p.sys ? document.getElementById(p.sys) : null;
-    const rows = [
-      ['Role', cat.role],
-      ['Type', p.type],
-      ['Length', p.len],
-      ['Category', cat.name],
-      ['System', txt(sys && sys.querySelector('.feat-title'))],
-      ['Tools', sys ? [...sys.querySelectorAll('.tool')].map(txt).join(', ') : ''],
-    ].filter(r => r[1]);
-    const results = sys ? [...sys.querySelectorAll('.feat-out')].map(txt) : [];
-    const fix = sys ? txt(sys.querySelector('.feat-fix')).replace(/^What changed/, '') : '';
-    const paras = [p.desc || cat.desc, sys ? txt(sys.querySelector('.feat-desc')) : ''].filter(Boolean);
-    const text = `<h2>${esc(p.title)}</h2>${paras.map(t => `<p class="dt-desc">${esc(t)}</p>`).join('')}
-      <dl class="dt-meta">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
-      ${results.length ? `<div class="wide"><dt>Result</dt><dd>${results.map(esc).join('<br>')}</dd></div>` : ''}
-      ${fix ? `<div class="wide fix"><dt>What changed</dt><dd>${esc(fix)}</dd></div>` : ''}</dl>`;
-    const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, p.hq ? 'hqdefault' : 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>
-      <a class="dt-watch" href="${watchUrl(p)}" target="_blank" rel="noopener">Watch on YouTube ↗</a>`;
-    return p.short ? `<div class="dt-split"><div>${text}</div><div>${media}</div></div>` : text + media;
+    const facts = [cat.role, p.len, sys ? txt(sys.querySelector('.feat-title')) : p.type].filter(Boolean);
+    const media = `<div class="dt-media${p.short ? ' vertical' : ''}"><button class="dt-poster" data-yt="${esc(p.id)}" aria-label="Play ${esc(p.title)}"><img src="${thumb(p.id, p.hq ? 'hqdefault' : 'maxresdefault')}" alt=""><span class="dt-play"></span></button></div>`;
+    const text = `<p class="dt-desc">${esc(p.desc || cat.desc)}</p>
+      <p class="dt-facts">${facts.map(esc).join(' · ')}</p>
+      <div class="dt-links">${sys ? `<a href="#${p.sys}" data-act="system">How this system works ↓</a>` : ''}<a href="${watchUrl(p)}" target="_blank" rel="noopener">Watch on YouTube ↗</a></div>`;
+    const title = `<h2>${esc(p.title)}</h2>`;
+    return p.short
+      ? `<div class="dt-split"><div>${title}${text}</div><div>${media}</div></div>`
+      : `${title}${media}${text}`;
   }
   // where this video sits in its folder: "1 of 3" on phones, "1 / 3" on desktop
   function setPlace(w, p) {

@@ -59,20 +59,25 @@ line, tool tags, watch chips. The "What changed" lines come from the verified fa
    before it ships."
 
 ## Desktop folders (Finder) · Status: draft, needs sign-off
-Each folder shows its role, then one line. Every project window has a Role row.
+Five folders. **AI Systems comes first everywhere** (top of the desktop column, first in Finder)
+and is a red folder with a slow glow and a ✦, so visitors know it's the one to open. Each folder
+shows its role, then one line. Motion & Explainers was removed on 2026-10-09.
+- AI Systems · Director, end to end: "Each system was designed, directed and delivered end to
+  end, and each one solves a specific production problem."
 - Brand Film · Edit & planning: "The calls here are structure and pace: which story the footage
-  holds, and what gets cut to tell it." (Replaces "The story is a decision... I make that call
-  first", which claimed more than an edit.)
+  holds, and what gets cut to tell it."
 - Client & Story Work · Edit & planning: "Product, culture, community, testimonial. Every cut
   answers one question: what does this audience need to believe?"
 - Video Advertisement · Edit & planning: "Conversion sets the standard here, not taste.
   Platform-native, and the first two seconds carry the whole thing."
 - Long-form & Podcast · Edit & planning: "YouTube episodes and podcasts. At this length, pacing is
   the call that keeps the audience."
-- Motion & Explainers · Edit & planning: "Explainers and product demos built in motion. The
-  animation has to carry the argument, not decorate it."
-- AI Systems · Director, end to end: "Each system was designed, directed and delivered end to
-  end, and each one solves a specific production problem."
+
+## Video windows
+Kept short so the video is one tap away: title, the video, one line of description, one line of
+facts (role · length · type or system), then "How this system works ↓" (AI videos, scrolls to the
+Systems section) and "Watch on YouTube". Tools, results and "what changed" live only in the Systems
+section.
 
 ## 02 — How I Choose Tools `#approach` · Status: draft, needs sign-off
 Merges the old Tools I've Vetted and How I Think sections. "Slop or salvation. Both are wrong."

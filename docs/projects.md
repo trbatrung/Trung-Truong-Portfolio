@@ -43,6 +43,7 @@ YouTube `ieu7p3qum_s` above, so it isn't listed twice.
 | Dental Ads | `-toxHWQCe_w` | Edit & planning | ? |
 | Nailzy (deck) | `eE9IeIG6HFU` | Edit & planning | ? |
 | Keychron (deck) | `iYsKXGBhExY` | Edit & planning | ? |
+| Revve Product Demo (deck; moved from Motion 2026-10-09) | `ofQ9lYCnjjk` | Edit & planning | ? |
 
 ## 04 · Long-form & Podcast (new folder, from the deck)
 | Project | Type | Video | Role | For |
@@ -53,17 +54,11 @@ YouTube `ieu7p3qum_s` above, so it isn't listed twice.
 | Nostalgia Street, Ep. 4 | Podcast · 4Front Studios | `ORcY-A6fwG8` | Edit & planning | 4Front? |
 | Tales From a Real Cowgirl | Podcast · 4Front Studios | `Lgr4LS4ULw4` | Edit & planning | 4Front? |
 | Robots Milking Cows?! | Podcast · 4Front Studios | `-MI2w6o8Tes` | Edit & planning | 4Front? |
+| What Is Web 3.0? (moved from Motion 2026-10-09) | YouTube · Ninja Ape | `57Wtwlewnac` | Edit & planning | ? |
 
 The deck calls the podcast work audio editing and sound design for Nostalgia Street.
 
-## 05 · Motion & Explainers (new folder, from the deck)
-| Project | Type | Video | Role | For |
-|---|---|---|---|---|
-| Revve Product Demo | Product Demo | `ofQ9lYCnjjk` | Edit & planning | ? |
-| What Is an NFT? | Motion Graphics · Ninja Ape | `DV1G6hvNptI` | Edit & planning | ? |
-| What Is Web 3.0? | Motion Graphics · Ninja Ape | `57Wtwlewnac` | Edit & planning | ? |
-
-## 06 · AI Systems (Edge8)
+## 05 · AI Systems (Edge8)
 Three systems. **Role: director, end to end** (confirmed 2026-10-08). Ethan delegated the
 "what changed" lines; they're drafted only from the verified facts, never from invented incidents.
 
@@ -124,6 +119,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 - **Dental Ads** (0:56, `-toxHWQCe_w`): A 56-second vertical ad for clinic marketing. The line on screen is the pitch: ad campaigns that take people from click to clinic.
 - **Nailzy** (0:42, `eE9IeIG6HFU`): A 42-second ad for Nailzy, the app that helps nail technicians find salons fast. In Vietnamese.
 - **Keychron** (0:17, `iYsKXGBhExY`): A 17-second Instagram ad for Keychron, built around a desk setup.
+- **Revve Product Demo** (2:53, `ofQ9lYCnjjk`): A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.
 
 **Long-form & Podcast**
 
@@ -133,12 +129,8 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 - **Nostalgia Street, Ep. 4** (57:21, `ORcY-A6fwG8`): A 57-minute episode with Tory Haggerty on Mike Tyson's Punch-Out, arcades and 90s grunge.
 - **Tales From a Real Cowgirl** (46:46, `Lgr4LS4ULw4`): A Nostalgia Street episode with Rebekah Scott of Rebekah Scott Designs, on growing up on a South Dakota farm and ranch.
 - **Robots Milking Cows?!** (48:47, `-MI2w6o8Tes`): A Nostalgia Street episode with Tanna Soukup of Strategie LLC, on growing up on a Minnesota dairy farm, robot milkers included.
-
-**Motion & Explainers**
-
-- **Revve Product Demo** (2:53, `ofQ9lYCnjjk`): A three-minute animated product demo for Revve, showing how its AI sales reps turn website visitors into qualified sales demos.
-- **What Is an NFT?** (7:35, `DV1G6hvNptI`): A seven-minute motion graphics explainer for Ninja Ape on how NFTs work, in plain terms. The channel's first video.
 - **What Is Web 3.0?** (10:37, `57Wtwlewnac`): A ten-minute motion graphics explainer for Ninja Ape on Web 3.0, made for beginners.
+
 
 **AI Systems**
 
@@ -149,12 +141,12 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 - **AI Language Lesson** (1:11, `8EKCg3SiSPI`): A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens' office.
 
 ## Retired
+- **What Is an NFT?** (`DV1G6hvNptI`, Ninja Ape). Removed 2026-10-09 with the Motion & Explainers folder; Revve moved to Video Ads and Web 3.0 to Long-form.
 - **Dermatology Course · Module Intro** (`uGsAgs07RbU`). AI-directed b-roll (Veo 3, Kling),
   replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
   Intro took its slot.
 
 ## Desktop hero
-Loose files on the desktop: Joe Schaeffer, No More Solo, Powerlift Hangar, Founder Intro (pending
-Ethan's pick). Everything else sits in the six folders: Brand Film, Client & Story, Video Ads,
-Long-form, Motion, AI Systems. Folder descriptions for Long-form and Motion are new drafts and
-need sign-off.
+Loose files on the desktop: Joe Schaeffer, No More Solo, Powerlift Hangar, Founder Intro. Five
+folders, AI Systems first and red with a glow (it's the director-level work): AI Systems, Brand
+Film, Client & Story, Video Ads, Long-form. Plus two notes (Tool tests, How I think).
