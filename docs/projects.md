@@ -76,6 +76,9 @@ Three systems. **Role: director, end to end** (confirmed 2026-10-08). Ethan dele
    - What changed: "Without a proper brief, AI first passes land far from final. Jobs now start from a
      structured context package, so the first pass lands close." (CV: context packages so first-pass
      output lands close to final.)
+- Also in AI Systems, not yet tied to a system: **8 Edges Portal Tour** (`asW50LOVYrs`, 4:36,
+   uploaded 2026-10-12). Added at Ethan's request and placed loose on the desktop. Which system
+   made it (or whether it's a fourth one) is still to confirm.
 2. **Avatar video at volume.** HeyGen + ElevenLabs.
    - Videos: Executive Scale (Shorts `WlB4_OJTftM`), Brand Presence (Shorts `3stIKPZL_00`)
    - What changed: "At volume, AI artifacts slip through. QC now runs inline at every stage, with no
@@ -135,6 +138,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 **AI Systems**
 
 - **Founder Intro** (1:07, `pR03yYZbI8E`): A one-minute intro film, built with the code-based animation pipeline.
+- **8 Edges Portal Tour** (4:36, `asW50LOVYrs`): A four-and-a-half-minute walkthrough of the 8 Edges portal. (From the title; YouTube had no description.)
 - **Install the Stack on a Mac** (10:21, `PQWu7NOOTFc`): A ten-minute walkthrough for setting up a full AI development stack on a Mac: Homebrew, Claude Desktop, GitHub, Supabase and Vercel, verified with three checks.
 - **Executive Scale** (1:19, `WlB4_OJTftM`): A 79-second avatar-led short arguing that launching an AI program is only the first step.
 - **Brand Presence** (0:43, `3stIKPZL_00`): A 43-second avatar-led short built on one number: 64.8% of Vietnamese are looking for a new job.
@@ -147,6 +151,6 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
   Intro took its slot.
 
 ## Desktop hero
-Loose files on the desktop: Joe Schaeffer, No More Solo, Powerlift Hangar, Founder Intro. Five
+Loose files on the desktop: Joe Schaeffer, No More Solo, Powerlift Hangar, Founder Intro, 8 Edges Portal Tour. Five
 folders, AI Systems first and red with a glow (it's the director-level work): AI Systems, Brand
 Film, Client & Story, Video Ads, Long-form. Plus two notes (Tool tests, How I think).
