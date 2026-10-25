@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pipeline Diorama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f1ede6; --ink: #1a1a1a; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+  /* the frame is CONFIG-sized and CSS-scaled to fit; sizes below are in rem, where 1rem = min(w,h)/108 px */
+  #frame { position: absolute; left: 50%; top: 50%; transform-origin: 0 0; overflow: hidden; background: var(--bg); }
+  #frame canvas { display: block; }
+  body.embed #frame canvas { pointer-events: none; }
+  #ui { position: absolute; inset: 0; pointer-events: none; color: var(--ink); font-family: 'Space Grotesk', system-ui, sans-serif; }
+  .card { position: absolute; border-radius: 2.2rem; overflow: hidden;
+    background: rgba(255,255,255,.58); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,.95); box-shadow: 0 1.6rem 4.8rem rgba(58,44,30,.16), 0 0 0 1px rgba(26,26,26,.05); }
+  .card.portrait { left: 50%; top: 6rem; width: 86rem; transform: translateX(-50%); }
+  .card.landscape { left: 4.8rem; bottom: 4.8rem; width: 56rem; }   /* bottom left sits over filler, never a district */
+  .bar { position: relative; height: 4.6rem; display: flex; align-items: center; padding: 0 2rem; border-bottom: 1px solid rgba(26,26,26,.07); }
+  .lights { display: flex; gap: .9rem; }
+  .lights i { width: 1.35rem; height: 1.35rem; border-radius: 50%; display: block; }
+  .lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+  .fname { position: absolute; left: 0; right: 0; text-align: center; font: 500 1.7rem/1 'IBM Plex Mono', monospace; color: rgba(26,26,26,.5); }
+  .body { padding: 2.8rem 3.2rem 3rem; }
+  .body h1 { margin: 0; font-weight: 600; font-size: 5.8rem; line-height: 1; letter-spacing: -.035em; }
+  .sub { margin: 1.2rem 0 0; font-size: 2.4rem; line-height: 1.3; color: rgba(26,26,26,.62); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2.8rem; padding-top: 2.4rem; border-top: 1px solid rgba(26,26,26,.08); }
+  .stat .n { font: 500 6.4rem/1 'IBM Plex Mono', monospace; letter-spacing: -.04em; }
+  .stat .l { display: flex; gap: .9rem; align-items: flex-start; margin-top: 1.1rem; font: 500 1.45rem/1.3 'IBM Plex Mono', monospace; letter-spacing: .07em; text-transform: uppercase; color: rgba(26,26,26,.56); }
+  .dot { flex: none; width: 1.1rem; height: 1.1rem; margin-top: .2rem; border-radius: 50%; }
+  .card.landscape .body h1 { font-size: 4.8rem; }
+  .card.landscape .sub { font-size: 2.1rem; }
+  .card.landscape .stat .n { font-size: 5rem; }
+  .card.landscape .stat .l { font-size: 1.3rem; }
+  .pill { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: .9rem; padding: .85rem 1.6rem; white-space: nowrap;
+    border-radius: 99rem; background: rgba(255,255,255,.84); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 .8rem 2.4rem rgba(58,44,30,.14), 0 0 0 1px rgba(26,26,26,.05);
+    font: 600 1.5rem/1 'IBM Plex Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="frame">
+  <canvas id="c"></canvas>
+  <div id="ui">
+    <div class="card" id="card">
+      <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="fname" id="fname"></span></div>
+      <div class="body"><h1 id="title"></h1><p class="sub" id="sub"></p><div class="stats" id="stats"></div></div>
+    </div>
+  </div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const CONFIG = {
+  duration: 10, fps: 30, introDuration: 1.5, seed: 42, intro: true,
+  size: [1080, 1920],
+  zones: {
+    research:   { name: 'Research',         color: '#4f9fe6', stat: '6',  label: 'use cases tested' },
+    aiWork:     { name: 'AI work',          color: '#57cbbb', stat: '3',  label: 'AI systems directed' },
+    production: { name: 'Video production', color: '#e6a15b', stat: '8+', label: 'years in production' },
+  },
+  accent: '#e8573f',
+  neutrals: { background: '#f1ede6', slab: '#e7e1d8', light: '#d9d3ca', mid: '#a39b91', dark: '#3a3633', ink: '#1a1a1a',
+    road: '#9c958d', bike: '#b2aba2', walk: '#e2dbd0', grass: '#c9d4b8', path: '#e9dfcd', leaf: '#97b08a', wall: '#f4efe6', desk: '#efe8dd' },
+  title: 'Ethan Truong',
+  subtitle: 'Research, AI work, video production. One pipeline.',
+  windowTitle: 'pipeline.live',
+  quality: 'high',
+};
+
+// ---------- URL overrides
+const Q = new URLSearchParams(location.search);
+if (Q.has('w') && Q.has('h')) CONFIG.size = [Math.round(+Q.get('w')), Math.round(+Q.get('h'))];
+if (Q.get('quality') === 'low') CONFIG.quality = 'low';
+if (Q.get('intro') === '0') CONFIG.intro = false;
+const EXPORT = Q.get('export') === '1', EMBED = Q.get('embed') === '1';
+const [W, H] = CONFIG.size, D = CONFIG.duration, FPS = CONFIG.fps;
+const INTRO = CONFIG.intro ? CONFIG.introDuration : 0, HIGH = CONFIG.quality !== 'low', PORTRAIT = H > W;
+const N = CONFIG.neutrals, ZN = CONFIG.zones, ACC = CONFIG.accent;
+if (EMBED) document.body.classList.add('embed');
+
+// ---------- math (everything below is a pure function of time)
+const TAU = Math.PI * 2;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const smooth = u => u * u * (3 - 2 * u);
+const easeOutCubic = u => 1 - Math.pow(1 - u, 3);
+const easeOutBack = u => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
+const fract = v => v - Math.floor(v);
+const wave = (t, k, ph = 0) => Math.sin(TAU * (k * t / D + ph));        // integer k keeps it periodic in D
+const lerpAngle = (a, b, u) => a + ((((b - a + Math.PI) % TAU) + TAU) % TAU - Math.PI) * u;
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const rng = mulberry32(CONFIG.seed);                                     // layout only, at startup
+const rr = (a, b) => a + (b - a) * rng();
+const pick = arr => arr[Math.floor(rng() * arr.length)];
+
+// ---------- renderer, camera, light, passes
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H, false);
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(25, W / H, 20, 700);
+
+scene.add(new THREE.HemisphereLight(0xfffaf2, 0xd9cfc1, 1.7));
+const sun = new THREE.DirectionalLight(0xfff2e0, 3.1);
+sun.position.set(-30, 58, 34);
+sun.castShadow = true;
+sun.shadow.mapSize.set(HIGH ? 2048 : 1024, HIGH ? 2048 : 1024);
+Object.assign(sun.shadow.camera, { left: -36, right: 36, top: 36, bottom: -36, near: 1, far: 180 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
+scene.add(sun, sun.target);
+
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType, samples: 4 }));
+composer.setPixelRatio(1);
+composer.setSize(W, H);
+composer.addPass(new RenderPass(scene, camera));
+if (HIGH) {
+  const ao = new GTAOPass(scene, camera, W, H);
+  ao.blendIntensity = 1;
+  ao.updateGtaoMaterial({ radius: 0.9, distanceExponent: 1, thickness: 1.4, scale: 1, samples: 16 });
+  ao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+  composer.addPass(ao);
+}
+composer.addPass(new OutputPass());
+
+// ACES shifts every color, the background too. Solve once for the input that lands on the exact off-white.
+const bgTarget = new THREE.Color(N.background), bg = bgTarget.clone();
+scene.background = bg;
+{
+  const gl = renderer.getContext(), px = new Uint8Array(4), got = new THREE.Color();
+  camera.position.set(0, 60, 120); camera.lookAt(0, 0, 0);
+  for (let i = 0; i < 10; i++) {
+    composer.render();
+    gl.readPixels(W >> 1, H >> 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    got.setRGB(px[0] / 255, px[1] / 255, px[2] / 255, THREE.SRGBColorSpace);
+    for (const c of ['r', 'g', 'b']) bg[c] *= clamp(bgTarget[c] / Math.max(got[c], 1e-4), 0.6, 2.5);
+  }
+}
+
+// ---------- materials and geometry helpers
+const matCache = new Map();
+function mat(hex, rough = 0.74) {
+  const k = hex + rough;
+  if (!matCache.has(k)) matCache.set(k, new THREE.MeshStandardMaterial({ color: hex, roughness: rough, metalness: 0 }));
+  return matCache.get(k);
+}
+// screens, LEDs and lit windows: a standard material that also emits its own (instance) color
+function glowMat(hex = '#ffffff', k = 0.8, own = false) {
+  const key = 'glow' + hex + k;
+  if (!own && matCache.has(key)) return matCache.get(key);
+  const m = new THREE.MeshStandardMaterial({ color: hex, roughness: 0.45, metalness: 0 });
+  m.onBeforeCompile = s => { s.fragmentShader = s.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>\n totalEmissiveRadiance += diffuseColor.rgb * ${k.toFixed(3)};`); };
+  m.customProgramCacheKey = () => 'glow' + k.toFixed(3);
+  if (!own) matCache.set(key, m);
+  return m;
+}
+const matOf = c => typeof c === 'string' ? mat(c) : c;
+const geoCache = new Map();
+function rbox(w, h, d, r = 0.06) {
+  r = Math.max(0.002, Math.min(r, w / 2 - 0.001, h / 2 - 0.001, d / 2 - 0.001));
+  const k = [w, h, d, r].join('|');
+  if (!geoCache.has(k)) geoCache.set(k, new RoundedBoxGeometry(w, h, d, 2, r));
+  return geoCache.get(k);
+}
+function cylGeo(rt, rb, h, seg = 20) {
+  const k = ['c', rt, rb, h, seg].join('|');
+  if (!geoCache.has(k)) geoCache.set(k, new THREE.CylinderGeometry(rt, rb, h, seg));
+  return geoCache.get(k);
+}
+function mesh(geo, material, x, y, z, parent) {
+  const m = new THREE.Mesh(geo, matOf(material));
+  m.castShadow = m.receiveShadow = true;
+  m.position.set(x, y, z);
+  (parent || scene).add(m);
+  return m;
+}
+const box = (p, w, h, d, c, x, y, z, r = 0.06) => mesh(rbox(w, h, d, r), c, x, y + h / 2, z, p);   // y is the bottom
+const cyl = (p, rt, rb, h, c, x, y, z, seg) => mesh(cylGeo(rt, rb, h, seg), c, x, y + h / 2, z, p);
+const tint = (hex, k) => '#' + new THREE.Color(N.background).lerp(new THREE.Color(hex), k).getHexString();
+
+// ---------- build-in: pieces rise and pop, the street first, then each district center outward
+const GROUPS = {
+  base:       { start: 0.00, spread: 0.45, cx: 0,     cz: 0,     norm: 34 },
+  research:   { start: 0.45, spread: 0.20, cx: -18.9, cz: 0,     norm: 13 },
+  ai:         { start: 0.70, spread: 0.20, cx: 0,     cz: -19.4, norm: 13 },
+  production: { start: 0.95, spread: 0.20, cx: 18.9,  cz: 0,     norm: 13 },
+};
+const POP = 0.35;
+const buildStart = (g, x, z) => { const G = GROUPS[g]; return G.start + G.spread * Math.min(1, Math.hypot(x - G.cx, z - G.cz) / G.norm); };
+function build(T, start) {
+  if (T >= INTRO) return [0, 1];
+  const e = clamp((T - start) / POP);
+  return [-1.6 * (1 - easeOutCubic(e)), easeOutBack(e)];
+}
+
+const pieces = [];
+function piece(obj, group, o = {}) {
+  if (!obj.parent) scene.add(obj);
+  pieces.push({ obj, baseY: obj.position.y, baseS: obj.scale.clone(), start: o.start ?? buildStart(group, obj.position.x, obj.position.z), anim: o.anim });
+  return obj;
+}
+function grp(group, x, z, y = 0, o = {}) {
+  const g = new THREE.Group();
+  g.position.set(x, y, z);
+  if (o.ry) g.rotation.y = o.ry;
+  return piece(g, group, o);
+}
+
+const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _e = new THREE.Euler(), _p = new THREE.Vector3(), _s = new THREE.Vector3();
+const insts = [];
+class Inst {
+  constructor(geo, material, max, cast = true) {
+    this.mesh = new THREE.InstancedMesh(geo, matOf(material), max);
+    this.mesh.castShadow = cast; this.mesh.receiveShadow = true;
+    this.mesh.count = 0; this.mesh.frustumCulled = false;
+    this.items = []; this.S = {};
+    scene.add(this.mesh); insts.push(this);
+  }
+  add(group, x, y, z, o = {}) {
+    const it = { b: { x, y, z, rx: o.rx || 0, ry: o.ry || 0, rz: o.rz || 0, sx: o.sx ?? 1, sy: o.sy ?? 1, sz: o.sz ?? 1, c: new THREE.Color(o.color ?? '#ffffff') },
+      start: o.start ?? buildStart(group, x, z), anim: o.anim };
+    this.items.push(it);
+    this.mesh.count = this.items.length;
+    return it;
+  }
+  update(T, t) {
+    const S = this.S;
+    this.items.forEach((it, i) => {
+      Object.assign(S, it.b);
+      if (it.anim) it.anim(S, t);
+      const [dy, sc] = build(T, it.start), k = Math.max(sc, 1e-4);
+      _p.set(S.x, S.y + dy, S.z);
+      _q.setFromEuler(_e.set(S.rx, S.ry, S.rz, 'YXZ'));
+      _s.set(S.sx * k, S.sy * k, S.sz * k);
+      this.mesh.setMatrixAt(i, _m.compose(_p, _q, _s));
+      this.mesh.setColorAt(i, S.c);
+    });
+    this.mesh.instanceMatrix.needsUpdate = true;
+    if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
+  }
+}
+
+// ---------- rounded-rectangle loops: the street, its lanes, the dolly track
+const CA = 10.5, CB = 11.5, CR = 4, ROAD = 2.2, WALK = 3.6, PAD_Y = 0.22;
+function makeRR(cx, cz, A, B, R) {
+  R = Math.max(R, 0.01);
+  const a = A - R, b = B - R, q = Math.PI * R / 2;
+  const arc = (ox, oz, th) => [cx + ox + R * Math.cos(th), cz + oz + R * Math.sin(th)];
+  // starts at the near-side middle and runs one way: left side, far side, right side, back
+  const segs = [
+    { len: a,     p: u => [cx - u, cz + B] },
+    { len: q,     p: u => arc(-a, b, Math.PI / 2 + u / R) },
+    { len: 2 * b, p: u => [cx - A, cz + b - u] },
+    { len: q,     p: u => arc(-a, -b, Math.PI + u / R) },
+    { len: 2 * a, p: u => [cx - a + u, cz - B] },
+    { len: q,     p: u => arc(a, -b, 1.5 * Math.PI + u / R) },
+    { len: 2 * b, p: u => [cx + A, cz - b + u] },
+    { len: q,     p: u => arc(a, b, u / R) },
+    { len: a,     p: u => [cx + a - u, cz + B] },
+  ];
+  const L = segs.reduce((s, g) => s + g.len, 0);
+  const pt = s => { s = ((s % L) + L) % L; for (const g of segs) { if (s <= g.len) return g.p(s); s -= g.len; } return segs[0].p(0); };
+  const at = s => {
+    const [x, z] = pt(s), [x2, z2] = pt(s + 0.01), dx = (x2 - x) / 0.01, dz = (z2 - z) / 0.01;
+    return { x, z, h: Math.atan2(-dz, dx), hp: Math.atan2(dx, dz), nx: -dz, nz: dx };   // h: +x forward, hp: +z forward, n: inward
+  };
+  return { L, at, a, b, q };
+}
+const offLoop = off => makeRR(0, 0, CA + off, CB + off, CR + off);
+function rrShape(A, B, R, path) {
+  R = Math.max(R, 0.001);
+  const a = A - R, b = B - R;
+  path.moveTo(-a, -B); path.lineTo(a, -B); path.absarc(a, -b, R, -Math.PI / 2, 0, false);
+  path.lineTo(A, b); path.absarc(a, b, R, 0, Math.PI / 2, false);
+  path.lineTo(-a, B); path.absarc(-a, b, R, Math.PI / 2, Math.PI, false);
+  path.lineTo(-A, -b); path.absarc(-a, -b, R, Math.PI, 1.5 * Math.PI, false);
+  return path;
+}
+function flatRR(cx, cz, A, B, R, o0, o1, h, y = 0) {
+  const s = rrShape(A + o1, B + o1, R + o1, new THREE.Shape());
+  if (o0 !== null) s.holes.push(rrShape(A + o0, B + o0, R + o0, new THREE.Path()));
+  const g = new THREE.ExtrudeGeometry(s, { depth: h, bevelEnabled: false, curveSegments: 24 });
+  g.rotateX(-Math.PI / 2);
+  g.translate(cx, y, cz);
+  return g;
+}
+
+// ---------- shared instanced parts
+const SKINS = ['#f0cfae', '#d9a882', '#b98563', '#8d5f43'];
+const SHIRTS = ['#3a3633', '#6b645d', '#f4efe6', '#a39b91', '#4f9fe6', '#57cbbb', '#e6a15b'];
+const bodies = new Inst(rbox(0.42, 0.66, 0.28, 0.12), mat('#ffffff', 0.8), 40);
+const heads = new Inst(new THREE.SphereGeometry(0.16, 18, 12), mat('#ffffff', 0.7), 40);
+const BH = 0.66;
+function person(group, x, z, o = {}) {
+  const seated = !!o.seated, bh = seated ? 0.46 : BH, lift = seated ? 0.42 : 0, floor = o.floor ?? PAD_Y;
+  const sy = bh / BH;
+  let ct = NaN, cv = null;
+  const get = t => (ct === t ? cv : (ct = t, cv = o.anim(t)));
+  const b = bodies.add(group, x, floor + lift + bh / 2, z, { color: o.shirt ?? pick(SHIRTS), sy, ry: o.ry || 0, start: o.start });
+  const h = heads.add(group, x, floor + lift + bh + 0.15, z, { color: o.skin ?? pick(SKINS), start: o.start });
+  if (o.anim) {
+    b.anim = (S, t) => { const v = get(t), f = v.floor ?? floor; S.x = v.x; S.z = v.z; S.ry = v.ry; S.y = f + lift + bh / 2 + (v.bob || 0); };
+    h.anim = (S, t) => { const v = get(t), f = v.floor ?? floor; S.x = v.x; S.z = v.z; S.y = f + lift + bh + 0.15 + (v.bob || 0) + (v.nod || 0); };
+  }
+}
+// keyframed walks: [[t, x, z], ...] from 0 to D, ending where they start
+function kf(keys) {
+  const segs = [];
+  for (let i = 0; i < keys.length - 1; i++) {
+    const [t0, x0, z0] = keys[i], [t1, x1, z1] = keys[i + 1], dx = x1 - x0, dz = z1 - z0, len = Math.hypot(dx, dz);
+    segs.push({ t0, t1, x0, z0, dx, dz, len, h: len > 1e-4 ? Math.atan2(dx, dz) : null });
+  }
+  const n = segs.length;
+  for (let i = 0; i < n; i++) if (segs[i].h === null) for (let j = 1; j <= n; j++) { const s = segs[(i + j) % n]; if (s.h !== null) { segs[i].h = s.h; break; } }
+  for (let i = 0; i < n; i++) { segs[i].h ??= 0; segs[i].hp = segs[(i - 1 + n) % n].h ?? segs[i].h; }
+  return t => {
+    let s = segs[n - 1];
+    for (const g of segs) if (t < g.t1) { s = g; break; }
+    const u = clamp((t - s.t0) / (s.t1 - s.t0)), e = s.len ? smooth(u) : 0;
+    return { x: s.x0 + s.dx * e, z: s.z0 + s.dz * e, ry: lerpAngle(s.hp, s.h, smooth(clamp(u / 0.2))),
+      bob: s.len ? 0.035 * Math.abs(Math.sin(Math.PI * e * s.len / 0.42)) : 0 };
+  };
+}
+const trunks = new Inst(cylGeo(0.1, 0.14, 1), mat('#9c8269'), 60);
+const crowns = new Inst(new THREE.IcosahedronGeometry(0.85, 1), mat('#ffffff', 0.85), 60);
+const LEAVES = ['#97b08a', '#8aa67e', '#a7bd96', '#86a07a'];
+function tree(group, x, z, s = 1, y0 = 0) {
+  trunks.add(group, x, y0 + 0.4 * s, z, { sx: s, sy: 0.8 * s, sz: s });
+  crowns.add(group, x, y0 + 0.8 * s + 0.55 * s, z, { sx: s, sy: s * rr(0.95, 1.2), sz: s, color: pick(LEAVES), ry: rr(0, TAU) });
+}
+const glowGlass = new THREE.Color('#5d6a73'), glowLit = new THREE.Color('#ffe2b0');
+const windows = new Inst(rbox(0.62, 0.78, 0.08, 0.03), glowMat('#ffffff', 0.55), 140, false);
+function windowAt(group, x, y, z, ry) {
+  const k = 1 + Math.floor(rng() * 3), ph = rng(), duty = rr(0.3, 0.8);
+  windows.add(group, x, y, z, { ry, color: '#5d6a73', anim: (S, t) => { S.c = fract(k * t / D + ph) < duty ? glowLit : glowGlass; } });
+}
+function wallX(group, cx, cz, len, h, th = 0.24, c = N.wall) { const g = grp(group, cx, cz, PAD_Y); box(g, len, h, th, c, 0, 0, 0, 0.06); return g; }
+function wallZ(group, cx, cz, len, h, th = 0.24, c = N.wall) { const g = grp(group, cx, cz, PAD_Y); box(g, th, h, len, c, 0, 0, 0, 0.06); return g; }
+function stool(group, x, z) { const g = grp(group, x, z, PAD_Y); cyl(g, 0.2, 0.2, 0.06, N.dark, 0, 0.36, 0); cyl(g, 0.04, 0.05, 0.36, N.mid, 0, 0, 0, 10); }
+function desk(group, x, z, w, d, along = 'x') {
+  const g = grp(group, x, z, PAD_Y);
+  const [sx, sz] = along === 'x' ? [w, d] : [d, w];
+  box(g, sx, 0.07, sz, N.desk, 0, 0.37, 0, 0.03);
+  for (const s of [-0.45, 0.45]) {
+    if (along === 'x') box(g, 0.07, 0.37, d * 0.9, N.mid, s * w * 0.95, 0, 0, 0.02);
+    else box(g, d * 0.9, 0.37, 0.07, N.mid, 0, 0, s * w * 0.95, 0.02);
+  }
+  return g;
+}
+// a screen showing one face: background, head and shoulders
+const FACE_BASE = new THREE.Color('#2f7d73');
+const faceBg = glowMat('#2f7d73', 0.85, true), faceLight = glowMat('#c9f1ea', 0.9);
+const discGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.012, 24).rotateX(Math.PI / 2);
+const shoulderGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.012, 24, 1, false, Math.PI / 2, Math.PI).rotateX(Math.PI / 2);
+function faceScreen(group, x, z, ry, standH = 0.8) {
+  const g = grp(group, x, z, PAD_Y, { ry });
+  box(g, 0.06, standH, 0.06, N.dark, 0, 0, 0, 0.02);
+  box(g, 0.74, 0.54, 0.05, N.dark, 0, standH, 0, 0.03);
+  box(g, 0.66, 0.46, 0.015, faceBg, 0, standH + 0.04, 0.03, 0.005);
+  mesh(discGeo, faceLight, 0, standH + 0.32, 0.042, g);
+  mesh(shoulderGeo, faceLight, 0, standH + 0.06, 0.042, g);
+  return g;
+}
+function bladeSign(group, x, z, dir, color) {
+  const g = grp(group, x, z, PAD_Y);
+  cyl(g, 0.05, 0.06, 2.6, N.dark, 0, 0, 0, 10);
+  if (dir[0]) box(g, 0.9, 0.62, 0.08, color, dir[0] * 0.5, 1.75, 0, 0.04);
+  else box(g, 0.08, 0.62, 0.9, color, 0, 1.75, dir[1] * 0.5, 0.04);
+}
+
+// ================= WORLD =================
+// ---------- slab
+const slab = new THREE.Group(); scene.add(slab);
+mesh(new RoundedBoxGeometry(48.4, 2.4, 49.6, 4, 1.1), mat(N.slab, 0.9), 0, -1.2, 0, slab);
+mesh(new RoundedBoxGeometry(46.6, 1.4, 47.8, 4, 0.6), mat(N.light, 0.9), 0, -2.6, 0, slab);
+
+// ---------- the loop street, sidewalks and the park inside it
+const street = grp('base', 0, 0);
+mesh(flatRR(0, 0, CA, CB, CR, -ROAD, ROAD, 0.06), mat(N.road, 0.92), 0, 0, 0, street);
+mesh(flatRR(0, 0, CA, CB, CR, 0.75, ROAD, 0.075), mat(N.bike, 0.92), 0, 0, 0, street);
+mesh(flatRR(0, 0, CA, CB, CR, ROAD, WALK, 0.2), mat(N.walk, 0.85), 0, 0, 0, street);
+mesh(flatRR(0, 0, CA, CB, CR, -WALK, -ROAD, 0.2), mat(N.walk, 0.85), 0, 0, 0, street);
+const park = grp('base', 0, 0);
+mesh(flatRR(0, 0, CA, CB, CR, null, -WALK, 0.16), mat(N.grass, 0.95), 0, 0, 0, park);
+box(park, 13.6, 0.025, 1.1, N.path, 0, 0.16, 0, 0.01);
+box(park, 1.1, 0.025, 15.6, N.path, 0, 0.16, 0, 0.01);
+
+const dashes = new Inst(rbox(0.9, 0.03, 0.12, 0.01), mat('#f4efe6', 0.6), 60, false);
+{ const lp = offLoop(0.75), n = Math.floor(lp.L / 2.1); for (let i = 0; i < n; i++) { const p = lp.at(i * lp.L / n); dashes.add('base', p.x, 0.09, p.z, { ry: p.h }); } }
+
+const CROSS = [{ cx: -3, cz: CB, n: [0, 1] }, { cx: -CA, cz: 6, n: [-1, 0] }, { cx: CA, cz: 6, n: [1, 0] }];
+const stripes = new Inst(rbox(2.0, 0.025, 0.34, 0.01), mat('#f8f4ed', 0.6), 30, false);
+for (const c of CROSS) for (let o = -1.86; o <= 1.9; o += 0.62) stripes.add('base', c.cx + c.n[0] * o, 0.09, c.cz + c.n[1] * o, { ry: Math.atan2(-c.n[0], c.n[1]) });
+
+// street lamps: outer and inner sidewalks, arms reaching over the road
+const poles = new Inst(cylGeo(0.055, 0.07, 1, 10), mat(N.dark), 30), arms = new Inst(rbox(0.8, 0.06, 0.06, 0.02), mat(N.dark), 30), lampHeads = new Inst(rbox(0.42, 0.1, 0.22, 0.04), mat('#f4efe6', 0.5), 30);
+for (const [off, count, dir] of [[3.25, 16, 1], [-3.25, 8, -1]]) {
+  const lp = offLoop(off);
+  for (let i = 0; i < count; i++) {
+    const p = lp.at((i + 0.5) * lp.L / count);
+    if (CROSS.some(c => Math.hypot(p.x - c.cx, p.z - c.cz) < 4.2)) continue;
+    const nx = p.nx * dir, nz = p.nz * dir, ry = Math.atan2(-nz, nx);
+    poles.add('base', p.x, 0.2 + 1.25, p.z, { sy: 2.5 });
+    arms.add('base', p.x + nx * 0.4, 2.62, p.z + nz * 0.4, { ry });
+    lampHeads.add('base', p.x + nx * 0.78, 2.56, p.z + nz * 0.78, { ry });
+  }
+}
+
+// park: planter tree, benches, trees
+{ const g = grp('base', 0, 0, 0.16); cyl(g, 1.1, 1.18, 0.4, N.light, 0, 0, 0, 28); tree('base', 0, 0, 1.15, 0.56); }
+for (const [x, z, ry] of [[2.7, 1.05, Math.PI], [-2.7, -1.05, 0], [1.05, -3.2, -Math.PI / 2]]) {
+  const g = grp('base', x, z, 0.16, { ry });
+  box(g, 1.5, 0.08, 0.44, '#b98f6b', 0, 0.36, 0, 0.03); box(g, 1.5, 0.36, 0.08, '#b98f6b', 0, 0.44, -0.2, 0.03);
+  box(g, 0.08, 0.36, 0.4, N.dark, -0.62, 0, 0, 0.02); box(g, 0.08, 0.36, 0.4, N.dark, 0.62, 0, 0, 0.02);
+}
+for (const [x, z, s] of [[-5.5, -6.5, 1.05], [5.5, -6.5, 0.95], [-5.6, -2.6, 0.85], [5.6, -2.6, 1], [2.2, 6.8, 0.9], [-1.4, -6.9, 0.8], [5.6, 2.6, 0.8], [-5.6, 2.4, 0.95]]) tree('base', x, z, s, 0.16);
+
+// corner buildings with window grids (windows only on the faces the camera sees)
+function building(x, z, w, d, h, color, rows, cz, cx) {
+  const g = grp('base', x, z);
+  box(g, w, h, d, color, 0, 0, 0, 0.14);
+  box(g, w + 0.2, 0.2, d + 0.2, N.light, 0, h, 0, 0.06);
+  const y0 = h > 4 ? 0.9 : 0.75;
+  for (let r = 0; r < rows; r++) {
+    const y = y0 + r * 1.35 + 0.39;
+    for (let c = 0; c < cz; c++) windowAt('base', x - w / 2 + (c + 0.5) * w / cz, y, z + d / 2 + 0.02, 0);
+    for (let c = 0; c < cx; c++) windowAt('base', x + w / 2 + 0.02, y, z - d / 2 + (c + 0.5) * d / cx, Math.PI / 2);
+  }
+  return g;
+}
+for (const sx of [-1, 1]) {
+  const g = building(sx * 19.3, -19.8, 7.2, 6.6, 6.2, sx < 0 ? '#ddd6cb' : '#d3cbbf', 4, 4, 4);
+  box(g, 1.6, 0.7, 1.2, N.mid, 1.2, 6.4, -1.0, 0.1);
+  cyl(g, 0.55, 0.55, 0.9, '#c9bfb2', -1.6, 6.4, 0.9, 20);
+  building(sx * 19.4, 20.1, 7.0, 6.4, sx < 0 ? 2.6 : 2.1, sx < 0 ? '#e4ddd2' : '#dad3c8', 1, 4, 3);
+}
+
+// near side: bus stop, trees
+{
+  const g = grp('base', 6.2, 17.2);
+  box(g, 4.2, 0.1, 1.5, '#f4efe6', 0, 2.05, 0.2, 0.04);
+  box(g, 0.08, 2.05, 0.08, N.dark, -1.95, 0, 0.75, 0.02); box(g, 0.08, 2.05, 0.08, N.dark, 1.95, 0, 0.75, 0.02);
+  box(g, 4.0, 1.5, 0.05, '#cfdde3', 0, 0.35, 0.82, 0.02);
+  box(g, 3.0, 0.08, 0.42, '#b98f6b', 0, 0.42, 0.45, 0.03);
+  box(g, 0.06, 1.5, 1.1, tint(ZN.aiWork.color, 0.55), 2.0, 0.35, 0.3, 0.03);
+  person('base', 5.5, 17.6, { seated: true, ry: Math.PI, floor: 0 });
+}
+for (const x of [-13, -9.6, -6.2, -2.8, 0.6, 10.8, 13.4]) for (const z of [18.6, 21.9]) {
+  if (x > 3 && x < 9.5 && z < 20) continue;
+  tree('base', x + rr(-0.6, 0.6), z + rr(-0.5, 0.5), rr(0.75, 1.1));
+}
+
+// ---------- district shells: tinted pad, low walls, curb stripe, blade sign
+function pad(group, cx, cz, w, d, color) { const g = grp(group, cx, cz); box(g, w, PAD_Y, d, tint(color, 0.36), 0, 0, 0, 0.08); }
+const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); box(g, w, 0.215, d, color, 0, 0, 0, 0.03); };
+
+// ================= RESEARCH (left) =================
+{
+  const G = 'research', C = ZN.research.color;
+  pad(G, -18.9, 0, 8.6, 23.6, C);
+  wallX(G, -18.9, -11.68, 8.6, 0.95); wallX(G, -18.9, 11.68, 8.6, 0.95); wallZ(G, -23.08, 0, 23.6, 0.45);
+  curbStripe(G, -(CA + ROAD) - 0.09, 0, 0.18, 11, C);
+  bladeSign(G, -14.95, -11.1, [1, 0], C);
+  desk(G, -20.6, 0, 18.4, 1.1, 'z');
+  // a row of identical monitors, all showing the same frame: same brief, head to head
+  const sky = glowMat('#a9cdf5', 0.75), ground = glowMat('#4f9fe6', 0.6), dotM = glowMat('#ffd59e', 0.9);
+  const meters = new Inst((() => { const g = new RoundedBoxGeometry(0.16, 1, 0.16, 2, 0.04); g.translate(0, 0.5, 0); return g; })(), mat('#ffffff', 0.6), 10);
+  const zs = [...Array(8)].map((_, i) => -7.9 + i * 2.257), targets = zs.map(() => rr(0.16, 0.42));
+  const best = targets.indexOf(Math.max(...targets));
+  const env = t => t < 0.6 ? 0 : t < 1.6 ? easeOutBack(clamp((t - 0.6) / 1.0)) : t < 8.0 ? 1 : t < 8.9 ? 1 - smooth((t - 8.0) / 0.9) : 0;
+  zs.forEach((z, i) => {
+    const g = grp(G, -20.95, z, PAD_Y + 0.44);
+    box(g, 0.3, 0.03, 0.3, N.dark, 0, 0, 0, 0.01); box(g, 0.05, 0.25, 0.05, N.dark, 0, 0.03, 0, 0.01);
+    box(g, 0.07, 0.5, 0.82, N.dark, 0, 0.2, 0, 0.03);
+    box(g, 0.02, 0.24, 0.74, sky, 0.045, 0.43, 0, 0.005);
+    box(g, 0.02, 0.2, 0.74, ground, 0.045, 0.23, 0, 0.005);
+    box(g, 0.022, 0.09, 0.09, dotM, 0.047, 0.53, 0.18, 0.01);
+    const h = targets[i];
+    meters.add(G, -20.12, PAD_Y + 0.44, z, { color: i === best ? ACC : C, sy: 0.02, anim: (S, t) => { S.sy = 0.02 + h * env(t - 0.12 * i); } });
+  });
+  for (const z of [-6.5, -2, 2.5, 7]) stool(G, -19.5, z);
+  person(G, -19.5, 2.5, { seated: true, ry: -Math.PI / 2 });
+  person(G, -18.4, -7, { anim: kf([[0, -18.4, -7], [0.4, -18.4, -7], [4.4, -18.4, 7], [5.4, -18.4, 7], [9.4, -18.4, -7], [10, -18.4, -7]]) });
+  // a meeting table with a laptop, a bookshelf of notes, plants
+  { const g = grp(G, -16.9, -4.6, PAD_Y);
+    box(g, 1.3, 0.07, 2.6, N.desk, 0, 0.37, 0, 0.03); box(g, 0.1, 0.37, 0.1, N.mid, 0, 0, -0.9, 0.02); box(g, 0.1, 0.37, 0.1, N.mid, 0, 0, 0.9, 0.02);
+    box(g, 0.5, 0.03, 0.36, N.dark, 0.1, 0.44, -0.5, 0.01);
+    const lid = box(g, 0.03, 0.32, 0.36, N.dark, -0.15, 0.46, -0.5, 0.01); lid.rotation.z = 0.25;
+    box(g, 0.012, 0.26, 0.3, glowMat('#a9cdf5', 0.8), -0.13, 0.49, -0.5, 0.004).rotation.z = 0.25;
+    box(g, 0.42, 0.02, 0.3, '#fbf8f2', 0.15, 0.44, 0.55, 0.005); }
+  for (const z of [-5.6, -3.6]) stool(G, -17.95, z);
+  stool(G, -15.85, -4.6);
+  person(G, -17.95, -5.6, { seated: true, ry: Math.PI / 2 });
+  person(G, -15.85, -4.6, { seated: true, ry: -Math.PI / 2, nod: true, anim: t => ({ x: -15.85, z: -4.6, ry: -Math.PI / 2 + 0.25 * wave(t, 1), nod: 0.02 * Math.max(0, wave(t, 3)) }) });
+  { const g = grp(G, -18.9, -11.2, PAD_Y);
+    for (const x of [-2.1, 2.1]) box(g, 0.06, 1.35, 0.42, '#b98f6b', x, 0, 0, 0.02);
+    for (const y of [0.05, 0.68, 1.3]) box(g, 4.26, 0.05, 0.42, '#b98f6b', 0, y, 0, 0.02);
+    const books = new Inst(rbox(0.11, 1, 0.3, 0.02), mat('#ffffff', 0.7), 40);
+    const BC = [C, '#a9cdf5', '#f4efe6', N.mid, '#cfe2f8', N.dark, '#f3c99a'];
+    for (const y of [0.1, 0.73]) { let x = -1.95; while (x < 1.9) { const h = rr(0.32, 0.52); books.add(G, -18.9 + x, PAD_Y + y + h / 2, -11.2, { sy: h, color: pick(BC), rz: rng() < 0.12 ? 0.18 : 0 }); x += rr(0.12, 0.2); } } }
+  tree(G, -15.3, -10.6, 0.55, PAD_Y); tree(G, -15.3, 10.6, 0.55, PAD_Y);
+  // desk lamp
+  { const g = grp(G, -21.0, -8.75, PAD_Y + 0.44); cyl(g, 0.12, 0.14, 0.04, N.dark, 0, 0, 0, 16); box(g, 0.04, 0.5, 0.04, N.dark, 0, 0.04, 0, 0.01);
+    const head = mesh(new THREE.ConeGeometry(0.14, 0.2, 18), C, 0.08, 0.56, 0, g); head.rotation.z = -0.9; }
+  // sticky-note wall; a few notes lift and settle
+  const board = grp(G, -20.9, 10.7, PAD_Y);
+  box(board, 0.08, 0.6, 0.08, N.dark, -1.6, 0, 0, 0.02); box(board, 0.08, 0.6, 0.08, N.dark, 1.6, 0, 0, 0.02);
+  box(board, 3.5, 1.7, 0.08, '#fbf8f2', 0, 0.55, 0, 0.04);
+  const noteGeo = new RoundedBoxGeometry(0.5, 0.4, 0.025, 2, 0.01); noteGeo.translate(0, -0.2, 0);
+  const notes = new Inst(noteGeo, mat('#ffffff', 0.8), 24);
+  const NOTE_C = ['#a9cdf5', '#f3c99a', '#ffffff', '#a8e3da', '#cfe2f8'];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) {
+    const flut = rng() < 0.3, k = 1 + Math.floor(rng() * 2), ph = rng();
+    notes.add(G, -20.9 - 1.4 + c * 0.7, PAD_Y + 2.13 - r * 0.42, 10.76, { color: pick(NOTE_C), rz: rr(-0.05, 0.05),
+      anim: flut ? (S, t) => { S.rx = -0.5 * Math.pow(0.5 + 0.5 * wave(t, k, ph), 8); } : null });
+  }
+}
+
+// ================= AI WORK (far) =================
+{
+  const G = 'ai', C = ZN.aiWork.color;
+  pad(G, 0, -19.4, 26.8, 8.0, C);
+  wallX(G, 0, -23.28, 26.8, 2.1); wallZ(G, -13.28, -19.4, 8.0, 0.95); wallZ(G, 13.28, -19.4, 8.0, 0.95);
+  wallZ(G, -4.5, -21.8, 2.8, 0.75, 0.16); wallZ(G, 4.5, -21.8, 2.8, 0.75, 0.16);
+  curbStripe(G, 0, -(CB + ROAD) - 0.09, 11, 0.18, C);
+  bladeSign(G, 12.9, -15.6, [0, 1], C);
+  // striped awnings over the three stations
+  const awn = new Inst(rbox(1, 0.06, 1.0, 0.02), mat('#ffffff', 0.7), 24);
+  for (const sc of [-8.6, 0, 8.6]) for (let j = 0; j < 6; j++) awn.add(G, sc - 3.5 + (j + 0.5) * 7 / 6, PAD_Y + 2.04, -22.72, { sx: 7 / 6, rx: 0.38, color: j % 2 ? '#f4efe6' : C });
+
+  // 1. code animation: code scrolling up, and a shape riding a motion curve
+  desk(G, -8.6, -21.5, 3.8, 1.0);
+  const monitor = (x, screenMat) => { const g = grp(G, x, -21.75, PAD_Y + 0.44);
+    box(g, 0.4, 0.03, 0.3, N.dark, 0, 0, 0, 0.01); box(g, 0.06, 0.16, 0.06, N.dark, 0, 0.03, 0, 0.01);
+    box(g, 1.55, 1.0, 0.07, N.dark, 0, 0.14, 0, 0.04); box(g, 1.43, 0.88, 0.02, screenMat, 0, 0.2, 0.045, 0.01); };
+  monitor(-9.55, glowMat('#1f2e2c', 0.6)); monitor(-7.6, glowMat('#1d3a37', 0.6));
+  const lines = new Inst(rbox(1, 0.045, 0.012, 0.006), glowMat('#ffffff', 0.9), 14, false);
+  const LC = ['#bff0e8', '#f4efe6', '#f3c99a', '#8fd6cb'], HS = 0.8, NL = 12, y0 = PAD_Y + 0.44 + 0.24, left = -9.55 - 0.66;
+  for (let i = 0; i < NL; i++) {
+    const w = rr(0.2, 0.85), ind = Math.floor(rng() * 4) * 0.09;
+    lines.add(G, left + ind + w / 2, y0, -21.67, { color: pick(LC), sx: w, anim: (S, t) => {
+      const y = fract((i * HS / NL + (t / D) * 3 * HS) / HS) * HS;              // 3 full scrolls per loop
+      const f = smooth(clamp(y / 0.08)) * smooth(clamp((HS - y) / 0.08)), sw = w * Math.max(f, 1e-3);
+      S.y = y0 + y; S.sx = sw; S.x = left + ind + sw / 2; } });
+  }
+  const bez = u => { const P = [[-0.6, -0.32], [-0.15, -0.42], [0.15, 0.42], [0.6, 0.34]], m = 1 - u;
+    return [0, 1].map(k => m * m * m * P[0][k] + 3 * m * m * u * P[1][k] + 3 * m * u * u * P[2][k] + u * u * u * P[3][k]); };
+  const cY = PAD_Y + 0.44 + 0.64, cX = -7.6, cZ = -21.67;
+  const dots = new Inst(new THREE.SphereGeometry(0.024, 10, 8), glowMat('#ffffff', 0.9), 20, false);
+  for (let i = 0; i < 16; i++) { const [x, y] = bez(i / 15); dots.add(G, cX + x, cY + y, cZ, { color: '#8fd6cb' }); }
+  for (const u of [0, 1]) { const [x, y] = bez(u); const k = mesh(rbox(0.07, 0.07, 0.02, 0.01), glowMat('#f3c99a', 0.9), cX + x, cY + y, cZ + 0.01); k.rotation.z = Math.PI / 4; piece(k, G); }
+  piece(mesh(rbox(0.11, 0.11, 0.03, 0.02), glowMat('#ffffff', 1), cX, cY, cZ + 0.02), G, { anim: (o, t) => {
+    const [x, y] = bez(0.5 - 0.5 * Math.cos(TAU * 2 * t / D)); o.position.set(cX + x, cY + y, cZ + 0.02); o.rotation.z = TAU * t / D; } });
+  stool(G, -8.6, -20.6);
+  person(G, -8.6, -20.6, { seated: true, ry: Math.PI });
+
+  // 2. avatar video: one presenter, a ring light, screens that all show the same face
+  { const g = grp(G, 0, -20.5, PAD_Y); cyl(g, 1.2, 1.25, 0.16, '#f4efe6', 0, 0, 0, 36); }
+  person(G, 0, -20.5, { floor: PAD_Y + 0.16, shirt: C, anim: t => ({ x: 0, z: -20.5, ry: 0.22 * wave(t, 2), nod: 0.02 * Math.max(0, wave(t, 5)) }) });
+  for (let k = 0; k < 7; k++) {
+    const th = (200 + k * 140 / 6) * Math.PI / 180, x = 2.35 * Math.cos(th), z = -20.5 + 2.35 * Math.sin(th);
+    faceScreen(G, x, z, Math.atan2(-x, -20.5 - z));
+  }
+  { const g = grp(G, 1.45, -19.0, PAD_Y, { ry: Math.atan2(-1.45, -1.5) });
+    box(g, 0.05, 1.3, 0.05, N.dark, 0, 0, 0, 0.02); mesh(new THREE.TorusGeometry(0.38, 0.05, 12, 40), glowMat('#ffffff', 1.1), 0, 1.6, 0, g); }
+  { const g = grp(G, -1.25, -18.9, PAD_Y, { ry: Math.atan2(1.25, -1.6) });
+    for (const a of [0, 2.1, 4.2]) { const l = box(g, 0.04, 1.0, 0.04, N.dark, Math.sin(a) * 0.18, 0, Math.cos(a) * 0.18, 0.01); l.rotation.set(Math.cos(a) * 0.3, 0, -Math.sin(a) * 0.3); }
+    box(g, 0.3, 0.24, 0.4, '#2a2725', 0, 0.98, 0, 0.05);
+    const lens = mesh(cylGeo(0.08, 0.09, 0.22, 16), '#2a2725', 0, 1.1, 0.3, g); lens.rotation.x = Math.PI / 2; }
+
+  // 3. AI lesson: a board that writes itself, a presenter screen, empty seats
+  { const g = grp(G, 8.6, -23.13, PAD_Y); box(g, 4.4, 1.35, 0.06, '#2f3b3a', 0, 0.45, 0, 0.03); box(g, 1.2, 0.16, 0.02, glowMat(C, 0.7), -1.45, 1.55, 0.04, 0.01); }
+  const chalk = new Inst(rbox(1, 0.05, 0.012, 0.006), glowMat('#ffffff', 0.7), 8, false);
+  for (let j = 0; j < 6; j++) {
+    const w = rr(1.2, 3.4), st = 1.0 + j * 0.95, x0 = 8.6 - 1.95, y = PAD_Y + 0.45 + 1.0 - j * 0.15;
+    chalk.add(G, x0 + w / 2, y, -23.08, { color: j % 3 === 0 ? '#bff0e8' : '#f4efe6', sx: 1e-3, anim: (S, t) => {
+      const sw = w * Math.max(1e-3, smooth(clamp((t - st) / 0.6)) * (1 - smooth(clamp((t - 8.3) / 0.6)))); S.sx = sw; S.x = x0 + sw / 2; } });
+  }
+  faceScreen(G, 5.7, -21.4, Math.atan2(8.9 - 5.7, -19.6 + 21.4), 0.7);
+  const seats = new Inst(rbox(0.52, 0.36, 0.5, 0.08), mat('#ffffff', 0.7), 12), backs = new Inst(rbox(0.52, 0.5, 0.08, 0.04), mat('#ffffff', 0.7), 12);
+  for (const z of [-20.7, -19.6, -18.5]) for (const x of [7.4, 8.4, 9.4, 10.4]) {
+    seats.add(G, x, PAD_Y + 0.18, z, { color: '#f4efe6' });
+    backs.add(G, x, PAD_Y + 0.36 + 0.25, z + 0.21, { color: tint(C, 0.75) });
+  }
+  // render racks with blinking LEDs
+  const leds = new Inst(rbox(0.1, 0.05, 0.02, 0.01), glowMat('#ffffff', 1.0), 60, false);
+  const ledOn = new THREE.Color(ACC), ledOff = new THREE.Color('#4a3a36');
+  for (const rx of [-12.7, 12.7]) {
+    const g = grp(G, rx, -22.7, PAD_Y); box(g, 0.8, 2.4, 0.75, N.dark, 0, 0, 0, 0.05);
+    for (let r = 0; r < 9; r++) for (const dx of [-0.22, 0, 0.22]) {
+      const k = 2 + Math.floor(rng() * 4), ph = rng(), duty = rr(0.25, 0.7);
+      leds.add(G, rx + dx, PAD_Y + 0.35 + r * 0.22, -22.31, { color: ACC, anim: (S, t) => { S.c = fract(k * t / D + ph) < duty ? ledOn : ledOff; } });
+    }
+  }
+}
+
+// ================= VIDEO PRODUCTION (right) =================
+let recMat;
+{
+  const G = 'production', C = ZN.production.color;
+  pad(G, 18.9, 0, 8.6, 23.6, C);
+  wallX(G, 18.9, -11.68, 8.6, 0.95); wallX(G, 18.9, 11.68, 8.6, 0.95); wallZ(G, 23.08, 0, 23.6, 0.45);
+  wallX(G, 19.9, 3.4, 6.6, 0.95, 0.18);
+  curbStripe(G, CA + ROAD + 0.09, 0, 0.18, 11, C);
+  bladeSign(G, 14.95, -11.1, [-1, 0], C);
+  { const g = grp(G, 19.1, -4.2, PAD_Y); box(g, 7.4, 0.04, 14.2, '#cfc5b8', 0, 0, 0, 0.02); }
+  const FL = PAD_Y + 0.04, TX = 20.4, TZ = -4.2;
+  // curved backdrop and the talent
+  { const g = grp(G, TX, TZ, FL);
+    const m = new THREE.MeshStandardMaterial({ color: '#f7ecdc', roughness: 0.9, side: THREE.DoubleSide });
+    mesh(new THREE.CylinderGeometry(2.5, 2.5, 2.4, 40, 1, true, Math.PI / 2 - 1.05, 2.1), m, 0, 1.2, 0, g); }
+  person(G, TX, TZ, { floor: FL, shirt: '#3a3633', anim: t => ({ x: TX, z: TZ, ry: -Math.PI / 2 + 0.15 * wave(t, 1), nod: 0.015 * Math.max(0, wave(t, 6)) }) });
+  // dolly track: a closed loop, and the camera on it always aims at the talent
+  const track = makeRR(17.0, TZ, 1.15, 3.8, 0.9);
+  { const g = grp(G, 17.0, TZ, FL);
+    for (const [o0, o1] of [[-0.25, -0.19], [0.19, 0.25]]) mesh(flatRR(0, 0, 1.15, 3.8, 0.9, o0, o1, 0.05, 0.03), '#5a5753', 0, 0, 0, g); }
+  const ties = new Inst(rbox(0.1, 0.03, 0.66, 0.01), mat('#8a7a68'), 64, false);
+  { const n = Math.floor(track.L / 0.42); for (let i = 0; i < n; i++) { const p = track.at(i * track.L / n); ties.add(G, p.x, FL + 0.015, p.z, { ry: p.h }); } }
+  const dolly = new THREE.Group(), head = new THREE.Group();
+  box(dolly, 0.95, 0.1, 0.7, N.dark, 0, 0.06, 0, 0.03);
+  for (const [x, z] of [[-0.36, -0.3], [0.36, -0.3], [-0.36, 0.3], [0.36, 0.3]]) { const w = mesh(cylGeo(0.07, 0.07, 0.06, 12), '#5a5753', x, 0.07, z, dolly); w.rotation.x = Math.PI / 2; }
+  box(dolly, 0.1, 0.78, 0.1, '#5a5753', 0, 0.16, 0, 0.02);
+  head.position.y = 1.1; dolly.add(head);
+  box(head, 0.5, 0.32, 0.3, '#2a2725', 0, -0.16, 0, 0.05);
+  { const l = mesh(cylGeo(0.09, 0.1, 0.3, 16), '#2a2725', 0.38, 0, 0, head); l.rotation.z = Math.PI / 2; }
+  box(head, 0.16, 0.1, 0.12, '#2a2725', -0.2, 0.16, 0, 0.03);
+  recMat = glowMat(ACC, 1.2, true);
+  box(head, 0.07, 0.07, 0.04, recMat, 0.1, 0.16, 0.13, 0.015);
+  const p0 = track.at(0); dolly.position.set(p0.x, FL + 0.04, p0.z);
+  const dollyAt = t => { const p = track.at((t / D) * track.L); return { ...p, aim: Math.atan2(-(TZ - p.z), TX - p.x) }; };
+  piece(dolly, G, { anim: (o, t) => { const p = dollyAt(t); o.position.set(p.x, FL + 0.04, p.z); o.rotation.y = p.h; head.rotation.y = p.aim - p.h; } });
+  person(G, p0.x, p0.z, { floor: FL, anim: t => { const p = dollyAt(t), c = Math.cos(p.h), s = Math.sin(p.h);
+    const lx = -0.75, lz = 0.3;                                                    // just behind and beside the dolly
+    return { x: p.x + lx * c + lz * s, z: p.z - lx * s + lz * c, ry: Math.atan2(TX - p.x, TZ - p.z), bob: 0.03 * Math.abs(Math.sin(TAU * 6 * t / D)) }; } });
+  // boom mic swinging over the talent
+  { const sx = 22.5, sz = -8.4, g = grp(G, sx, sz, FL);
+    cyl(g, 0.035, 0.045, 2.0, N.dark, 0, 0, 0, 10);
+    for (const a of [0.5, 2.6, 4.7]) { const l = box(g, 0.04, 0.7, 0.04, N.dark, Math.sin(a) * 0.25, 0, Math.cos(a) * 0.25, 0.01); l.rotation.set(Math.cos(a) * 0.45, 0, -Math.sin(a) * 0.45); }
+    const arm = new THREE.Group(); arm.position.y = 2.0; g.add(arm);
+    const ry0 = Math.atan2(-(TZ - sz), TX - sx), len = Math.hypot(TX - sx, TZ - sz) - 0.1;
+    box(arm, len, 0.05, 0.05, '#5a5753', len / 2, -0.025, 0, 0.02);
+    box(arm, 0.12, 0.32, 0.12, '#2a2725', len, -0.36, 0, 0.05);
+    arm.rotation.set(0, ry0, -0.06);
+    g.userData.arm = arm; g.userData.ry0 = ry0;
+    pieces[pieces.length - 1].anim = (o, t) => { o.userData.arm.rotation.y = o.userData.ry0 + 0.1 * wave(t, 2); }; }
+  // softboxes, C-stand, monitor cart with the clapperboard
+  for (const [x, z] of [[19.4, -7.7], [19.4, -0.7]]) {
+    const g = grp(G, x, z, FL, { ry: Math.atan2(TX - x, TZ - z) });
+    box(g, 0.05, 1.5, 0.05, N.dark, 0, 0, 0, 0.02);
+    box(g, 0.95, 0.7, 0.36, N.dark, 0, 1.45, 0, 0.06);
+    box(g, 0.85, 0.6, 0.02, glowMat('#fff3df', 1.0), 0, 1.5, 0.19, 0.01);
+  }
+  { const g = grp(G, 15.6, -10.5, FL);
+    cyl(g, 0.03, 0.04, 2.2, '#5a5753', 0, 0, 0, 8);
+    for (const a of [0, 2.1, 4.2]) { const l = box(g, 0.035, 0.6, 0.035, '#5a5753', Math.sin(a) * 0.22, 0, Math.cos(a) * 0.22, 0.01); l.rotation.set(Math.cos(a) * 0.5, 0, -Math.sin(a) * 0.5); }
+    box(g, 1.2, 0.04, 0.04, '#5a5753', 0.55, 2.0, 0, 0.01);
+    box(g, 0.05, 0.6, 0.8, '#2a2725', 1.15, 1.75, 0, 0.02); }
+  const amberSky = glowMat('#f6d3a8', 0.75), amberGround = glowMat(C, 0.6);
+  { const g = grp(G, 15.7, 1.9, FL);
+    box(g, 0.9, 0.06, 0.6, N.dark, 0, 0.72, 0, 0.02); box(g, 0.9, 0.05, 0.6, N.dark, 0, 0.2, 0, 0.02);
+    for (const [x, z] of [[-0.4, -0.26], [0.4, -0.26], [-0.4, 0.26], [0.4, 0.26]]) box(g, 0.04, 0.72, 0.04, N.dark, x, 0.05, z, 0.01);
+    box(g, 0.78, 0.5, 0.05, N.dark, 0.0, 0.85, -0.15, 0.03);
+    box(g, 0.7, 0.24, 0.02, amberSky, 0, 1.08, -0.115, 0.005); box(g, 0.7, 0.18, 0.02, amberGround, 0, 0.9, -0.115, 0.005); }
+  { // clapperboard: snaps shut once per loop, then eases open again
+    const g = grp(G, 16.0, 2.05, FL + 0.78);
+    box(g, 0.42, 0.3, 0.03, '#2a2725', 0, 0, 0, 0.01);
+    const stick = new THREE.Group(); stick.position.set(-0.21, 0.31, 0); g.add(stick);
+    box(stick, 0.44, 0.07, 0.035, '#2a2725', 0.22, -0.035, 0, 0.01);
+    for (const x of [0.08, 0.22, 0.36]) box(stick, 0.06, 0.071, 0.037, '#f4efe6', x, -0.035, 0, 0.005);
+    const clap = t => t < 0.8 ? 0.5 : t < 0.92 ? 0.5 * (1 - Math.pow((t - 0.8) / 0.12, 2)) : t < 1.3 ? 0 : t < 3 ? 0.5 * smooth((t - 1.3) / 1.7) : 0.5;
+    pieces[pieces.length - 1].anim = (o, t) => { stick.rotation.z = clap(t); }; }
+  // edit bay: viewer, bins, a timeline with a playhead, the editor, a shelf of drives
+  desk(G, 19.6, 6.9, 4.2, 1.0);
+  for (const [x, kind] of [[18.85, 'viewer'], [20.35, 'bins']]) {
+    const g = grp(G, x, 6.65, PAD_Y + 0.44);
+    box(g, 0.36, 0.03, 0.26, N.dark, 0, 0, 0, 0.01); box(g, 0.05, 0.3, 0.05, N.dark, 0, 0.03, 0, 0.01);
+    box(g, 1.2, 0.74, 0.06, N.dark, 0, 0.3, 0, 0.03);
+    if (kind === 'viewer') { box(g, 1.08, 0.36, 0.02, amberSky, 0, 0.66, 0.04, 0.005); box(g, 1.08, 0.26, 0.02, amberGround, 0, 0.4, 0.04, 0.005); }
+    else { box(g, 1.08, 0.62, 0.02, glowMat('#2b2622', 0.5), 0, 0.36, 0.04, 0.005);
+      for (let i = 0; i < 6; i++) box(g, 0.28, 0.17, 0.02, glowMat(pick([C, ZN.research.color, ZN.aiWork.color, '#f6d3a8']), 0.7), -0.34 + (i % 3) * 0.34, 0.45 + Math.floor(i / 3) * 0.24, 0.05, 0.01); }
+  }
+  { const g = grp(G, 19.6, 7.22, PAD_Y + 0.44); g.rotation.x = -0.32;
+    box(g, 2.9, 0.44, 0.05, N.dark, 0, 0.02, 0, 0.03);
+    box(g, 2.78, 0.34, 0.02, glowMat('#24201d', 0.5), 0, 0.07, 0.03, 0.005);
+    const tc = [ZN.research.color, ZN.aiWork.color, C];
+    for (let r = 0; r < 3; r++) { let x = -1.33; while (x < 1.25) { const w = Math.min(rr(0.3, 0.8), 1.33 - x); if (w > 0.1) box(g, w - 0.04, 0.07, 0.02, glowMat(tc[r], 0.75), x + w / 2, 0.3 - r * 0.1, 0.04, 0.01); x += w; } }
+    const ph = box(g, 0.025, 0.36, 0.025, glowMat(ACC, 1.2), -1.36, 0.06, 0.05, 0.005);
+    pieces[pieces.length - 1].anim = (o, t) => { ph.position.x = -1.36 + 2.72 * fract(t / D); }; }
+  { const g = grp(G, 19.6, 8.25, PAD_Y); cyl(g, 0.24, 0.24, 0.06, N.dark, 0, 0.36, 0, 16); cyl(g, 0.04, 0.05, 0.36, N.mid, 0, 0, 0, 10); box(g, 0.48, 0.42, 0.06, N.dark, 0, 0.44, 0.24, 0.03); }
+  person(G, 19.6, 8.25, { seated: true, ry: Math.PI });
+  { const g = grp(G, 19.4, 11.15, PAD_Y);
+    for (const x of [-2.0, 2.0]) box(g, 0.06, 1.3, 0.5, '#b98f6b', x, 0, 0, 0.02);
+    for (const y of [0.05, 0.62, 1.24]) box(g, 4.06, 0.05, 0.5, '#b98f6b', 0, y, 0, 0.02);
+    const drives = new Inst(rbox(0.26, 0.38, 0.4, 0.04), mat('#ffffff', 0.6), 16);
+    const DC = [ZN.research.color, ZN.aiWork.color, C, '#f4efe6', N.dark];
+    for (const [r, y] of [[0, 0.1], [1, 0.67]]) for (let i = 0; i < 7; i++) drives.add(G, 19.4 - 1.65 + i * 0.55, PAD_Y + y + 0.19, 11.15, { color: r === 1 && i === 3 ? ACC : DC[(i + r * 2) % DC.length] }); }
+  tree(G, 22.3, 4.5, 0.6, PAD_Y);
+}
+
+// ================= TRAFFIC: the pipeline, one way around the loop =================
+const carLane = offLoop(-0.75), bikeLane = offLoop(1.5);
+function car(color, van) {
+  const g = new THREE.Group();
+  if (van) { box(g, 2.7, 1.1, 1.24, color, 0, 0.22, 0, 0.16); box(g, 0.06, 0.42, 1.08, '#dfe6ea', 1.33, 0.78, 0, 0.02); box(g, 0.9, 0.06, 1.0, '#f4efe6', -0.3, 1.32, 0, 0.03); }
+  else { box(g, 2.5, 0.5, 1.2, color, 0, 0.2, 0, 0.18); box(g, 1.35, 0.42, 1.04, '#dfe6ea', -0.12, 0.66, 0, 0.16); box(g, 1.2, 0.06, 1.06, color, -0.12, 1.06, 0, 0.03); }
+  for (const [x, z] of [[-0.8, -0.56], [0.8, -0.56], [-0.8, 0.56], [0.8, 0.56]]) { const w = mesh(cylGeo(0.22, 0.22, 0.16, 16), '#2a2725', x, 0.22, z, g); w.rotation.x = Math.PI / 2; }
+  for (const z of [-0.38, 0.38]) box(g, 0.04, 0.1, 0.18, glowMat('#fff6e0', 1.0), van ? 1.36 : 1.25, 0.42, z, 0.02);
+  return g;
+}
+const CARS = [['#57cbbb', false], ['#f4efe6', false], ['#e6a15b', true], ['#6b645d', false]];
+const carAt = (i, t) => carLane.at((fract(t / D + i / CARS.length)) * carLane.L);     // one lap per loop, evenly spaced
+CARS.forEach(([c, van], i) => { const g = car(c, van), p = carAt(i, 0); g.position.set(p.x, 0.06, p.z); g.rotation.y = p.h;
+  piece(g, 'base', { anim: (o, t) => { const p = carAt(i, t); o.position.set(p.x, 0.06, p.z); o.rotation.y = p.h; } }); });
+
+// scooters: ease to a stop at each district's curb, then pull away; one lap per loop
+const DWELL = 0.055, MOVE = 1 - 3 * DWELL;
+function scoot(p) {   // p in [0,1): returns arc fraction and stop progress (-1 while moving)
+  const legs = [[0.75, 1.25, MOVE * 0.5], [0.25, 0.5, MOVE * 0.25], [0.5, 0.75, MOVE * 0.25]];
+  let t = p;
+  for (const [a, b, dur] of legs) {
+    if (t < dur) return { f: fract(a + (b - a) * smooth(t / dur)), stop: -1 };
+    t -= dur;
+    if (t < DWELL) return { f: fract(b), stop: t / DWELL };
+    t -= DWELL;
+  }
+  return { f: 0.75, stop: -1 };
+}
+const SCOOTERS = 3;
+const scooterAt = (j, t) => { const s = scoot(fract(t / D + j / SCOOTERS)); return { ...bikeLane.at(s.f * bikeLane.L), stop: s.stop }; };
+for (let j = 0; j < SCOOTERS; j++) {
+  const g = new THREE.Group();
+  box(g, 0.95, 0.07, 0.3, N.dark, 0, 0.13, 0, 0.03);
+  for (const x of [-0.38, 0.38]) { const w = mesh(cylGeo(0.12, 0.12, 0.08, 14), '#2a2725', x, 0.12, 0, g); w.rotation.x = Math.PI / 2; }
+  const col = box(g, 0.05, 0.85, 0.05, N.dark, 0.4, 0.18, 0, 0.02); col.rotation.z = 0.15;
+  box(g, 0.05, 0.04, 0.5, N.dark, 0.33, 1.02, 0, 0.02);
+  box(g, 0.3, 0.06, 0.3, N.dark, -0.42, 0.3, 0, 0.02);
+  const parcel = box(g, 0.4, 0.34, 0.4, ACC, -0.42, 0.36, 0, 0.05);
+  const p = scooterAt(j, 0); g.position.set(p.x, 0.075, p.z); g.rotation.y = p.h;
+  piece(g, 'base', { anim: (o, t) => { const p = scooterAt(j, t); o.position.set(p.x, 0.075, p.z); o.rotation.y = p.h;
+    parcel.position.y = 0.53 + (p.stop >= 0 ? 0.28 * Math.sin(Math.PI * p.stop) : 0); } });
+  person('base', p.x, p.z, { floor: 0.2, shirt: '#f4efe6', anim: t => { const p = scooterAt(j, t), c = Math.cos(p.h), s = Math.sin(p.h);
+    return { x: p.x + 0.05 * c, z: p.z - 0.05 * s, ry: p.hp, floor: 0.2 }; } });
+}
+
+// ---------- people on the sidewalks and in the park
+const walkLoop = offLoop(2.9);
+const sideWalker = (sMid, from, to, k, ph) => t => {
+  const u = 0.5 - 0.5 * Math.cos(TAU * (k * t / D + ph)), s = sMid + from + (to - from) * u;
+  const v = Math.sin(TAU * (k * t / D + ph)), p = walkLoop.at(s);
+  return { x: p.x, z: p.z, ry: lerpAngle(p.hp + Math.PI, p.hp, smooth(clamp(v * 3 + 0.5))), floor: 0.2,
+    bob: 0.03 * Math.abs(Math.sin(TAU * 7 * k * t / D)) * Math.min(1, Math.abs(v) * 4) };
+};
+const WL = walkLoop, sLeft = WL.a + WL.q + WL.b, sRight = 3 * (WL.a + WL.q + WL.b);
+person('research', -13.4, 0, { floor: 0.2, anim: sideWalker(sLeft, -4.2, 4, 1, 0) });
+person('production', 13.4, 0, { floor: 0.2, anim: sideWalker(sRight, -4, 4.2, 1, 0.35) });
+person('base', 2, CB + 2.9, { floor: 0.2, anim: sideWalker(WL.L, -6, -0.5, 1, 0.6) });
+for (const ph of [0, 0.5]) person('base', 4.5, 0, { floor: 0.16, anim: t => {
+  const th = TAU * (t / D + ph), x = 4.4 * Math.cos(th), z = 5.0 * Math.sin(th);
+  return { x, z, ry: Math.atan2(-4.4 * Math.sin(th), 5.0 * Math.cos(th)), floor: 0.16, bob: 0.03 * Math.abs(Math.sin(TAU * 9 * t / D)) }; } });
+
+// crossers: wait at the curb, cross only in a gap in the traffic, visit the park, cross back
+const CROSS_T = 2.0;
+function crossPlan(c) {
+  const [nx, nz] = c.n, P0 = [c.cx + nx * 2.95, c.cz + nz * 2.95], P1 = [c.cx - nx * 2.95, c.cz - nz * 2.95];
+  const P2 = [c.cx - nx * 5.1 + (nz ? 0 : 0), c.cz - nz * 5.1];
+  const tx = nz, tz = -nx;                                                         // along the road
+  const conflict = (x, z, t) => {
+    const o = (x - c.cx) * nx + (z - c.cz) * nz;
+    if (o > -2.3 && o < 0.85) for (let i = 0; i < CARS.length; i++) { const p = carAt(i, t), a = (p.x - c.cx) * tx + (p.z - c.cz) * tz, b = (p.x - c.cx) * nx + (p.z - c.cz) * nz; if (Math.abs(a) < 3.2 && Math.abs(b) < 3) return true; }
+    if (o > 0.65 && o < 2.3) for (let j = 0; j < SCOOTERS; j++) { const p = scooterAt(j, t), a = (p.x - c.cx) * tx + (p.z - c.cz) * tz, b = (p.x - c.cx) * nx + (p.z - c.cz) * nz; if (Math.abs(a) < 2.2 && Math.abs(b) < 3) return true; }
+    return false;
+  };
+  const clear = (from, to, t0) => { for (let s = 0; s <= CROSS_T; s += 0.04) { const e = smooth(s / CROSS_T); if (conflict(from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e, (t0 + s) % D)) return false; } return true; };
+  const walk = Math.max(0.9, Math.hypot(P2[0] - P1[0], P2[1] - P1[1]) / 1.4);
+  let t1 = -1, t2 = -1;
+  for (let t = 0.3; t < 4.5; t += 0.05) if (clear(P0, P1, t)) { t1 = t; break; }
+  if (t1 >= 0) for (let t = D - CROSS_T - 0.25; t > t1 + CROSS_T + 2 * walk + 0.5; t -= 0.05) if (clear(P1, P0, t)) { t2 = t; break; }
+  if (t1 < 0 || t2 < 0) return { keys: [[0, ...P0], [D, ...P0]], P0, ok: false };
+  return { keys: [[0, ...P0], [t1, ...P0], [t1 + CROSS_T, ...P1], [t1 + CROSS_T + walk, ...P2], [t2 - walk, ...P2], [t2, ...P1], [t2 + CROSS_T, ...P0], [D, ...P0]], P0, ok: true, c };
+}
+const crossInfo = [];
+for (const c of CROSS) {
+  const plan = crossPlan(c), path = kf(plan.keys);
+  crossInfo.push({ at: c, ok: plan.ok, keys: plan.keys.map(k => k[0].toFixed(2)) });
+  const floorAt = (x, z) => { const o = (x - c.cx) * c.n[0] + (z - c.cz) * c.n[1]; return o > 2.2 ? 0.2 : o > -2.2 ? 0.075 : o > -3.6 ? 0.2 : 0.16; };
+  person('base', plan.P0[0], plan.P0[1], { floor: 0.2, anim: t => { const v = path(t); v.floor = floorAt(v.x, v.z); return v; } });
+}
+
+// ================= overlay =================
+const card = document.getElementById('card');
+card.classList.add(PORTRAIT ? 'portrait' : 'landscape');
+document.getElementById('fname').textContent = CONFIG.windowTitle;
+document.getElementById('title').textContent = CONFIG.title;
+document.getElementById('sub').textContent = CONFIG.subtitle;
+const ZONES = [
+  { ...ZN.research, group: 'research', anchor: new THREE.Vector3(-18.9, 3.0, -1) },
+  { ...ZN.aiWork, group: 'ai', anchor: new THREE.Vector3(0, 3.6, -19.4) },
+  { ...ZN.production, group: 'production', anchor: new THREE.Vector3(18.9, 3.0, -1) },
+];
+const statsEl = document.getElementById('stats'), ui = document.getElementById('ui');
+for (const z of ZONES) {
+  const m = /^(\d+)(.*)$/.exec(z.stat);
+  z.num = +m[1]; z.suffix = m[2];
+  const s = document.createElement('div'); s.className = 'stat';
+  s.innerHTML = `<div class="n"></div><div class="l"><span class="dot"></span><span></span></div>`;
+  s.querySelector('.dot').style.background = z.color;
+  s.querySelector('.l span:last-child').textContent = z.label;
+  statsEl.appendChild(s);
+  z.nEl = s.querySelector('.n'); z.dotEl = s.querySelector('.dot');
+  const p = document.createElement('div'); p.className = 'pill';
+  p.innerHTML = `<span class="dot"></span><span></span>`;
+  p.querySelector('.dot').style.background = z.color;
+  p.querySelector('span:last-child').textContent = z.name;
+  ui.appendChild(p); z.pill = p;
+}
+const _v = new THREE.Vector3();
+function drawOverlay(T, t) {
+  card.style.opacity = INTRO ? clamp(T / 0.35) : 1;
+  ZONES.forEach((z, i) => {
+    const e = T >= INTRO ? 1 : easeOutCubic(clamp((T - 0.15) / Math.max(0.01, INTRO - 0.3)));
+    z.nEl.textContent = Math.round(z.num * e) + (e >= 1 ? z.suffix : '');
+    const pulse = T >= INTRO ? 0.5 + 0.5 * wave(t, 2, -i / 3) : 0;            // stats hold; only the dot breathes
+    z.dotEl.style.boxShadow = `0 0 0 ${(pulse * 0.6).toFixed(3)}rem ${z.color}33`;
+    _v.copy(z.anchor).project(camera);
+    z.pill.style.transform = `translate(${((_v.x + 1) / 2 * W).toFixed(1)}px, ${((1 - _v.y) / 2 * H).toFixed(1)}px) translate(-50%, -100%)`;
+    z.pill.style.opacity = INTRO ? clamp((T - GROUPS[z.group].start - 0.25) / 0.3) : 1;
+  });
+}
+
+// ================= camera: framed once, then a gentle swing and push-in per loop =================
+// a tall frame is width-limited, so it looks down a little more steeply and uses the height
+const TGT = new THREE.Vector3(0, 0.6, 0), BASE_YAW = 25 * Math.PI / 180, PITCH = (PORTRAIT ? 44 : 35) * Math.PI / 180, SWAY = 15 * Math.PI / 180;
+let DIST = 150;
+function placeCamera(yaw, dist) {
+  camera.position.set(TGT.x + dist * Math.cos(PITCH) * Math.sin(yaw), TGT.y + dist * Math.sin(PITCH), TGT.z + dist * Math.cos(PITCH) * Math.cos(yaw));
+  camera.lookAt(TGT); camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+}
+function frameCamera() {
+  const rem = Math.min(W, H) / 108, cardBottom = card.offsetTop + card.offsetHeight;
+  const free = PORTRAIT ? { x0: 3 * rem, x1: W - 3 * rem, y0: cardBottom + 3 * rem, y1: H - 4 * rem }
+                        : { x0: card.offsetLeft + card.offsetWidth * 0.45, x1: W - 3 * rem, y0: 3 * rem, y1: H - 3 * rem };
+  const pts = [];
+  for (const x of [-24.2, 24.2]) for (const z of [-24.8, 24.8]) for (const y of [-3.3, 2.6]) pts.push(new THREE.Vector3(x, y, z));
+  for (const x of [-22.9, 22.9]) pts.push(new THREE.Vector3(x, 7.2, -23.1));
+  camera.clearViewOffset();
+  const bounds = (dist, yaws) => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (const yaw of yaws) { placeCamera(yaw, dist); for (const p of pts) { _v.copy(p).project(camera); const px = (_v.x + 1) / 2 * W, py = (1 - _v.y) / 2 * H; x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); } }
+    return { x0, x1, y0, y1 }; };
+  const yaws = [-1, -0.5, 0, 0.5, 1].map(k => BASE_YAW + k * SWAY);
+  // a tall frame fits the resting pose (the swing may graze the sides); a wide one keeps the whole swing inside
+  const fitYaws = PORTRAIT || STILL ? [BASE_YAW] : yaws, fill = PORTRAIT ? 0.97 : STILL ? 0.95 : 0.92;
+  for (let i = 0; i < 6; i++) { const b = bounds(DIST, fitYaws), r = Math.max((b.x1 - b.x0) / (free.x1 - free.x0), (b.y1 - b.y0) / (free.y1 - free.y0)); DIST *= r / fill; }
+  const b = bounds(DIST, [BASE_YAW]);
+  camera.setViewOffset(W, H, (b.x0 + b.x1) / 2 - (free.x0 + free.x1) / 2, (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2, W, H);
+}
+// on the site (?embed=1) the camera holds still and only the world moves; ?camera=swing / ?camera=still override
+const STILL = Q.get('camera') ? Q.get('camera') === 'still' : EMBED;
+function poseCamera(T, t) {
+  const ph = STILL ? 0 : TAU * t / D;
+  let dist = DIST * (1 - 0.1 * (0.5 - 0.5 * Math.cos(ph)));
+  if (T < INTRO && !STILL) dist *= 1 + 0.12 * (1 - easeOutCubic(T / INTRO));
+  placeCamera(BASE_YAW + SWAY * Math.sin(ph), dist);
+}
+
+// ================= one frame =================
+function draw(T) {
+  const t = T < INTRO ? 0 : (((T - INTRO) % D) + D) % D;
+  slab.position.y = T < INTRO ? -7 * (1 - easeOutCubic(clamp(T / 0.5))) : 0;
+  for (const p of pieces) {
+    p.obj.position.y = p.baseY;
+    if (p.anim) p.anim(p.obj, t);
+    const [dy, sc] = build(T, p.start);
+    p.obj.position.y += dy;
+    p.obj.scale.copy(p.baseS).multiplyScalar(Math.max(sc, 1e-4));
+    p.obj.visible = sc > 1e-3;
+  }
+  for (const i of insts) i.update(T, t);
+  recMat.color.set(fract(t) < 0.55 ? ACC : '#4a3a36');                         // REC blinks once a second
+  faceBg.color.copy(FACE_BASE).multiplyScalar(0.9 + 0.12 * wave(t, 2));          // every face screen pulses together
+  poseCamera(T, t);
+  drawOverlay(T, t);
+  composer.render();
+}
+
+// ================= frame scaling, export API, autoplay =================
+const frame = document.getElementById('frame');
+frame.style.width = W + 'px'; frame.style.height = H + 'px';
+document.documentElement.style.fontSize = (Math.min(W, H) / 108) + 'px';
+function fit() { const s = Math.min(innerWidth / W, innerHeight / H); frame.style.transform = `translate(${-W * s / 2}px, ${-H * s / 2}px) scale(${s})`; }
+fit(); addEventListener('resize', fit);
+
+window.CONFIG = CONFIG;
+window.TIMELINE = { introDuration: INTRO, duration: D, fps: FPS, introFrames: Math.round(INTRO * FPS), loopFrames: Math.round(D * FPS) };
+// resolves once the canvas and the HTML overlay have painted (a hidden tab never paints, so it doesn't wait there)
+window.renderAt = T => { draw(T); return new Promise(r => document.hidden ? setTimeout(r, 0) : requestAnimationFrame(() => requestAnimationFrame(r))); };
+window.__debug = { crossInfo };
+
+window.ready = (async () => {
+  await Promise.all([document.fonts.load('600 40px "Space Grotesk"'), document.fonts.load('400 40px "Space Grotesk"'), document.fonts.load('500 40px "IBM Plex Mono"')]).catch(() => {});
+  await document.fonts.ready;
+  frameCamera();
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (EXPORT || still) { await window.renderAt(INTRO); return; }
+  let start = null, offset = 0, raf = 0;
+  const tick = now => { if (start === null) start = now; draw(offset + (now - start) / 1000); raf = requestAnimationFrame(tick); };
+  raf = requestAnimationFrame(tick);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(raf); if (start !== null) offset += (performance.now() - start) / 1000; start = null; }
+    else raf = requestAnimationFrame(tick);
+  });
+})();
+</script>
+</body>
+</html>
