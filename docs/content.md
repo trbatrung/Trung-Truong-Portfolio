@@ -50,7 +50,8 @@ them, not sum them all in 1".
   - "Long reads since April 2026 · Ho Chi Minh City", then links to Read Diagnosis and YouTube.
   - **A Mac window previewing the site:** the latest piece with its illustration, then three
     more pieces with titles, dates and read times taken from the site.
-  - **The Research board** keeps a `diagnosis ↗` file.
+  - **The Research board** has a Diagnosis folder with all seven pieces (illustration, title, read
+    time), each opening on the site, above the tool-test sticky notes.
   - **Open:** Diagnosis is published without a personal name (its About page says so). Linking it
     from the named portfolio makes it his publicly. Ethan to confirm before it goes live.
 - **Boards replace Finder.** Each area has its own endless desktop on the Ember wallpaper

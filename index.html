@@ -1251,19 +1251,31 @@
   const DOC_SVG = '<svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg>';
   const TESTS = [...document.querySelectorAll('#skLog li')].map(li => [txt(li.querySelector('b')), txt(li.querySelector('em'))]);
   const AREAS = {
-    research:   { name: 'Research', c: '#4f9fe6', tag: 'Tool tests', line: 'Same brief, head to head. I log where each tool breaks.' },
+    research:   { name: 'Research', c: '#4f9fe6', tag: 'Diagnosis · Tool tests', line: 'Diagnosis, my analysis of Vietnam\'s economy. And the tool tests: same brief, head to head.' },
     ai:         { name: 'AI work', c: '#57cbbb', tag: CATS.ai.role, line: CATS.ai.desc },
     production: { name: 'Video production', c: '#e6a15b', tag: 'Edit & planning', line: 'Brand films, client stories, ads and long-form.' },
   };
   const SIZE = { file: [176, 150], v: [108, 204], doc: [112, 136], sticky: [168, 150] };   // each item's cell on the board
   const TILT = [-2, 1.5, -1, 2, -1.5, 1, -.5];
   const fileHTML = p => `<button type="button" class="bd-file${p.short ? ' v' : ''}" data-project="${esc(p.id)}"><span class="th"><img src="${thumb(p.id)}" alt="" loading="lazy" decoding="async" draggable="false">${p.len ? `<span class="len">${esc(p.len)}</span>` : ''}</span><span class="lb">${esc(p.title)}</span></button>`;
+  // Diagnosis, newest first, as on the site: [slug, title, kicker, date, read time, thumbnail]
+  const DIAG_URL = 'https://diagnosis-omega.vercel.app';
+  const DIAG = [
+    ['growth-quota', "Vietnam's growth is real. It is also an order.", 'Second opinion', 'Oct 20, 2026', '14 min', 'growth-quota.png'],
+    ['certificate-economy', 'Everything is certified. Nothing is checked.', 'Case notes', 'Aug 2, 2026', '17 min', 'certificate-economy.png'],
+    ['ip-crackdown', "The crackdown is real. The alternative isn't.", 'Case notes', 'May 29, 2026', '14 min', 'ip-crackdown.png'],
+    ['housing-collapse', "Vietnam's Property Market Is Not Collapsing. That's the Problem.", 'Case notes', 'May 15, 2026', '14 min', 'housing-collapse.png'],
+    ['degree-trap', 'Vietnam Trained a Generation for the Wrong Economy', 'Case notes', 'Apr 28, 2026', '15 min', 'degree-trap.png'],
+    ['retail-investors-savings-desert', "Vietnam's Retail Investors Aren't Gamblers. The System Made Them Into One.", 'Case notes', 'Apr 27, 2026', '15 min', 'retail-investors-hero.png'],
+    ['gdp-vs-living-standards', "Vietnam's Economy Is Growing. Most Vietnamese Can't Afford to Live in It.", 'Case notes', 'Apr 24, 2026', '18 min', 'two-towers-distribution.jpeg'],
+  ];
+  const diagHTML = ([slug, title, , , read, img]) => `<a class="bd-file" href="${DIAG_URL}/posts/${slug}" target="_blank" rel="noopener" draggable="false"><span class="th"><img src="${DIAG_URL}/thumbnails/${img}" alt="" loading="lazy" decoding="async" draggable="false"><span class="len">${esc(read)}</span></span><span class="lb">${esc(title)}</span></a>`;
   function boardGroups(area) {
     if (area === 'research') return [
       { items: [['doc', `<button type="button" class="bd-file doc" data-note="tests"><span class="th">${DOC_SVG}</span><span class="lb">tool-tests.md</span></button>`],
-                ['doc', `<a class="bd-file doc" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener" draggable="false"><span class="th">${DOC_SVG}</span><span class="lb">diagnosis ↗</span></a>`],
                 ['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`]] },
-      { items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
+      { head: `<div class="bd-folder">${FOLDER_SVG}Diagnosis <em>${DIAG.length}</em></div>`, items: DIAG.map(d => ['file', diagHTML(d)]) },
+      { head: `<div class="bd-folder">${FOLDER_SVG}Tool tests <em>${TESTS.length}</em></div>`, items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
     ];
     const pov = area === 'ai' ? [{ items: [['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`],
       ['sticky', `<button type="button" class="bd-sticky no" data-note="pov" style="--r:-1.5deg"><span class="n">How I think</span><b>Slop or salvation. Both are wrong.</b><span>AI gets you to 80% fast. Know when that's the finish line.</span></button>`]] }] : [];
@@ -1321,7 +1333,7 @@
   // lay out the open area: its folders flow into rows, one under the other
   function layoutBoard() {
     const phone = isPhone(), gx = phone ? 20 : 28, gy = phone ? 28 : 34, gap = phone ? 150 : 220;
-    const width = phone ? { research: 356, ai: 372, production: 372 } : { research: 560, ai: 788, production: 992 };
+    const width = phone ? { research: 372, ai: 372, production: 372 } : { research: 600, ai: 788, production: 992 };
     const world = bd.world;
     const put = (html, x, y) => { world.insertAdjacentHTML('beforeend', html); const el = world.lastElementChild; el.style.left = x + 'px'; el.style.top = y + 'px'; return el; };
     world.innerHTML = '';
