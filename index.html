@@ -508,9 +508,29 @@
   .sk-go::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
   .sk-go:hover { background: rgba(255,255,255,.16); transform: translateY(-2px); }
   .sk-go:active { transform: scale(.96); transition-duration: .12s; }
-  .sk-aside { margin-top: .9rem; font-size: .95rem; line-height: 1.55; color: var(--ink-dim); max-width: 30em; }
-  .sk-aside a { color: var(--ink); text-decoration: underline; text-decoration-color: rgba(79,159,230,.6); text-underline-offset: 4px; }
-  .sk-aside a:hover { text-decoration-color: #4f9fe6; }
+
+  /* ---------- DIAGNOSIS ----------
+     Ethan's own publication gets its own block: a few lines, and a Mac window previewing the site */
+  .dg-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; }
+  .dg-lede { font-family: var(--serif); font-size: clamp(1.8rem, 3.4vw, 2.6rem); line-height: 1.15; letter-spacing: -.015em; }
+  .dg-line { margin-top: 1.1rem; font-size: clamp(1.02rem, 1.4vw, 1.15rem); line-height: 1.65; color: var(--ink-dim); max-width: 32em; }
+  .dg-meta { margin-top: 1.2rem; color: var(--muted); }
+  .dg-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.6rem; }
+  .dg-links .sk-go { margin-top: 0; }
+  .dg-site { background: #f7f2ea; color: #1d1a17; padding: 18px 20px 8px; }
+  .dg-mast { font: 500 22px var(--serif); color: #9e4434; padding-bottom: 12px; border-bottom: 1px solid #e6ddd0; margin-bottom: 14px; }
+  .dg-lead { display: block; }
+  .dg-lead img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #e9e2d6; }
+  .dg-k { display: block; margin-top: 10px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #9e4434; }
+  .dg-lead b { display: block; margin-top: 4px; font: 500 20px/1.25 var(--serif); }
+  .dg-d { display: block; margin-top: 6px; font-size: 12px; color: #8a8178; }
+  .dg-list { list-style: none; margin-top: 14px; border-top: 1px solid #e6ddd0; }
+  .dg-list a { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; padding: 10px 0; }
+  .dg-list li + li a { border-top: 1px solid #eee6da; }
+  .dg-list img { width: 64px; height: 44px; object-fit: cover; border-radius: 4px; background: #e9e2d6; }
+  .dg-list b { display: block; font: 500 14px/1.3 var(--serif); color: #1d1a17; }
+  .dg-list span { font-size: 11.5px; color: #8a8178; }
+  .dg-lead:hover b, .dg-list a:hover b { text-decoration: underline; text-underline-offset: 3px; }
   .sk-demo { min-width: 0; }
   .mac-len { margin-left: auto; font: 500 11.5px var(--mono); color: #aaa; }
   .sk-media { position: relative; aspect-ratio: 16/9; background: #111; overflow: hidden; }
@@ -597,6 +617,7 @@
     .ap-grid { grid-template-columns: 1fr; }
     .vet-row { grid-template-columns: 1fr; gap: .35rem; }
     .skill { grid-template-columns: 1fr; gap: 2rem; }
+    .dg-grid { grid-template-columns: 1fr; gap: 2rem; }
     .skill.flip .sk-copy { order: 0; }
     .about-grid { grid-template-columns: 1fr; }
   }
@@ -752,7 +773,6 @@
         <div class="sk-tag mono"><i></i>01 · Research</div>
         <h3>Shape the idea</h3>
         <p class="sk-line">What the work is for, before anything gets made. Then the right tool, tested head to head.</p>
-        <p class="sk-aside">I also write <a href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener">Diagnosis ↗</a>, independent economic analysis of Vietnam.</p>
         <button type="button" class="sk-go" data-area="research">See the tool tests ↗</button>
       </div>
       <div class="sk-demo">
@@ -816,6 +836,42 @@
         </div>
       </div>
     </article>
+  </div>
+</section>
+
+<!-- ---------- DIAGNOSIS: Ethan's publication, its own block ---------- -->
+<section id="diagnosis">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="idx fname">diagnosis.md</div>
+        <h2>Diagnosis.</h2>
+      </div>
+      <div class="aside">Independent<br>economic analysis</div>
+    </div>
+    <div class="dg-grid reveal">
+      <div class="dg-copy">
+        <p class="dg-lede">Vietnam's economy, as it actually is.</p>
+        <p class="dg-line">My independent analysis of Vietnam's economy. Each piece takes the official claim seriously, then tests it against the data, against how the data was produced, and against what people inside the economy see.</p>
+        <p class="dg-meta mono">Long reads since April 2026 · Ho Chi Minh City</p>
+        <div class="dg-links">
+          <a class="sk-go" style="--c:#c9503a" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener">Read Diagnosis ↗</a>
+          <a class="sk-go" style="--c:#e8573f" href="https://www.youtube.com/@DiagnosisVietnam" target="_blank" rel="noopener">YouTube ↗</a>
+        </div>
+      </div>
+      <div class="mac">
+        <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">diagnosis-omega.vercel.app</span></div>
+        <div class="dg-site">
+          <div class="dg-mast">Diagnosis</div>
+          <a class="dg-lead" href="https://diagnosis-omega.vercel.app/posts/growth-quota" target="_blank" rel="noopener"><img src="https://diagnosis-omega.vercel.app/thumbnails/growth-quota.png" alt="" loading="lazy"><span class="dg-k">Latest · Second opinion</span><b>Vietnam's growth is real. It is also an order.</b><span class="dg-d">October 20, 2026 · 14 min read</span></a>
+          <ul class="dg-list">
+            <li><a href="https://diagnosis-omega.vercel.app/posts/certificate-economy" target="_blank" rel="noopener"><img src="https://diagnosis-omega.vercel.app/thumbnails/certificate-economy.png" alt="" loading="lazy"><span><b>Everything is certified. Nothing is checked.</b>August 2, 2026 · 17 min read</span></a></li>
+            <li><a href="https://diagnosis-omega.vercel.app/posts/housing-collapse" target="_blank" rel="noopener"><img src="https://diagnosis-omega.vercel.app/thumbnails/housing-collapse.png" alt="" loading="lazy"><span><b>Vietnam's Property Market Is Not Collapsing. That's the Problem.</b>May 15, 2026 · 14 min read</span></a></li>
+            <li><a href="https://diagnosis-omega.vercel.app/posts/degree-trap" target="_blank" rel="noopener"><img src="https://diagnosis-omega.vercel.app/thumbnails/degree-trap.png" alt="" loading="lazy"><span><b>Vietnam Trained a Generation for the Wrong Economy</b>April 28, 2026 · 15 min read</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
