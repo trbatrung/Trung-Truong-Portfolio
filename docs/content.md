@@ -61,7 +61,7 @@ Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is
   - H1 "I build the work, **and the systems behind it**.";
   - line "Film, motion and creative technology. Eight years, concept to delivery.";
   - status "Ho Chi Minh City · Open to senior creative roles".
-- **Proof strip:** 8+ Years making the work · 10+ People in the team I built · Idea → app Tools I
+- **Proof strip:** 8+ Years making the work · 10+ People in the team I built · Idea → real life Tools I
   build and ship myself · Fast AI built into the workflow. (2026-10-25, Ethan: no channel stat
   anywhere, and say he vibecodes without the word "vibecode". Retired: "300K → 1M Mike Dee's
   channel, the year I helped" and "3 Systems I built". The Mike Dee fact stays in profile.md.)
