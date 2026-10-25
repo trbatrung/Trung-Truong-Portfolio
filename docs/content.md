@@ -55,8 +55,8 @@ them, not sum them all in 1".
     "Vietnam's economy, as it actually is."; the copy is "My independent analysis of the economy I
     live in. Each piece takes an official claim and checks it against the data, and against what
     people on the ground see."; then "Since April 2026 · Read it ↗". The tool-test notes sit below.
-  - **Open:** Diagnosis is published without a personal name (its About page says so). Linking it
-    from the named portfolio makes it his publicly. Ethan to confirm before it goes live.
+  - **Confirmed (2026-10-26):** Diagnosis itself is published without a personal name, and Ethan
+    is fine having his name on it here: "I'm fine having my name on Diagnosis."
 - **Boards replace Finder.** Each area has its own endless desktop on the Ember wallpaper
   (`research.board`, `ai-work.board`, `production.board`): drag to move, scroll or pinch to zoom,
   Fit to reframe, and the three-part control on the board switches area. Videos are files with
