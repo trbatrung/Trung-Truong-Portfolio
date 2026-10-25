@@ -61,10 +61,10 @@ Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is
   - H1 "I build the work, **and the systems behind it**.";
   - line "Film, motion and creative technology. Eight years, concept to delivery.";
   - status "Ho Chi Minh City · Open to senior creative roles".
-- **Proof strip:** 8+ Years making the work · 10+ People in the team I built · 300K → 1M A channel
-  I helped grow · Fast AI integration, on a stack I own. (2026-10-25, Ethan: he didn't want Mike
-  Dee's name or "3 Systems I built" as a first impression. The channel is Mike Dee's: joined at
-  300K, 1M in under a year. Was: "Mike Dee's channel, the year I helped" · "3 Systems I built".)
+- **Proof strip:** 8+ Years making the work · 10+ People in the team I built · Idea → app Tools I
+  build and ship myself · Fast AI built into the workflow. (2026-10-25, Ethan: no channel stat
+  anywhere, and say he vibecodes without the word "vibecode". Retired: "300K → 1M Mike Dee's
+  channel, the year I helped" and "3 Systems I built". The Mike Dee fact stays in profile.md.)
 - **Systems and How I work: cut, same day.** Ethan: "why are we explain the projexts again? just
   keep the portfolio short". The projects live on the map and in their windows. How I work
   became one line in the note card, with links to the How I think and Tool tests notes.
