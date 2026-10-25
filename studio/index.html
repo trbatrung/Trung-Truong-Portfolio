@@ -13,6 +13,9 @@
   body { font-family: 'Space Grotesk', system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
   #frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: hidden; background: var(--bg); }
   html.clear, html.clear body, html.clear #frame { background: transparent; }   /* ?bg=none: the site's hero shows through */
+  /* in the site's hero: a vertical swipe scrolls the page, taps still click, and a long press doesn't select the map's text */
+  html.embed, html.embed body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: pan-y; }
+  html.embed canvas { touch-action: pan-y; }
   #frame canvas { display: block; }
   #ui { position: absolute; inset: 0; pointer-events: none; }
   .hit { pointer-events: auto; cursor: pointer; }
@@ -193,6 +196,7 @@ const ORDER = ['research', 'ai', 'production'];
 const Q = new URLSearchParams(location.search);
 const EXPORT = Q.get('export') === '1', EMBED = Q.get('embed') === '1', CLEAR = Q.get('bg') === 'none';
 if (CLEAR) document.documentElement.classList.add('clear');
+if (EMBED) document.documentElement.classList.add('embed');
 if (Q.get('quality') === 'low') CONFIG.quality = 'low';
 if (Q.get('intro') === '0') CONFIG.intro = false;
 if (AREAS[Q.get('area')]) CONFIG.selected = Q.get('area');
@@ -1419,7 +1423,13 @@ window.ready = (async () => {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (EXPORT || still) { paused = true; await window.renderAt(INTRO); return; }
   let start = null, offset = 0, raf = 0;
-  const tick = now => { if (start === null) start = now; draw(offset + (now - start) / 1000); raf = requestAnimationFrame(tick); };
+  let warned = false;
+  // schedule the next frame first, so one bad frame (a slow first load on a phone, say) can't stop the loop
+  const tick = now => {
+    raf = requestAnimationFrame(tick);
+    if (start === null) start = now;
+    try { draw(offset + (now - start) / 1000); } catch (err) { if (!warned) { warned = true; console.error(err); } }
+  };
   raf = requestAnimationFrame(tick);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { cancelAnimationFrame(raf); if (start !== null) offset += (performance.now() - start) / 1000; start = null; }
