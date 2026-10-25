@@ -130,6 +130,7 @@
     font: 500 1.1rem 'IBM Plex Mono', monospace; letter-spacing: .06em; text-transform: uppercase; transition: opacity .5s; }
   .tap-hint i { width: .8rem; height: .8rem; border-radius: 50%; background: #e6a15b; animation: ping 1.6s ease-out infinite; box-shadow: 0 0 0 .3rem rgba(230,161,91,.25); }
   html.seen .tap-hint { opacity: 0; }
+  html.seen.zoomed-in .tap-hint { opacity: 1; }   /* zoomed in, it comes back to say how to turn and move */
   @media (prefers-reduced-motion: reduce) { .pill.hit::after, .tap-hint i { animation: none; } }
   #ui.compact .pill .dot { width: .75rem; height: .75rem; }
   /* the compact side panel: a stack of glass cards, one per area. Scroll, drag or use the arrow keys to flip */
@@ -1638,14 +1639,16 @@ const turned = () => { const a = ((view.tr % TAU) + TAU) % TAU; return a > 1e-3 
 function viewChanged(snap) {
   const zoomed = view.tz > 1.001 || turned();
   document.documentElement.classList.toggle('zoomed', zoomed);
-  document.documentElement.classList.toggle('zoomed-in', view.tz > 1.001);
+  const zIn = view.tz > 1.001;
+  if (refs.hint && document.documentElement.classList.contains('zoomed-in') !== zIn) refs.hint.innerHTML = refs.hintText(zIn);
+  document.documentElement.classList.toggle('zoomed-in', zIn);
   if (refs.zoomReset) refs.zoomReset.hidden = !zoomed;
   if (refs.zoomIn) { refs.zoomIn.disabled = view.tz >= ZMAX - 1e-3; refs.zoomOut.disabled = view.tz <= 1.001; }
   if (zoomed && refs.zoomHint) refs.zoomHint.hidden = true;
   if (snap || paused) { applyView(true); if (paused) draw(lastT); }
   armHome();
 }
-// the map always finds its way back to the default view: 6s after the last touch on a phone, a moment after
+// the map always finds its way back to the default view: 15s after the last touch on a phone, a moment after
 // the mouse leaves on desktop (not while it hovers), and at once when the map scrolls out of sight
 let homeTimer = 0, hovering = false;
 const isHome = () => view.tz <= 1.001 && !turned();
@@ -1657,7 +1660,7 @@ function armHome(ms) {
   clearTimeout(homeTimer);
   if (!ZOOM_ON || isHome()) return;
   homeTimer = setTimeout(() => (document.documentElement.classList.contains('panning') ? armHome(1500) : goHome(false)),
-    ms ?? (TOUCH ? 6000 : hovering ? 15000 : 2500));
+    ms ?? (TOUCH ? 15000 : hovering ? 15000 : 2500));
 }
 function zoomAt(sx, sy, factor, snap) {                                     // the point under (sx, sy) stays put
   const px = (sx + view.tx) / view.tz, py = (sy + view.ty) / view.tz;
@@ -1726,7 +1729,11 @@ if (ZOOM_ON) {
     refs.zoomReset = el('txt', 'Reset', zc, 'button');
   }
   refs.zoomReset.title = 'Show the whole map';
-  el('tap-hint', `<i></i>${TOUCH ? 'Tap a place · swipe to turn · pinch to zoom' : 'Click a place · drag to turn · pinch or + to zoom'}`);   // the how-to, until the first touch
+  // the how-to, until the first touch; zoomed in, how to turn and move
+  const hintText = zoomedIn => `<i></i>${zoomedIn ? (TOUCH ? 'Swipe sideways to turn · up or down to move' : 'Drag sideways to turn · up or down to move')
+    : (TOUCH ? 'Tap a place · swipe to turn · pinch to zoom' : 'Click a place · drag to turn · pinch or + to zoom')}`;
+  refs.hint = el('tap-hint', hintText(false));
+  refs.hintText = hintText;
   refs.zoomReset.hidden = true;                                             // only once zoomed in
   refs.zoomReset.onclick = () => { view.tz = 1; view.tr = Math.round(view.tr / TAU) * TAU; clampView(); viewChanged(false); };   // straighten by the short way
   document.documentElement.addEventListener('mouseenter', () => { hovering = true; armHome(); });
@@ -1758,10 +1765,11 @@ if (ZOOM_ON) {
     if (touch1.mine && e.cancelable) e.preventDefault();
   }, { passive: false });
   canvas.addEventListener('pointerdown', e => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 && e.button !== 2) return;
     if (e.pointerType === 'touch' && drag) { drag = null; return; }              // a second finger: the pinch takes over
-    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, mode: null, touch: e.pointerType === 'touch' };
+    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, mode: null, touch: e.pointerType === 'touch', move: e.button === 2 || e.shiftKey };
   });
+  canvas.addEventListener('contextmenu', e => { if (view.tz > 1.001) e.preventDefault(); });   // zoomed in, a right-drag moves the map
   canvas.addEventListener('pointermove', e => {
     if (!drag || e.pointerId !== drag.id || pinch) return;
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -1769,7 +1777,9 @@ if (ZOOM_ON) {
       if (Math.hypot(dx, dy) < 6) return;
       const zoomedIn = view.tz > 1.001;
       if (drag.touch && !zoomedIn && !turnish(dx, dy)) { drag = null; return; }   // at rest, only clearly vertical swipes scroll the page
-      drag.mode = zoomedIn ? 'pan' : 'turn';
+      // a drag that starts sideways turns the map, zoomed in or not; zoomed in, one that starts up or down (or a
+      // right- or Shift-drag) moves it, in any direction from there
+      drag.mode = zoomedIn && (drag.move || !turnish(dx, dy)) ? 'pan' : 'turn';
       try { canvas.setPointerCapture(e.pointerId); } catch {}
       document.documentElement.classList.add('panning', 'seen');
     }
