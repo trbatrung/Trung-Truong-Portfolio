@@ -38,6 +38,15 @@ never their assets. His calls on 2026-10-25:
   street life; different lighting per area; research as papers, binders and books instead of
   monitors; a hologram in the middle of AI work; more lights, a crane and cameras in video
   production; the camera holds still (no spin). Layout signed off: "layout is alright".
+- **Map landmarks (Ethan, 2026-10-25, after launch):** "add more places + make it tru-er".
+  - Research now sits inside **Ben Thanh Market**, with its clock-tower south gate facing the camera.
+  - **Notre-Dame** got twin spires, a rose window, three doors, the nave, the apse and the statue
+    in front.
+  - The **Post Office** and the **Opera House** got real facades.
+  - The **Independence Palace** and the **Ba Son Bridge** are new.
+  - The landmarks on the near edge face the camera.
+  - Bitexco is unchanged ("perfect").
+  - Phones load less: the minified three.js, no ambient-occlusion files, and no waiting for fonts.
 - **Hero (revised again, 2026-10-25): no more desktop.** "the whole map thing should be the hero".
   - The 3D map fills the first screen, with the Ember background showing through it. The
     headline, the line under it, the status and the two buttons sit in a band above it.

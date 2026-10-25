@@ -155,9 +155,17 @@
 </script>
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
 } }
+</script>
+<script>
+  // start the downloads now instead of one after another (after the import map, so 'three' resolves);
+  // the ambient-occlusion files only where they're used, not on phones
+  { const q = new URLSearchParams(location.search);
+    const files = ['build/three.module.min.js', 'examples/jsm/geometries/RoundedBoxGeometry.js'];
+    if (q.get('quality') !== 'low') files.push('examples/jsm/postprocessing/EffectComposer.js', 'examples/jsm/postprocessing/RenderPass.js', 'examples/jsm/postprocessing/GTAOPass.js', 'examples/jsm/postprocessing/OutputPass.js');
+    for (const f of files) { const l = document.createElement('link'); l.rel = 'modulepreload'; l.href = 'https://cdn.jsdelivr.net/npm/three@0.169.0/' + f; document.head.appendChild(l); } }
 </script>
 </head>
 <body>
@@ -165,10 +173,6 @@
 <script type="module">
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 // Everything on this page is a fact from docs/profile.md and the live site. No invented metrics.
 const CONFIG = {
@@ -183,7 +187,7 @@ const CONFIG = {
 };
 const AREAS = {
   research: {
-    name: 'Research', color: '#4f9fe6', place: 'Colonial archive', role: 'Named breakdown stays private',
+    name: 'Research', color: '#4f9fe6', place: 'Ben Thanh Market', role: 'Named breakdown stays private',
     kpi: { v: '6', l: 'Use cases tested', s: 'Same brief, head to head', short: 'tested' },   // Ethan to confirm "6"
     tiles: [['6', 'Use cases tested'], ['7', 'Verdicts logged']],
     listTitle: 'Verdicts', list: [
@@ -238,7 +242,7 @@ const N = CONFIG.neutrals, ACC = CONFIG.accent;
 // the embed fills the iframe's own viewport; w/h, if the site still sends them, only hint the pixel ratio
 let W, H, PR;
 function measure() {
-  if (EMBED) { W = Math.max(200, innerWidth); H = Math.max(150, innerHeight); PR = Q.has('w') ? Math.min(2, Math.max(1, +Q.get('w') / W)) : Math.min(2, Math.max(1, devicePixelRatio || 1)); }
+  if (EMBED) { W = Math.max(200, innerWidth); H = Math.max(150, innerHeight); const cap = CONFIG.quality === 'low' ? 1.6 : 2; PR = Q.has('w') ? Math.min(cap, Math.max(1, +Q.get('w') / W)) : Math.min(cap, Math.max(1, devicePixelRatio || 1)); }
   else { [W, H] = CONFIG.size; PR = 1; }
 }
 measure();
@@ -280,10 +284,12 @@ sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
 scene.add(sun, sun.target);
 sun.target.position.set(-1.7, 0, -5.75);
 
-const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(16, 16, { type: THREE.HalfFloatType, samples: 4 }));
-composer.addPass(new RenderPass(scene, camera));
-let ao = null;
+// ambient occlusion runs on desktop only, so phones never download it: they render straight to the canvas
+let composer = null, ao = null;
 if (HIGH) {
+  const [{ EffectComposer }, { RenderPass }, { GTAOPass }, { OutputPass }] = await Promise.all(['EffectComposer', 'RenderPass', 'GTAOPass', 'OutputPass'].map(n => import(`three/addons/postprocessing/${n}.js`)));
+  composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(16, 16, { type: THREE.HalfFloatType, samples: 4 }));
+  composer.addPass(new RenderPass(scene, camera));
   ao = new GTAOPass(scene, camera, 16, 16);
   ao.blendIntensity = 1;
   ao.updateGtaoMaterial({ radius: 0.9, distanceExponent: 1, thickness: 1.4, scale: 1, samples: 16 });
@@ -292,12 +298,13 @@ if (HIGH) {
   const hide = ao.overrideVisibility.bind(ao);             // holograms, light pools and arcs stay out of the AO depth pass
   ao.overrideVisibility = function () { hide(); this.scene.traverse(o => { if (o.userData.noAO) o.visible = false; }); };
   composer.addPass(ao);
+  composer.addPass(new OutputPass());
 }
-composer.addPass(new OutputPass());
+const render = () => composer ? composer.render() : renderer.render(scene, camera);
 function resizeGL() {
   renderer.setPixelRatio(PR); renderer.setSize(W, H, false);
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-  composer.setPixelRatio(PR); composer.setSize(W, H);
+  if (composer) { composer.setPixelRatio(PR); composer.setSize(W, H); }
   camera.aspect = W / H;
 }
 resizeGL();
@@ -309,7 +316,7 @@ if (!CLEAR) {
   const gl = renderer.getContext(), px = new Uint8Array(4), got = new THREE.Color();
   camera.position.set(0, 60, 120); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
   for (let i = 0; i < 10; i++) {
-    composer.render();
+    render();
     gl.readPixels((W * PR) >> 1, (H * PR) >> 1, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
     got.setRGB(px[0] / 255, px[1] / 255, px[2] / 255, THREE.SRGBColorSpace);
     for (const c of ['r', 'g', 'b']) bg[c] *= clamp(bgTarget[c] / Math.max(got[c], 1e-4), 0.6, 2.5);
@@ -358,6 +365,19 @@ const cyl = (p, rt, rb, h, c, x, y, z, seg) => mesh(cylGeo(rt, rb, h, seg), c, x
 const tint = (hex, k) => '#' + new THREE.Color(N.background).lerp(new THREE.Color(hex), k).getHexString();
 const halfDisc = (r, t = 0.03) => new THREE.CylinderGeometry(r, r, t, 24, 1, false, Math.PI / 2, Math.PI).rotateX(Math.PI / 2);   // upper half, facing +z
 const disc = (r, t = 0.03) => new THREE.CylinderGeometry(r, r, t, 28).rotateX(Math.PI / 2);
+// a pitched roof: a triangular prism, ridge along z (ry turns it), bottom at y
+function gable(p, w, h, len, c, x, y, z, ry = 0) {
+  const sh = new THREE.Shape(); sh.moveTo(-w / 2, 0); sh.lineTo(w / 2, 0); sh.lineTo(0, h); sh.closePath();
+  const geo = new THREE.ExtrudeGeometry(sh, { depth: len, bevelEnabled: false }); geo.translate(0, 0, -len / 2);
+  const m = mesh(geo, c, x, y, z, p); m.rotation.y = ry; return m;
+}
+// a thin rod between two points: bridge cables
+function strut(p, a, b, r, c) {
+  const d = new THREE.Vector3().subVectors(b, a), m = mesh(cylGeo(r, r, 1, 6), c, (a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2, p);
+  m.scale.y = d.length(); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); m.castShadow = false; return m;
+}
+// an arched opening on a facade that faces +z: a door, or a window, with a round top; bottom at y
+function archAt(p, w, h, c, x, y, z, t = 0.06) { box(p, w, h, t, c, x, y, z, 0.01); mesh(halfDisc(w / 2, t), c, x, y + h, z, p); }
 function pyramid(r, h, c, x, y, z, p) { const m = mesh(new THREE.ConeGeometry(r, h, 4), c, x, y + h / 2, z, p); m.rotation.y = Math.PI / 4; return m; }
 
 // ---------- build-in: the street and hub first, then each area in pipeline order, center outward
@@ -700,11 +720,11 @@ for (let j = 0; j < 2; j++) {
   box(g, 0.8, 1.2, 0.8, glass, 0, 16.1, 0, 0.1); pyramid(0.5, 1.4, '#c9d3d6', 0, 17.3, 0, g);
   for (let y = 2; y < 15; y += 1.6) box(g, 1.3, 0.05, 1.3, '#dce4e6', 0, 0.6 + y, 0, 0.02); }
 // far bank: low riverside houses and trees
-for (const [x, w, h, c] of [[-24.5, 3.2, 1.8, '#e9dcc0'], [-20.6, 3.6, 2.4, '#d9e3d2'], [-16.5, 3.0, 1.6, '#f1d9b8'], [-12.6, 3.8, 2.8, '#e4d6c6'], [-8.2, 3.2, 2.0, '#efe2c4'], [-4.2, 3.4, 1.7, '#dde3e6'], [0.2, 3.0, 2.3, '#f0d6c0'], [21.5, 3.4, 1.9, '#e6dccb']]) {
+for (const [x, w, h, c] of [[-24.5, 3.2, 1.8, '#e9dcc0'], [-20.6, 3.6, 2.4, '#d9e3d2'], [-16.5, 3.0, 1.6, '#f1d9b8'], [-12.6, 3.8, 2.8, '#e4d6c6'], [-4.2, 3.4, 1.7, '#dde3e6'], [0.2, 3.0, 2.3, '#f0d6c0'], [21.5, 3.4, 1.9, '#e6dccb']]) {
   const g = grp('base', x, -33.4); box(g, w, h, 3.4, c, 0, 0, 0, 0.1); box(g, w + 0.15, 0.14, 3.55, N.light, 0, h, 0, 0.04);
   for (let i = 0; i < Math.floor(w / 1.1); i++) windowAt('base', x - w / 2 + 0.55 + i * 1.1, h * 0.55, -33.4 + 1.72, 0, 0.8);
 }
-for (const x of [-26.5, -22.5, -18.5, -14.6, -10.3, -6.2, -2.0, 2.4, 5.0, 19.2, 23.8]) tree('base', x + rr(-0.3, 0.3), -31.6, rr(0.55, 0.8));
+for (const x of [-26.5, -22.5, -18.5, -14.6, -10.3, -2.0, 2.4, 5.0, 19.2, 23.8]) tree('base', x + rr(-0.3, 0.3), -31.6, rr(0.55, 0.8));
 
 // Bitexco, behind AI work: tapered tower, helipad out the side near the top
 { const g = grp('base', -19.6, -19.7);
@@ -716,34 +736,100 @@ for (const x of [-26.5, -22.5, -18.5, -14.6, -10.3, -6.2, -2.0, 2.4, 5.0, 19.2, 
   box(g, 0.9, 0.5, 0.5, '#c9c2b8', 0.7, 10.1, 0, 0.05);
   cyl(g, 0.05, 0.08, 1.8, '#c9d3d6', 0, 13.9, 0, 8); }
 
-// Notre-Dame: red brick, two square towers with spires
-{ const g = grp('base', -20.6, 20.6);
-  const brick = '#b65b3f';
-  box(g, 3.2, 2.8, 5.0, brick, 0, 0, 0.6, 0.08); box(g, 3.4, 0.45, 5.2, '#8f4733', 0, 2.8, 0.6, 0.06);
-  for (const x of [-1.05, 1.05]) { box(g, 1.15, 4.6, 1.15, brick, x, 0, -1.9, 0.06); box(g, 1.25, 0.15, 1.25, '#f1e6d6', x, 4.6, -1.9, 0.03); pyramid(0.66, 2.0, '#7f8d88', x, 4.75, -1.9, g); }
-  mesh(disc(0.38, 0.05), '#f1e6d6', 0, 2.55, -2.4, g);
-  box(g, 0.9, 1.3, 0.1, '#3a3633', 0, 0, -2.42, 0.04); }
-// Central Post Office: long yellow facade, white pilasters, a clock pediment
-{ const g = grp('base', -11.0, 20.4);
-  box(g, 7.8, 2.4, 3.6, '#efcf86', 0, 0, 0, 0.08); box(g, 8.0, 0.22, 3.8, '#f6efe3', 0, 2.4, 0, 0.04);
-  box(g, 2.0, 1.0, 0.4, '#efcf86', 0, 2.4, -1.6, 0.05); mesh(disc(0.32, 0.04), '#ffffff', 0, 2.95, -1.82, g);
-  box(g, 3.6, 0.6, 2.8, '#7f8f88', 0, 2.62, 0.2, 0.25);
-  for (let i = 0; i < 9; i++) { const x = -3.6 + i * 0.9; box(g, 0.16, 2.3, 0.1, '#f6efe3', x, 0, -1.84, 0.03); if (i < 8) windowAt('base', -11.0 + x + 0.45, 1.25, 20.4 - 1.86, 0, 0.75); } }
-// Ben Thanh Market: low hall, central clock tower (its hands turn once a loop)
-let clockHands = [];
-{ const g = grp('base', 3.4, 20.7);
-  box(g, 8.2, 1.8, 4.6, '#f1e2c2', 0, 0, 0, 0.08); box(g, 8.4, 0.4, 4.8, '#b9a58c', 0, 1.8, 0, 0.1);
-  for (const x of [-3.7, 3.7]) { box(g, 1.0, 2.5, 1.0, '#f1e2c2', x, 0, -2.2, 0.05); pyramid(0.62, 0.8, '#8a7f72', x, 2.5, -2.2, g); }
-  box(g, 1.6, 4.2, 1.5, '#f1e2c2', 0, 0, -2.3, 0.06); box(g, 1.75, 0.2, 1.65, '#e3d3b0', 0, 4.2, -2.3, 0.03); pyramid(1.1, 1.2, '#8a7f72', 0, 4.4, -2.3, g);
-  mesh(disc(0.5, 0.04), '#ffffff', 0, 3.3, -3.07, g);
-  for (const [len, k] of [[0.42, 1], [0.3, 0]]) { const hand = new THREE.Group(); hand.position.set(0, 3.3, -3.11); g.add(hand); box(hand, 0.05, len, 0.02, '#3a3633', 0, 0, 0, 0.01); clockHands.push([hand, k]); } }
-// Opera House: cream facade, the big front arch
-{ const g = grp('base', 19.6, 20.5);
-  box(g, 6.4, 2.6, 4.6, '#f3e8d4', 0, 0, 0, 0.08); box(g, 6.6, 0.25, 4.8, '#e5d5b8', 0, 2.6, 0, 0.04);
-  for (const x of [-2.6, 2.6]) { box(g, 1.3, 3.1, 1.3, '#f3e8d4', x, 0, -1.9, 0.05); box(g, 1.4, 0.2, 1.4, '#e5d5b8', x, 3.1, -1.9, 0.03); }
-  box(g, 2.6, 2.9, 0.6, '#f3e8d4', 0, 0, -2.45, 0.05);
-  box(g, 1.8, 1.5, 0.08, '#4a4440', 0, 0, -2.76, 0.03); mesh(halfDisc(0.9, 0.08).rotateY(Math.PI), '#4a4440', 0, 1.5, -2.76, g);
-  mesh(halfDisc(1.25, 0.12).rotateY(Math.PI), '#e5d5b8', 0, 2.9, -2.45, g); }
+// Ba Son Bridge, from the riverside promenade over to Thu Thiem: one white pylon on the far bank, a fan of cables,
+// the deck high enough for the ships to pass under
+{ const g = grp('base', -6.4, -29.0);
+  const WH = '#f4efe6', DECK = '#e3ddd4', TOP = 3.2;
+  box(g, 2.2, 0.35, 10.8, DECK, 0, TOP - 0.35, -1.2, 0.05);
+  box(g, 1.8, 0.02, 10.8, '#8f8881', 0, TOP, -1.2, 0.01);
+  for (const x of [-1.07, 1.07]) { box(g, 0.05, 0.28, 10.8, WH, x, TOP, -1.2, 0.02); box(g, 0.06, 0.05, 10.8, glowMat('#ffd59e', 0.9), x, TOP + 0.28, -1.2, 0.02); }
+  box(g, 2.4, TOP - 0.35, 0.9, '#d6cec1', 0, 0, 4.1, 0.06); box(g, 2.4, TOP - 0.35, 1.0, '#d6cec1', 0, 0, -6.1, 0.06);
+  const py = mesh(new THREE.CylinderGeometry(0.2, 0.45, 12.5, 4), WH, 0, 6.25, -2.6, g); py.rotation.y = Math.PI / 4;
+  mesh(new THREE.SphereGeometry(0.12, 10, 8), glowMat(ACC, 1.2), 0, 12.6, -2.6, g);
+  for (let i = 0; i < 5; i++) { const ay = 11.4 - i * 0.95;
+    for (const x of [-0.95, 0.95]) {
+      strut(g, new THREE.Vector3(0, ay, -2.6), new THREE.Vector3(x, TOP, 3.8 - i * 1.25), 0.025, '#efe9df');
+      strut(g, new THREE.Vector3(0, ay, -2.6), new THREE.Vector3(x, TOP, -3.6 - i * 0.7), 0.025, '#efe9df'); } } }
+
+let clockHands = [];   // Ben Thanh's clock, in the Research area; the hands turn once a beat
+// Independence Palace: the long white building behind its screen of slender fins, a rooftop pavilion, the lawn and fountain
+{ const g = grp('base', -20.4, 20.4);
+  const WH = '#f4f2ec', GR = '#d8d6cf';
+  box(g, 9.0, 0.45, 4.0, GR, 0, 0, 0, 0.06);
+  box(g, 8.2, 2.5, 3.2, WH, 0, 0.45, -0.1, 0.05);
+  box(g, 7.8, 2.0, 0.05, '#5e6d72', 0, 0.7, 1.52, 0.01);                       // glass behind the fins
+  box(g, 8.8, 0.2, 3.8, WH, 0, 2.95, -0.05, 0.04);                             // the roof slab, overhanging
+  box(g, 2.6, 0.9, 1.6, WH, 0, 3.15, -0.4, 0.04); box(g, 2.9, 0.12, 1.9, GR, 0, 4.05, -0.4, 0.03);
+  box(g, 2.6, 0.12, 1.1, WH, 0, 1.15, 2.05, 0.03);                             // entrance canopy
+  for (const x of [-1.1, 1.1]) cyl(g, 0.05, 0.05, 0.72, WH, x, 0.45, 2.45, 8);
+  box(g, 7.0, 0.1, 1.9, N.grass, 0, 0, 3.45, 0.04);                            // the lawn, and its fountain
+  cyl(g, 0.55, 0.6, 0.22, '#f8f4ed', 0, 0.1, 3.45, 20); cyl(g, 0.46, 0.46, 0.05, '#8fc3d1', 0, 0.28, 3.45, 20); cyl(g, 0.05, 0.08, 0.35, '#f8f4ed', 0, 0.3, 3.45, 8); }
+const fins = new Inst(rbox(0.07, 2.2, 0.26, 0.02), mat('#fbfaf6', 0.6), 30);
+for (let i = 0; i < 26; i++) fins.add('base', -20.4 - 3.9 + i * 0.312, 1.75, 22.0);
+
+// Notre-Dame Cathedral: red brick, twin towers with slender iron spires, a rose window over three doors, the nave and apse
+// behind, Our Lady of Peace in the square. Like the other landmarks on this edge, it faces the camera so the facade reads.
+{ const g = grp('base', -7.5, 20.2);
+  const BR = '#b65b3f', BRD = '#93472f', ST = '#efe4d2', SL = '#66767d', DK = '#3a302c', RF = '#7d4434', GLS = '#5a6f86';
+  box(g, 3.0, 3.0, 5.0, BR, 0, 0, 0.2, 0.06); gable(g, 3.3, 1.4, 5.1, RF, 0, 3.0, 0.2);                       // nave
+  box(g, 5.0, 2.7, 1.5, BR, 0, 0, -0.9, 0.06); gable(g, 5.2, 1.2, 1.6, RF, 0, 2.7, -0.9, Math.PI / 2);       // transept
+  cyl(g, 1.3, 1.3, 2.8, BR, 0, 0, -2.3, 12); mesh(new THREE.ConeGeometry(1.42, 1.1, 12), RF, 0, 3.35, -2.3, g);   // apse
+  for (const s of [-1, 1]) {
+    for (const z of [-1.6, 0.4, 1.9]) box(g, 0.28, 2.2, 0.4, BRD, s * 1.62, 0, z, 0.03);                       // buttresses
+    for (const z of [-0.6, 1.2]) { const w = new THREE.Group(); w.position.set(s * 1.51, 0, z); w.rotation.y = s * Math.PI / 2; g.add(w); archAt(w, 0.42, 1.0, GLS, 0, 1.1, 0); }
+  }
+  for (const s of [-1, 1]) { const x = s * 1.6, z = 2.45;                                                      // the two towers
+    box(g, 1.4, 5.6, 1.4, BR, x, 0, z, 0.05);
+    for (const y of [1.9, 3.7, 5.5]) box(g, 1.5, 0.12, 1.5, ST, x, y, z, 0.02);
+    archAt(g, 0.55, 0.95, DK, x, 0.15, z + 0.71); archAt(g, 0.3, 0.75, GLS, x, 2.4, z + 0.71);
+    for (const [dx, dz, ry] of [[0, 0.71, 0], [s * 0.71, 0, s * Math.PI / 2]]) {                               // belfry openings
+      const b = new THREE.Group(); b.position.set(x + dx, 0, z + dz); b.rotation.y = ry; g.add(b);
+      archAt(b, 0.34, 0.9, DK, -0.22, 4.1, 0); archAt(b, 0.34, 0.9, DK, 0.22, 4.1, 0); }
+    cyl(g, 0.66, 0.7, 0.45, ST, x, 5.6, z, 8);
+    for (const [px, pz] of [[-0.58, -0.58], [0.58, -0.58], [-0.58, 0.58], [0.58, 0.58]]) pyramid(0.14, 0.6, ST, x + px, 5.6, z + pz, g);
+    mesh(new THREE.ConeGeometry(0.6, 3.6, 8), SL, x, 7.85, z, g);
+    box(g, 0.05, 0.5, 0.05, '#e9e2d6', x, 9.6, z, 0.01); box(g, 0.28, 0.05, 0.05, '#e9e2d6', x, 9.9, z, 0.01); }
+  box(g, 1.85, 3.9, 0.6, BR, 0, 0, 2.5, 0.04); gable(g, 1.85, 0.9, 0.6, BR, 0, 3.9, 2.5);                     // the gable between them
+  box(g, 1.95, 0.12, 0.7, ST, 0, 3.9, 2.5, 0.02); box(g, 1.95, 0.1, 0.7, ST, 0, 1.9, 2.5, 0.02);
+  mesh(disc(0.5, 0.06), ST, 0, 2.75, 2.82, g); mesh(disc(0.38, 0.07), glowMat('#6f8fb6', 0.35), 0, 2.75, 2.83, g);   // rose window
+  archAt(g, 0.8, 1.15, DK, 0, 0.15, 2.82);
+  box(g, 5.0, 0.12, 0.35, ST, 0, 0, 3.32, 0.03);                                                                // the steps
+  cyl(g, 0.6, 0.6, 0.1, N.grass, 0, 0, 4.1, 20);                                                                // the statue in its garden
+  box(g, 0.3, 0.5, 0.3, ST, 0, 0.1, 4.1, 0.03); cyl(g, 0.08, 0.13, 0.5, '#f8f4ed', 0, 0.6, 4.1, 10); mesh(new THREE.SphereGeometry(0.075, 10, 8), '#f8f4ed', 0, 1.17, 4.1, g); }
+
+// Central Post Office, beside the cathedral: the long yellow facade, white pilasters, arched windows, the clock under
+// its arched pediment, and the barrel roof of the iron hall
+{ const g = grp('base', 4.0, 20.6);
+  const YL = '#efcf86', WH = '#f8f2e6', GL = '#6f878c';
+  box(g, 8.0, 2.3, 3.4, YL, 0, 0, 0, 0.06); box(g, 8.1, 0.18, 3.5, WH, 0, 2.3, 0, 0.03); box(g, 8.1, 0.25, 3.5, '#d9c9a8', 0, 0, 0, 0.03);
+  mesh(new THREE.CylinderGeometry(1.35, 1.35, 4.2, 20, 1, false, 0, Math.PI).rotateZ(Math.PI / 2), '#7f8f88', 0, 2.48, -0.2, g);
+  box(g, 2.2, 2.9, 3.6, YL, 0, 0, 0.1, 0.05); mesh(halfDisc(1.1, 0.3), YL, 0, 2.9, 1.75, g);
+  mesh(new THREE.TorusGeometry(1.1, 0.07, 6, 24, Math.PI), WH, 0, 2.9, 1.92, g);
+  mesh(disc(0.42, 0.05), '#3a3633', 0, 3.2, 1.93, g); mesh(disc(0.36, 0.06), '#fbf8f2', 0, 3.2, 1.94, g);
+  for (const [len, a] of [[0.3, 0.5], [0.2, -1.9]]) { const h = box(g, 0.04, len, 0.02, '#3a3633', 0, 3.2, 1.98, 0.01); h.geometry = h.geometry.clone().translate(0, len / 2, 0); h.position.y = 3.2; h.rotation.z = a; }
+  archAt(g, 1.0, 1.3, '#4a4440', 0, 0.25, 1.93);
+  for (const s of [-1, 1]) {
+    box(g, 1.3, 2.6, 3.6, YL, s * 3.35, 0, 0.1, 0.05); box(g, 1.4, 0.14, 3.7, WH, s * 3.35, 2.6, 0.1, 0.02);
+    gable(g, 1.3, 0.45, 0.3, YL, s * 3.35, 2.74, 1.75); archAt(g, 0.5, 0.9, GL, s * 3.35, 0.7, 1.93);
+    for (let i = 0; i < 3; i++) { const x = s * (1.4 + i * 0.5); archAt(g, 0.3, 0.75, GL, x, 0.55, 1.73); mesh(disc(0.1, 0.04), GL, x, 1.85, 1.73, g); }
+    for (let i = 0; i < 4; i++) box(g, 0.08, 2.05, 0.06, WH, s * (1.15 + i * 0.5), 0.25, 1.73, 0.01); } }
+
+// Opera House: the great arch between two columns, an arched crown over it, wings with tall windows and a statue each
+{ const g = grp('base', 19.6, 20.4);
+  const CR = '#f3e8d4', TR = '#e2d1b2', GL = '#8fa3a8';
+  box(g, 6.2, 2.7, 4.2, CR, 0, 0, -0.2, 0.06); box(g, 6.3, 0.2, 4.3, TR, 0, 2.7, -0.2, 0.03);
+  box(g, 5.4, 0.7, 3.4, '#8c95a0', 0, 2.9, -0.4, 0.2);
+  for (const s of [-1, 1]) {
+    box(g, 1.7, 3.0, 0.6, CR, s * 2.2, 0, 2.1, 0.04); box(g, 1.8, 0.16, 0.7, TR, s * 2.2, 3.0, 2.1, 0.02);
+    for (const dx of [-0.4, 0.4]) archAt(g, 0.42, 1.1, GL, s * 2.2 + dx, 0.9, 2.42);
+    cyl(g, 0.16, 0.18, 0.2, TR, s * 2.2, 3.16, 2.1, 10); cyl(g, 0.07, 0.11, 0.42, '#fbf8f2', s * 2.2, 3.36, 2.1, 8);
+    mesh(new THREE.SphereGeometry(0.07, 8, 6), '#fbf8f2', s * 2.2, 3.84, 2.1, g); }
+  box(g, 2.6, 3.4, 0.9, CR, 0, 0, 2.25, 0.05);
+  archAt(g, 1.5, 1.6, '#4a4440', 0, 0.3, 2.72); mesh(new THREE.TorusGeometry(0.75, 0.08, 6, 24, Math.PI), TR, 0, 1.9, 2.74, g);
+  for (const x of [-1.05, 1.05]) cyl(g, 0.09, 0.09, 2.8, '#fbf8f2', x, 0.3, 2.8, 10);
+  mesh(halfDisc(1.3, 0.35), CR, 0, 3.4, 2.25, g); mesh(new THREE.TorusGeometry(1.3, 0.07, 6, 28, Math.PI), TR, 0, 3.4, 2.44, g);
+  box(g, 2.7, 0.16, 1.0, TR, 0, 3.4, 2.25, 0.02);
+  box(g, 3.2, 0.3, 1.0, '#e9dfcd', 0, 0, 3.1, 0.04); }
 // tube houses along the west edge, behind the archive
 { let z = -15.6; const C = ['#efcf86', '#f3e6c9', '#cfe3cf', '#f2c6a8', '#dce6ea', '#f0dcae'];
   while (z < 15.4) {
@@ -755,7 +841,7 @@ let clockHands = [];
     z += w;
   } }
 // near side and promenade: tamarind trees, street-food carts with plastic stools
-for (const [x, z, s] of [[-16.0, 17.4, 1.0], [-6.1, 17.2, 0.95], [-1.4, 23.6, 0.8], [9.0, 17.1, 1.0], [12.8, 23.6, 0.85], [14.9, 17.6, 0.9], [-8.6, -24.3, 0.6], [-3.2, -24.3, 0.6], [3.2, -24.3, 0.6], [8.6, -24.3, 0.6]]) tree('base', x, z, s);
+for (const [x, z, s] of [[-13.6, 17.6, 0.95], [-12.4, 23.4, 0.8], [-1.4, 23.6, 0.8], [9.0, 17.1, 1.0], [12.8, 23.6, 0.85], [14.9, 17.6, 0.9], [-8.6, -24.3, 0.6], [-3.2, -24.3, 0.6], [3.2, -24.3, 0.6], [8.6, -24.3, 0.6]]) tree('base', x, z, s);
 const stools = new Inst(cylGeo(0.13, 0.15, 0.3, 12), mat('#ffffff', 0.6), 24);
 function cart(x, z, ry, n) {
   const g = grp('base', x, z, 0.2, { ry });
@@ -799,12 +885,24 @@ function pad(key, group, cx, cz, w, d, color) {
 }
 const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); box(g, w, 0.215, d, color, 0, 0, 0, 0.03); };
 
-// ================= RESEARCH: a colonial archive (warm tungsten) =================
+// ================= RESEARCH: inside Ben Thanh Market (warm tungsten) =================
 {
-  const G = 'research', C = AREAS.research.color, Y = '#efcf86', WHITE = '#f6efe3', WOOD = N.wood;
+  const G = 'research', C = AREAS.research.color, Y = '#f1dcae', WHITE = '#f6efe3', WOOD = N.wood;
   pad('research', G, -18.9, 0, 8.6, 23.6, C);
   { const g = wallZ(G, -23.08, 0, 23.6, 2.6, 0.26, Y); box(g, 0.4, 0.18, 23.8, WHITE, 0, 2.6, 0, 0.04); }
-  for (const z of [-11.68, 11.68]) { const g = wallX(G, -18.9, z, 8.6, 1.1, 0.24, Y); box(g, 8.7, 0.1, 0.32, WHITE, 0, 1.1, 0, 0.03); }
+  { const g = wallX(G, -18.9, -11.68, 8.6, 1.1, 0.24, Y); box(g, 8.7, 0.1, 0.32, WHITE, 0, 1.1, 0, 0.03); }
+  { const g = grp(G, -23.95, 0, PAD_Y + 2.45); const r = box(g, 1.9, 0.12, 23.9, '#8a958a', 0, 0, 0, 0.03); r.rotation.z = 0.32; }   // the hall's long roof
+  // the south gate, facing the camera: the clock tower over the main arch, arched gates either side, a pavilion at each corner
+  { const g = grp(G, -18.9, 11.68, PAD_Y), DKG = '#4a4440', RF = '#8a958a';
+    box(g, 8.6, 1.9, 0.4, Y, 0, 0, 0, 0.05); box(g, 8.7, 0.16, 0.5, WHITE, 0, 1.9, 0, 0.02); box(g, 8.7, 0.18, 0.46, '#d9c9a8', 0, 0, 0, 0.02);
+    for (const x of [-2.9, -1.75, 1.75, 2.9]) archAt(g, 0.6, 0.75, DKG, x, 0.25, 0.21);
+    for (const s of [-1, 1]) { box(g, 1.0, 2.5, 1.0, Y, s * 3.8, 0, 0, 0.05); box(g, 1.1, 0.14, 1.1, WHITE, s * 3.8, 2.5, 0, 0.02); pyramid(0.66, 0.7, RF, s * 3.8, 2.64, 0, g); archAt(g, 0.36, 0.7, '#6f878c', s * 3.8, 0.9, 0.51); }
+    box(g, 1.9, 4.5, 1.2, Y, 0, 0, 0.15, 0.05);
+    for (const y of [1.9, 3.2]) box(g, 2.0, 0.12, 1.3, WHITE, 0, y, 0.15, 0.02);
+    archAt(g, 0.95, 1.05, DKG, 0, 0.1, 0.77);
+    box(g, 2.05, 0.18, 1.35, WHITE, 0, 4.5, 0.15, 0.02); box(g, 1.3, 0.55, 0.9, Y, 0, 4.68, 0.15, 0.04); pyramid(0.85, 0.75, RF, 0, 5.23, 0.15, g);
+    mesh(disc(0.52, 0.05), DKG, 0, 2.6, 0.77, g); mesh(disc(0.46, 0.06), '#fbf8f2', 0, 2.6, 0.78, g);
+    for (const [len, k] of [[0.4, 1], [0.28, 0]]) { const hand = new THREE.Group(); hand.position.set(0, 2.6, 0.83); g.add(hand); box(hand, 0.05, len, 0.02, '#3a3633', 0, 0, 0, 0.01); clockHands.push([hand, k]); } }
   curbStripe(G, -(CA + ROAD) - 0.09, 0, 0.18, 11, C);
   const warmGlass = glowMat('#ffcf8a', 0.9);
   for (const z of [-10.4, -6.5, -2.5, 2.4, 6.5, 10.4]) {          // arched windows, lit from inside
@@ -828,7 +926,7 @@ const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); b
   // reading tables: paper stacks, open books, a lamp each
   const sheets = new Inst(rbox(0.42, 0.012, 0.3, 0.004), mat('#ffffff', 0.85), 120, false);
   const pages = mat('#fbf7ee', 0.8);
-  for (const tz of [3.6, 8.4]) {
+  for (const tz of [2.4, 7.0]) {
     desk(G, -17.3, tz, 2.6, 1.3, 'z', '#c99c72');
     for (const [dx, dz] of [[-0.35, -0.9], [0.3, -0.35], [-0.3, 0.55], [0.32, 1.0]]) {
       const n = 4 + Math.floor(rng() * 9), x = -17.3 + dx, z = tz + dz;
@@ -843,8 +941,8 @@ const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); b
     lamp(G, '#ffb35c', 9, 6, -17.6, 1.3, tz - 0.4, 0); pool(G, -17.4, tz - 0.2, 2.0, '#ffb35c', 0.42);
     stool(G, -16.35, tz - 0.5); stool(G, -18.25, tz + 0.6);
   }
-  person(G, -16.35, 3.1, { seated: true, ry: -Math.PI / 2, anim: t => ({ x: -16.35, z: 3.1, ry: -Math.PI / 2, nod: -0.03 * (0.5 + 0.5 * wave(t, 2)) }) });
-  person(G, -18.25, 9.0, { seated: true, ry: Math.PI / 2 });
+  person(G, -16.35, 1.9, { seated: true, ry: -Math.PI / 2, anim: t => ({ x: -16.35, z: 1.9, ry: -Math.PI / 2, nod: -0.03 * (0.5 + 0.5 * wave(t, 2)) }) });
+  person(G, -18.25, 7.6, { seated: true, ry: Math.PI / 2 });
   person(G, -18.3, -10.3, { anim: kf([[0, -18.3, -10.3], [0.6, -18.3, -10.3], [2.6, -18.3, -6.5], [3.8, -18.3, -6.5], [5.8, -18.3, -2.4], [7.0, -18.3, -2.4], [9.6, -18.3, -10.3], [10, -18.3, -10.3]]) });
   // floor lamps between the stacks
   for (const z of [-10.6, -2.6]) {
@@ -873,7 +971,7 @@ const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); b
   }
   // loose sheets drifting on closed paths over the tables
   const drift = new Inst(rbox(0.36, 0.006, 0.26, 0.002), mat('#fbf8f2', 0.8), 6, false);
-  [[-17.2, 5.9, 0], [-17.6, 1.2, 0.3], [-16.6, 10.2, 0.55], [-19.3, 6.0, 0.8]].forEach(([cx, cz, ph]) => drift.add(G, cx, 1.4, cz, { anim: (S, t) => {
+  [[-17.2, 4.7, 0], [-17.6, 0.2, 0.3], [-16.6, 8.6, 0.55], [-19.3, 6.0, 0.8]].forEach(([cx, cz, ph]) => drift.add(G, cx, 1.4, cz, { anim: (S, t) => {
     S.x = cx + 0.7 * wave(t, 1, ph); S.z = cz + 0.9 * wave(t, 2, ph + 0.25); S.y = PAD_Y + 1.35 + 0.3 * wave(t, 2, ph);
     S.rx = 0.5 * wave(t, 3, ph); S.rz = 0.4 * wave(t, 2, ph + 0.1); S.ry = TAU * t / D; } }));
 }
@@ -1380,7 +1478,7 @@ function frameCamera() {
   const free = freeRect();
   const pts = [];                                                            // the ground of the block and its river; towers may run off the top
   for (const x of [-29, 25.6]) for (const z of [-31, 25]) for (const y of [-3.2, 1.5]) pts.push(new THREE.Vector3(x, y, z));
-  pts.push(new THREE.Vector3(-20.6, 6.5, 20.6), new THREE.Vector3(3.4, 5.4, 18.4));
+  pts.push(new THREE.Vector3(-7.5, 7.0, 20.2), new THREE.Vector3(4.0, 3.6, 20.6));
   camera.clearViewOffset();
   const bounds = dist => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; placeCamera(BASE_YAW, dist);
     for (const p of pts) { _v.copy(p).project(camera); const px = (_v.x + 1) / 2 * W, py = (1 - _v.y) / 2 * H; x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); }
@@ -1474,7 +1572,7 @@ function draw(T) {
   for (const [hand, k] of clockHands) hand.rotation.z = -TAU * t / D * (k ? 1 : 1 / 12) - (k ? 0 : 1.1);
   poseCamera(T, t);
   drawOverlay(T, t);
-  composer.render();
+  render();
 }
 
 // ================= sizing, export API, autoplay, picking =================
@@ -1616,18 +1714,20 @@ window.selectArea = select;
 window.__debug = { walkInfo };
 let paused = false;
 window.ready = (async () => {
-  await Promise.all([document.fonts.load('600 40px "Space Grotesk"'), document.fonts.load('400 40px "Space Grotesk"'), document.fonts.load('500 40px "IBM Plex Mono"')]).catch(() => {});
-  await document.fonts.ready;
+  const fonts = Promise.all([document.fonts.load('600 40px "Space Grotesk"'), document.fonts.load('400 40px "Space Grotesk"'), document.fonts.load('500 40px "IBM Plex Mono"')]).then(() => document.fonts.ready).catch(() => {});
+  await Promise.race([fonts, new Promise(r => setTimeout(r, EXPORT ? 15000 : 1200))]);
   frameCamera();
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (EXPORT || still) { paused = true; await window.renderAt(INTRO); return; }
+  if (EXPORT || still) { paused = true; await window.renderAt(INTRO); if (EMBED && parent !== window) parent.postMessage({ type: 'studio:ready' }, location.origin); return; }
   let start = null, offset = 0, raf = 0;
   let warned = false;
   // schedule the next frame first, so one bad frame (a slow first load on a phone, say) can't stop the loop
+  let shown = false;
   const tick = now => {
     raf = requestAnimationFrame(tick);
     if (start === null) start = now;
     try { draw(offset + (now - start) / 1000); } catch (err) { if (!warned) { warned = true; console.error(err); } }
+    if (!shown && EMBED && parent !== window) { shown = true; parent.postMessage({ type: 'studio:ready' }, location.origin); }   // the site swaps its placeholder for the map now, not on page load
   };
   raf = requestAnimationFrame(tick);
   document.addEventListener('visibilitychange', () => {

@@ -19,6 +19,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0b0d'/%3E%3Ctext x='50' y='55' font-family='Georgia,serif' font-size='56' font-style='italic' font-weight='600' fill='%23e6a15b' text-anchor='middle' dominant-baseline='central'%3ETT%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>   <!-- three.js, for the map -->
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto;min-height:0}.map{display:none}</style></noscript>
 <style>
@@ -638,9 +639,9 @@
   </div>
   <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
     <div class="dash-empty">
-      <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Tool tests</b><em>Same brief, head to head</em></div>
-      <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>3</b><em>AI systems, directed end to end</em></div>
-      <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>8+</b><em>Years in production</em></div>
+      <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Ben Thanh Market</b><em>Tool tests, same brief, head to head</em></div>
+      <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>By Bitexco</b><em>Systems, directed end to end</em></div>
+      <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>Riverside lot</b><em>Edit &amp; planning</em></div>
     </div>
   </div>
 </header>
@@ -913,9 +914,9 @@
   });
 
   // ----- the map -----
-  // The hero is the live 3D map, its own page in studio/. It loads once that file exists (three
-  // plain cards stand in until then) with a transparent background, so the Ember ombre shows
-  // through. Phones get the lighter version. A click on an area opens that area's work.
+  // The hero is the live 3D map, its own page in studio/, with a transparent background so the
+  // Ember ombre shows through. Three plain cards stand in until it loads. Phones get the lighter
+  // version. A click on an area opens that area's board.
   const studio = document.getElementById('studio');
   const STUDIO_SRC = 'studio/index.html';
   let studioMode = '';
@@ -927,20 +928,18 @@
     if (!f) {
       f = document.createElement('iframe');
       f.title = 'Live 3D map: research, AI work and video production';
-      f.addEventListener('load', () => studio.classList.add('live'));
+      f.addEventListener('load', () => setTimeout(() => studio.classList.add('live'), 8000));   // a fallback; normally the map says when it has drawn
       studio.appendChild(f);
     }
     f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '');
   }
-  fetch(STUDIO_SRC, { method: 'HEAD' })
-    .then(r => { if (r.ok) { mountStudio(); addEventListener('resize', mountStudio); } })
-    .catch(() => {});
   function openArea(area, opener) {
     openBoard(area, opener);
   }
   addEventListener('message', e => {
-    if (e.origin !== location.origin || !e.data || e.data.type !== 'studio:area') return;
-    openArea(e.data.area);
+    if (e.origin !== location.origin || !e.data) return;
+    if (e.data.type === 'studio:ready') studio.classList.add('live');
+    if (e.data.type === 'studio:area') openArea(e.data.area);
   });
   document.querySelectorAll('.tri [data-area]').forEach(b => b.addEventListener('click', () => {
     try { studio.querySelector('iframe')?.contentWindow?.selectArea?.(b.dataset.area, false); } catch {}   // the map highlights it too
@@ -1462,6 +1461,10 @@
     wv.innerHTML = Array.from({ length: 34 }, (_, i) =>
       `<i style="--h:${6 + Math.round(30 * Math.abs(Math.sin(i * .9 + n * 2) * Math.cos(i * .31 + n)))};--d:${(i * 7 % 10) / 10}"></i>`).join('');
   });
+
+  // the map loads straight away: it's the first thing on the page
+  mountStudio();
+  addEventListener('resize', mountStudio);
 
   // scroll bleed: --p runs 0 to 1 across the hero's height
   let bleedQueued = false;
