@@ -21,6 +21,22 @@ followed only part of `copy-rewrite-brief.md`, and from the desktop prototype bu
   "Install the Stack on a Mac" is code-animation output. Headline is "Where does AI belong in
   your video?"
 
+## heyclicky pass (2026-10-25)
+Ethan asked for a pass in the style of heyclicky.com (a mobile recording he shared): Mac windows
+around every video, filenames as captions, a sky panel, a pixel wordmark footer. Take the vibe,
+never their assets. His calls on 2026-10-25:
+- **Theme:** keep the dark Ember look. Only heyclicky's components come in.
+- **Voice:** sentence case and the current voice. No lowercase texting tone.
+- **Hero:** the live 3D loop-street scene (`studio/index.html`, built from `studio-3d-prompt.md`
+  in a separate session) in a Mac window, under the headline. The desktop and every video move
+  to the next section down (`#work`), inside a big Mac window frame.
+- **What I Do:** on a sky panel, with "rates on request". No public prices.
+- **Left out:** testimonial wall, project counter, FAQ, signed founder note.
+
+Order of work, one section at a time with Ethan's sign-off: hero + desktop section, Systems (video
+windows, waveform dots, problem and fix bubbles), What I Do sky panel, footer (desktop icons and a
+pixel wordmark).
+
 ## How we work
 - One section at a time. Ethan signs off before the next one starts (the brief requires this).
 - Show before and after side by side for every copy change.

@@ -12,8 +12,11 @@ then mirror them into the HTML. **Status** says where each section stands in the
 - **Motifs:** film grain, vignette, live running timecode, crop-mark corners, mono spec-sheet labels.
 - Entrance motion is enhancement only (guarded by `prefers-reduced-motion`, `<noscript>` fallback).
   Content is never hidden if JS or animation don't run.
-- **Hero:** a fixed-size desktop on the Ember ombre (teal to amber). Other palettes stay in the
+- **Hero:** the live 3D scene in a Mac window on the Ember ombre (teal to amber). The desktop
+  sits in the Work section right below it, on the same background. Other palettes stay in the
   CSS as `data-bg` options (`teal`, `amber`, `dusk`). No photos.
+- **Windows (from the heyclicky pass):** every framed piece of media sits in a white Mac window
+  with traffic lights and a filename in the title bar, like the desktop's own windows.
 
 ## Nav (fixed)
 Logo "Ethan." · Work (opens Finder) · Systems · Approach · About · Contact · live timecode (teal).
@@ -23,8 +26,11 @@ The page below the hero runs about 480 words (down from about 1,360 on 2026-10-0
 on the desktop: every video in Finder, the full point of view and the full tool tests as notes.
 Say each idea once. Before adding a line, check it isn't already said in another section.
 
-## Hero `#top` · Status: headline picked; background still open
-A fixed 1440x900 desktop screen (390x950 on phones), scaled to fit. See `positioning.md`.
+## Hero `#top` · Status: heyclicky pass, needs sign-off
+Text centered on the Ember background, then the live 3D loop-street scene in a Mac window (title
+bar `pipeline.live`). The scene loads from `studio/index.html?embed=1&w=1440&h=900`
+(`?embed=1&quality=low&w=1080&h=1350` on phones) only when that file exists; until then the window
+shows a flat map of the same loop street. Copy unchanged from the 2026-10-08 hero:
 - Eyebrow: "Trung (Ethan) Truong · Creative Direction & Production Systems"
 - H1: "Where does **AI** belong in your video?" + "AI has a defined place in it. The **standard**
   doesn't move." Picked 2026-10-08 from six neutral options: the headline from option 3, the
@@ -33,8 +39,16 @@ A fixed 1440x900 desktop screen (390x950 on phones), scaled to fit. See `positio
 - Sub: "Script to final master, end to end."
 - CTAs: "Browse the work" (opens Finder) · "Get in touch"
 - Status: "Ho Chi Minh City · Open to senior roles and select projects"
-- Desktop: 4 loose videos, 2 notes (Tool tests, How I think), 6 folders, dock (Work, About,
-  Contact, LinkedIn, Email).
+- Window caption: "One loop: research, AI work, video production."
+
+## 00 — Work `#work` · Status: heyclicky pass, needs sign-off
+The desktop moved here from the hero on 2026-10-25: a fixed 1440x900 screen (390x560 on phones)
+on the Ember background, inside a big Mac window frame titled "Desktop", scaled to the frame's
+width. Label "00 — Work". H2: "Every video lives on this desktop." Aside: "Open a folder / AI
+Systems first".
+- Desktop: 5 loose videos, 2 notes (Tool tests, How I think), 5 folders, dock (Work, About,
+  Contact, LinkedIn, Email), and a sticky note: "Every video is here, sorted into folders. Start
+  with AI Systems." (hidden on phones).
 
 ## Stat strip · Status: done
 8+ Years in production · 10+ Team built & directed · Full Pipeline ownership · Both AI & real

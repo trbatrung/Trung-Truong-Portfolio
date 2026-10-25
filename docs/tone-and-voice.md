@@ -35,6 +35,8 @@ take away is about **decisions and standards**, not about being good with two ki
 - Uppercase mono micro-labels for eyebrows, tags and metadata.
 - Outcome lines in amber, introduced by an arrow.
 - Final deliverable is the **final master**, not the "final cut".
+- Window title bars show a filename, lowercase mono, e.g. `pipeline.live`, `founder-intro.mov`.
+  Filenames are the only lowercase copy on the site (heyclicky pass, 2026-10-25).
 
 ## Phrase bank (still approved)
 - "Slop or salvation. Both are wrong."
