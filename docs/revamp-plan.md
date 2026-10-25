@@ -46,6 +46,11 @@ never their assets. His calls on 2026-10-25:
   - The **Independence Palace** and the **Ba Son Bridge** are new.
   - The landmarks on the near edge face the camera.
   - Bitexco is unchanged ("perfect").
+  - The plain row next to Research became **Nguyen Hue walking street**: paving, lanterns, the
+    fountain, people strolling, and colorful shophouses.
+  - Its eye-catcher is the café apartment block at **42 Nguyen Hue**, at the river end facing the
+    camera. Every balcony is its own lit café. (Ethan: "have apartment 42 as the main eye catcher")
+  - The houses across the river use the same shophouse builder.
   - Phones load less: the minified three.js, no ambient-occlusion files, and no waiting for fonts.
 - **Hero (revised again, 2026-10-25): no more desktop.** "the whole map thing should be the hero".
   - The 3D map fills the first screen, with the Ember background showing through it. The

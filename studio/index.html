@@ -547,15 +547,15 @@ function kf(keys) {   // [[t, x, z], ...] over one period (a beat, or the full l
   };
 }
 // tamarind trees: wide, low canopies in deep green
-const trunks = new Inst(cylGeo(0.1, 0.15, 1), mat('#8c7158'), 80);
-const crowns = new Inst(new THREE.IcosahedronGeometry(0.85, 1), mat('#ffffff', 0.85), 80);
+const trunks = new Inst(cylGeo(0.1, 0.15, 1), mat('#8c7158'), 140);
+const crowns = new Inst(new THREE.IcosahedronGeometry(0.85, 1), mat('#ffffff', 0.85), 140);
 const LEAVES = ['#7f9c6c', '#728f61', '#8aa778', '#6c8a5c'];
 function tree(group, x, z, s = 1, y0 = 0) {
   trunks.add(group, x, y0 + 0.5 * s, z, { sx: s, sy: s, sz: s });
   crowns.add(group, x, y0 + s * 1.35, z, { sx: s * 1.35, sy: s * 0.8, sz: s * 1.35, color: pick(LEAVES), ry: rr(0, TAU) });
 }
 const glowGlass = new THREE.Color('#5d6a73'), glowLit = new THREE.Color('#ffd9a6');
-const windows = new Inst(rbox(0.5, 0.66, 0.08, 0.03), glowMat('#ffffff', 0.6), 260, false);
+const windows = new Inst(rbox(0.5, 0.66, 0.08, 0.03), glowMat('#ffffff', 0.6), 320, false);
 function windowAt(group, x, y, z, ry, sx = 1) {
   const k = 1 + Math.floor(rng() * 2), ph = rng(), duty = rr(0.45, 0.9);
   windows.add(group, x, y, z, { ry, sx, color: '#5d6a73', anim: (S, t) => { S.c = fract(k * t / D + ph) < duty ? glowLit : glowGlass; } });
@@ -719,11 +719,39 @@ for (let j = 0; j < 2; j++) {
   for (const [x, z, h] of [[0, 0, 15.5], [-0.95, -0.3, 12.5], [0.95, 0.25, 13.6], [-0.3, 0.95, 11.0], [0.4, -0.95, 10.0]]) box(g, 1.25, h, 1.25, glass, x, 0.6, z, 0.12);
   box(g, 0.8, 1.2, 0.8, glass, 0, 16.1, 0, 0.1); pyramid(0.5, 1.4, '#c9d3d6', 0, 17.3, 0, g);
   for (let y = 2; y < 15; y += 1.6) box(g, 1.3, 0.05, 1.3, '#dce4e6', 0, 0.6 + y, 0, 0.02); }
-// far bank: low riverside houses and trees
-for (const [x, w, h, c] of [[-24.5, 3.2, 1.8, '#e9dcc0'], [-20.6, 3.6, 2.4, '#d9e3d2'], [-16.5, 3.0, 1.6, '#f1d9b8'], [-12.6, 3.8, 2.8, '#e4d6c6'], [-4.2, 3.4, 1.7, '#dde3e6'], [0.2, 3.0, 2.3, '#f0d6c0'], [21.5, 3.4, 1.9, '#e6dccb']]) {
-  const g = grp('base', x, -33.4); box(g, w, h, 3.4, c, 0, 0, 0, 0.1); box(g, w + 0.15, 0.14, 3.55, N.light, 0, h, 0, 0.04);
-  for (let i = 0; i < Math.floor(w / 1.1); i++) windowAt('base', x - w / 2 + 0.55 + i * 1.1, h * 0.55, -33.4 + 1.72, 0, 0.8);
+// Saigon tube houses (nhà ống): narrow and tall, painted bright, a balcony on every floor with an iron railing and
+// plants (some bougainvillea), a shop sign and shutter on the ground floor, AC units, a steel water tank on the roof.
+// Built facing +z, then turned (ry). The repeated parts are instanced.
+const TH = {
+  slab: new Inst(rbox(1, 0.06, 0.5, 0.02), mat('#ffffff', 0.7), 120), rail: new Inst(rbox(1, 0.3, 0.03, 0.01), mat('#ffffff', 0.6), 120, false),
+  sign: new Inst(rbox(1, 0.34, 0.07, 0.02), mat('#ffffff', 0.55), 40), shutter: new Inst(rbox(1, 0.95, 0.04, 0.01), mat('#ffffff', 0.7), 40, false),
+  parapet: new Inst(rbox(1, 0.36, 0.16, 0.03), mat('#ffffff', 0.7), 40), ac: new Inst(rbox(0.34, 0.22, 0.2, 0.03), mat('#ffffff', 0.6), 60),
+  tank: new Inst(cylGeo(0.26, 0.26, 0.6, 12), mat('#ffffff', 0.35, 0.4), 40), plant: new Inst(new THREE.SphereGeometry(0.15, 8, 6), mat('#ffffff', 0.85), 320),
+};
+const HOUSE = ['#f2c94c', '#7fc8b8', '#f4a7a3', '#a7d3a6', '#f6e7c1', '#e9a46b', '#9ec5e8', '#f7d9a8', '#e8b4d0'];
+const SIGN = ['#d64541', '#2f6db5', '#f2c94c', '#1f8a70', '#e67e22', '#ffffff'], LEAF = ['#5e8f4e', '#6fa35a', '#4f7d45'];
+function tubeHouse(cx, cz, ry, w, d, floors) {
+  const c = pick(HOUSE), FH = 1.15, H = floors * FH + 0.5, f = d / 2, g = grp('base', cx, cz, 0, { ry });
+  const add = (inst, lx, y, lz, o = {}) => inst.add('base', cx + lx * Math.cos(ry) + lz * Math.sin(ry), y, cz - lx * Math.sin(ry) + lz * Math.cos(ry), { ...o, ry });
+  box(g, w - 0.06, H, d, c, 0, 0, 0, 0.06); box(g, w, 0.1, d + 0.02, N.light, 0, H, 0, 0.03);
+  add(TH.parapet, 0, H + 0.18, f - 0.08, { sx: w - 0.06, color: rng() < 0.5 ? '#fbf8f2' : c });
+  if (rng() < 0.35) gable(g, w * 0.6, 0.45, 0.16, rng() < 0.5 ? '#fbf8f2' : c, 0, H + 0.36, f - 0.08);
+  add(TH.shutter, 0, 0.55, f + 0.02, { sx: w * 0.8, color: rng() < 0.5 ? '#b9b8b2' : '#5a5650' });
+  add(TH.sign, 0, 1.28, f + 0.05, { sx: w * 0.92, color: pick(SIGN) });
+  for (let i = 1; i < floors; i++) {
+    const y = i * FH + 0.25, cx2 = cx + f * Math.sin(ry), cz2 = cz + f * Math.cos(ry);
+    add(TH.slab, 0, y, f + 0.22, { sx: w * 0.9, color: '#f4efe6' });
+    add(TH.rail, 0, y + 0.2, f + 0.45, { sx: w * 0.9, color: rng() < 0.6 ? '#3a3633' : '#f8f4ed' });
+    windowAt('base', cx2 + 0.02 * Math.sin(ry), y + 0.5, cz2 + 0.02 * Math.cos(ry), ry, 1.3);
+    for (let k = 0, n = Math.floor(rng() * 3); k < n; k++)
+      add(TH.plant, rr(-w / 2 + 0.3, w / 2 - 0.3), y + 0.16, f + 0.3, { sx: rr(0.8, 1.4), sy: rr(0.8, 1.3), sz: rr(0.8, 1.4), color: rng() < 0.25 ? '#d94f8a' : pick(LEAF) });
+    if (rng() < 0.4) add(TH.ac, (rng() < 0.5 ? -1 : 1) * (w / 2 - 0.32), y + 0.62, f + 0.1, { color: '#f1eee8' });
+  }
+  add(TH.tank, rr(-w / 4, w / 4), H + 0.4, rr(-d / 4, 0), { color: '#d4dadd' });
+  if (rng() < 0.5) for (let k = 0; k < 3; k++) add(TH.plant, rr(-w / 3, w / 3), H + 0.2, rr(-d / 3, d / 4), { color: pick(LEAF) });
 }
+// far bank: riverside tube houses and trees
+for (const [x, w, n] of [[-24.5, 3.2, 2], [-20.6, 3.6, 3], [-16.5, 3.0, 2], [-12.6, 3.8, 3], [-4.2, 3.4, 2], [0.2, 3.0, 3], [21.5, 3.4, 2]]) tubeHouse(x, -33.4, 0, w, 3.4, n);
 for (const x of [-26.5, -22.5, -18.5, -14.6, -10.3, -2.0, 2.4, 5.0, 19.2, 23.8]) tree('base', x + rr(-0.3, 0.3), -31.6, rr(0.55, 0.8));
 
 // Bitexco, behind AI work: tapered tower, helipad out the side near the top
@@ -830,16 +858,51 @@ for (let i = 0; i < 26; i++) fins.add('base', -20.4 - 3.9 + i * 0.312, 1.75, 22.
   mesh(halfDisc(1.3, 0.35), CR, 0, 3.4, 2.25, g); mesh(new THREE.TorusGeometry(1.3, 0.07, 6, 28, Math.PI), TR, 0, 3.4, 2.44, g);
   box(g, 2.7, 0.16, 1.0, TR, 0, 3.4, 2.25, 0.02);
   box(g, 3.2, 0.3, 1.0, '#e9dfcd', 0, 0, 3.1, 0.04); }
-// tube houses along the west edge, behind the archive
-{ let z = -15.6; const C = ['#efcf86', '#f3e6c9', '#cfe3cf', '#f2c6a8', '#dce6ea', '#f0dcae'];
-  while (z < 15.4) {
-    const w = rr(2.5, 3.3), h = rr(3.0, 5.6), c = pick(C), cz = z + w / 2, g = grp('base', -26.7, cz);
-    box(g, 3.8, h, w - 0.08, c, 0, 0, 0, 0.08); box(g, 3.9, 0.14, w + 0.02, N.light, 0, h, 0, 0.03);
-    for (let f = 1.1; f < h - 0.6; f += 1.25) { box(g, 0.5, 0.08, w * 0.78, '#f4efe6', 2.15, f - 0.12, 0, 0.02); box(g, 0.04, 0.4, w * 0.78, '#6b645d', 2.38, f - 0.04, 0, 0.01); windowAt('base', -26.7 + 1.92, f + 0.35, cz, Math.PI / 2, 0.9); }
-    cyl(g, 0.32, 0.32, 0.5, rng() < 0.5 ? '#cfd8dc' : '#e7e1d8', rr(-1, 1), h + 0.14, rr(-0.4, 0.4), 14);
-    if (rng() < 0.4) tree('base', -26.7 + rr(-1, 0.5), cz, 0.45, h + 0.14);
-    z += w;
-  } }
+// Nguyen Hue walking street, along the market's west wall: granite paving, lanterns, planters, the fountain, people
+// strolling, a balloon seller, shophouses on its west side. At its river end, looking down the whole street at the
+// camera, the eye-catcher: the café apartment block at 42 Nguyen Hue, every balcony a different café or shop, each
+// painted and lit its own color.
+const NH = -24.95;
+{ const g = grp('base', NH, -4.6);
+  box(g, 3.5, 0.06, 32.0, '#ebe5da', 0, 0, 4.2, 0.03);
+  box(g, 2.0, 0.18, 2.6, '#f4efe6', -0.4, 0.06, 14.6, 0.06); box(g, 1.7, 0.05, 2.3, '#8fc3d1', -0.4, 0.2, 14.6, 0.03);
+  for (const z of [-6.0, 1.2, 8.4]) box(g, 0.8, 0.32, 0.8, '#d9d1c4', 0, 0.06, z, 0.05); }
+for (const z of [-10.6, -3.4, 3.8]) tree('base', NH, z, 0.5, 0.38);
+const jets = new Inst(cylGeo(0.035, 0.05, 1, 6), new THREE.MeshStandardMaterial({ color: '#e8f6fb', roughness: 0.2, transparent: true, opacity: 0.75 }), 9, false);
+for (let i = 0; i < 9; i++) { const x = NH - 0.4 + ((i % 3) - 1) * 0.5, z = 10.0 + (Math.floor(i / 3) - 1) * 0.7, ph = i / 9, k = 1 + (i % 2);
+  jets.add('base', x, 0.5, z, { anim: (S, t) => { const hgt = 0.4 + 0.9 * (0.5 + 0.5 * wave(t, k, ph)); S.sy = hgt; S.y = 0.25 + hgt / 2; } }); }
+const nhPost = new Inst(cylGeo(0.035, 0.05, 1.5, 8), mat(N.dark), 20), nhLamp = new Inst(new THREE.SphereGeometry(0.12, 10, 8), glowMat('#ffe2b0', 1.2), 20, false);
+for (let z = -14.5; z < 13; z += 4.2) for (const dx of [-1.55, 1.55]) { nhPost.add('base', NH + dx, 0.81, z); nhLamp.add('base', NH + dx, 1.62, z); }
+for (const [x0, z0, z1, ph] of [[NH - 0.9, -14, 12, 0], [NH - 0.4, 12, -13, 0.2], [NH - 0.2, -10, 8, 0.45], [NH - 1.0, 4, -14, 0.65], [NH - 1.2, 10, -6, 0.8], [NH - 0.6, -15, 2, 0.33]]) {
+  const K = kf([[0, x0, z0], [26, x0, z1], [30, x0, z1], [56, x0, z0], [60, x0, z0]]);
+  person('base', x0, z0, { floor: 0.06, anim: (t, tf) => K(fract(tf / LOOP + ph) * LOOP) }); }
+person('base', NH - 0.2, 1.6, { floor: 0.06, ry: -Math.PI / 2 });                      // the balloon seller
+{ const g = grp('base', NH - 0.48, 1.6, 0.06); cyl(g, 0.015, 0.015, 1.6, '#f4efe6', 0, 0, 0, 6);
+  ['#e8573f', '#f2c94c', '#57cbbb', '#4f9fe6', '#e8b4d0', '#ffffff', '#e6a15b'].forEach((c, i) => {
+    const a = i / 7 * TAU, m = mesh(new THREE.SphereGeometry(0.17, 10, 8), c, 0.22 * Math.cos(a), 1.85 + 0.12 * Math.sin(3 * a), 0.22 * Math.sin(a), g); m.scale.y = 1.15; }); }
+// the west side: shophouses
+for (const [z0, z1] of [[-15.6, 15.4]]) { let z = z0; while (z < z1 - 1.5) { const w = Math.min(rr(2.2, 3.0), z1 - z); tubeHouse(-27.85, z + w / 2, Math.PI / 2, w, 2.3, 2 + Math.floor(rng() * 3)); z += w; } }
+// 42 Nguyen Hue: an old ten-storey concrete block, four bays wide, every balcony its own café or shop: a lit shopfront,
+// a striped awning, a neon sign. Banner signs run down its street side.
+const CAFE = ['#e8573f', '#f2c94c', '#57cbbb', '#2f6db5', '#e8b4d0', '#1f8a70', '#f39c4a', '#9b59b6', '#ffffff', '#d64541', '#7fc8b8', '#3a3633'];
+const NEON = ['#ffffff', '#ffe066', '#ff7a90', '#7ef0e0', '#ffb35c', '#9fd0ff'];
+const cafeBack = new Inst(rbox(1, 0.66, 0.04, 0.01), glowMat('#ffffff', 0.45), 44, false), cafeSign = new Inst(rbox(1, 0.14, 0.06, 0.02), glowMat('#ffffff', 1.1), 44, false);
+const awning = new Inst(rbox(1, 0.05, 0.36, 0.01), mat('#ffffff', 0.7), 44, false), banner = new Inst(rbox(0.06, 1, 0.34, 0.02), glowMat('#ffffff', 0.9), 8, false);
+{ const cx = -26.75, cz = -17.6, W = 4.5, D = 2.6, FL = 10, FH = 0.95, H = FL * FH + 0.6, f = D / 2;
+  const g = grp('base', cx, cz);
+  const add = (inst, lx, y, lz, o = {}) => inst.add('base', cx + lx, y, cz + lz, o);
+  box(g, W, H, D - 0.3, '#ddd8ce', 0, 0, -0.15, 0.06); box(g, W + 0.1, 0.14, D, '#cfc9be', 0, H, 0, 0.03);
+  for (const lx of [-W / 2 + 0.06, -W / 4, 0, W / 4, W / 2 - 0.06]) box(g, 0.1, H, 0.12, '#ebe7df', lx, 0, f - 0.2, 0.02);
+  for (let i = 0; i < FL; i++) { const y = i * FH + 0.5;
+    if (i) add(TH.slab, 0, y, f - 0.12, { sx: W, color: '#ece8e0' });
+    for (let j = 0; j < 4; j++) { const lx = -W / 2 + W / 8 + j * W / 4, c = pick(CAFE);
+      add(cafeBack, lx, y + 0.38, f - 0.24, { sx: W / 4 - 0.16, color: c });
+      add(awning, lx, y + 0.82, f - 0.02, { sx: W / 4 - 0.14, rx: 0.35, color: pick(CAFE) });
+      add(cafeSign, lx + rr(-0.15, 0.15), y + 0.62, f + 0.05, { sx: rr(0.4, 0.85), color: pick(NEON) });
+      if (i) add(TH.rail, lx, y + 0.18, f + 0.12, { sx: W / 4 - 0.16, color: rng() < 0.7 ? '#f8f4ed' : '#3a3633' });
+      if (i && rng() < 0.55) add(TH.plant, lx + rr(-0.35, 0.35), y + 0.16, f + 0.02, { color: rng() < 0.3 ? '#d94f8a' : pick(LEAF) }); } }
+  for (let k = 0; k < 6; k++) add(banner, W / 2 + 0.04, 1.6 + k * 1.45, f - 0.5 - (k % 2) * 0.9, { sy: rr(0.9, 1.3), color: pick(NEON) });
+  for (const [lx, lz] of [[-1.4, -0.4], [0.2, 0.3], [1.5, -0.2]]) add(TH.tank, lx, H + 0.44, lz, { color: '#d4dadd' }); }
 // near side and promenade: tamarind trees, street-food carts with plastic stools
 for (const [x, z, s] of [[-13.6, 17.6, 0.95], [-12.4, 23.4, 0.8], [-1.4, 23.6, 0.8], [9.0, 17.1, 1.0], [12.8, 23.6, 0.85], [14.9, 17.6, 0.9], [-8.6, -24.3, 0.6], [-3.2, -24.3, 0.6], [3.2, -24.3, 0.6], [8.6, -24.3, 0.6]]) tree('base', x, z, s);
 const stools = new Inst(cylGeo(0.13, 0.15, 0.3, 12), mat('#ffffff', 0.6), 24);
@@ -891,7 +954,6 @@ const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); b
   pad('research', G, -18.9, 0, 8.6, 23.6, C);
   { const g = wallZ(G, -23.08, 0, 23.6, 2.6, 0.26, Y); box(g, 0.4, 0.18, 23.8, WHITE, 0, 2.6, 0, 0.04); }
   { const g = wallX(G, -18.9, -11.68, 8.6, 1.1, 0.24, Y); box(g, 8.7, 0.1, 0.32, WHITE, 0, 1.1, 0, 0.03); }
-  { const g = grp(G, -23.95, 0, PAD_Y + 2.45); const r = box(g, 1.9, 0.12, 23.9, '#8a958a', 0, 0, 0, 0.03); r.rotation.z = 0.32; }   // the hall's long roof
   // the south gate, facing the camera: the clock tower over the main arch, arched gates either side, a pavilion at each corner
   { const g = grp(G, -18.9, 11.68, PAD_Y), DKG = '#4a4440', RF = '#8a958a';
     box(g, 8.6, 1.9, 0.4, Y, 0, 0, 0, 0.05); box(g, 8.7, 0.16, 0.5, WHITE, 0, 1.9, 0, 0.02); box(g, 8.7, 0.18, 0.46, '#d9c9a8', 0, 0, 0, 0.02);
