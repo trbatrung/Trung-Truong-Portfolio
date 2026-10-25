@@ -41,6 +41,12 @@ them, not sum them all in 1".
      final." Answer: "So every job starts from a structured brief. Now the first pass lands
      close." (the verified "what changed" line). Button: See the systems.
   The asks are framings of what a visitor might ask, not quotes from clients.
+- **Diagnosis (2026-10-26, Ethan: "another angle of me ... dont have to overdo it").** One line under
+  the Research skill, "I also write Diagnosis ↗, independent economic analysis of Vietnam.", and
+  a `diagnosis ↗` file on the Research board, both linking to https://diagnosis-omega.vercel.app/.
+  **Open:** Diagnosis is published without a personal name (its About page says so) and covers
+  politics where it shapes the economy and lists share positions. Linking it from the named
+  portfolio makes it his publicly. Ethan to confirm before this goes live.
 - **Boards replace Finder.** Each area has its own endless desktop on the Ember wallpaper
   (`research.board`, `ai-work.board`, `production.board`): drag to move, scroll or pinch to zoom,
   Fit to reframe, and the three-part control on the board switches area. Videos are files with

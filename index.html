@@ -508,6 +508,9 @@
   .sk-go::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
   .sk-go:hover { background: rgba(255,255,255,.16); transform: translateY(-2px); }
   .sk-go:active { transform: scale(.96); transition-duration: .12s; }
+  .sk-aside { margin-top: .9rem; font-size: .95rem; line-height: 1.55; color: var(--ink-dim); max-width: 30em; }
+  .sk-aside a { color: var(--ink); text-decoration: underline; text-decoration-color: rgba(79,159,230,.6); text-underline-offset: 4px; }
+  .sk-aside a:hover { text-decoration-color: #4f9fe6; }
   .sk-demo { min-width: 0; }
   .mac-len { margin-left: auto; font: 500 11.5px var(--mono); color: #aaa; }
   .sk-media { position: relative; aspect-ratio: 16/9; background: #111; overflow: hidden; }
@@ -749,6 +752,7 @@
         <div class="sk-tag mono"><i></i>01 · Research</div>
         <h3>Shape the idea</h3>
         <p class="sk-line">What the work is for, before anything gets made. Then the right tool, tested head to head.</p>
+        <p class="sk-aside">I also write <a href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener">Diagnosis ↗</a>, independent economic analysis of Vietnam.</p>
         <button type="button" class="sk-go" data-area="research">See the tool tests ↗</button>
       </div>
       <div class="sk-demo">
@@ -1201,6 +1205,7 @@
   function boardGroups(area) {
     if (area === 'research') return [
       { items: [['doc', `<button type="button" class="bd-file doc" data-note="tests"><span class="th">${DOC_SVG}</span><span class="lb">tool-tests.md</span></button>`],
+                ['doc', `<a class="bd-file doc" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener" draggable="false"><span class="th">${DOC_SVG}</span><span class="lb">diagnosis ↗</span></a>`],
                 ['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`]] },
       { items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
     ];
