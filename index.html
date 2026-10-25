@@ -311,13 +311,14 @@
   .bd-file:hover .lb, .bd-file:focus-visible .lb { background: #0a5cd6; text-shadow: none; }
   .bd-file:focus-visible, .bd-sticky:focus-visible { outline: none; }
   /* Diagnosis: one card, its wordmark on its own cream */
-  .bd-diag { width: 360px; height: 236px; display: flex; flex-direction: column; gap: 8px; padding: 22px 24px 20px; border-radius: 12px; background: #faf6f0; color: #111; cursor: pointer;
+  .bd-diag { width: 360px; height: 236px; display: flex; flex-direction: column; gap: 8px; padding: 20px 24px 20px; border-radius: 12px; border-top: 4px solid #c0392b; background: #faf6f0; color: #111; cursor: pointer;
     box-shadow: 0 16px 34px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2); transition: transform .35s var(--spring); }
   .bd-diag:hover, .bd-diag:focus-visible { transform: translateY(-3px) scale(1.02); outline: none; }
   .bd-diag .wm { font: 500 34px/1 'Newsreader', Georgia, serif; letter-spacing: -.01em; }
+  .bd-diag .wm::after { content: '.'; color: #c0392b; }   /* Diagnosis's red: the site's accent */
   .bd-diag .tl { font: italic 400 17px/1.3 'Newsreader', Georgia, serif; color: #3a332c; }
   .bd-diag .cp { font-size: 13px; line-height: 1.5; color: #6f665d; }
-  .bd-diag .go { margin-top: auto; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #111; }
+  .bd-diag .go { margin-top: auto; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #c0392b; }
   /* the tool tests as sticky notes */
   .bd-sticky { width: 168px; height: 150px; padding: 14px 14px 12px; border: 0; border-radius: 3px; background: #f6d36b; color: #2a2316; text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 6px; transform: rotate(var(--r, 0deg)); box-shadow: 0 12px 24px rgba(0,0,0,.3); transition: transform .35s var(--spring); }
   .bd-sticky.no { background: #f2a46a; }
@@ -526,10 +527,10 @@
   .dg-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.6rem; }
   .dg-links .sk-go { margin-top: 0; }
   .dg-site { background: #faf6f0; color: #1d1a17; padding: 18px 20px 8px; }
-  .dg-mast { font: 500 24px 'Newsreader', Georgia, serif; color: #111; padding-bottom: 12px; border-bottom: 1px solid #e6ddd0; margin-bottom: 14px; }
+  .dg-mast { font: 500 24px 'Newsreader', Georgia, serif; color: #111; border-top: 3px solid #c0392b; padding-top: 10px; padding-bottom: 12px; border-bottom: 1px solid #e6ddd0; margin-bottom: 14px; }
   .dg-lead { display: block; }
   .dg-lead img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #e9e2d6; }
-  .dg-k { display: block; margin-top: 10px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #9e4434; }
+  .dg-k { display: block; margin-top: 10px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #c0392b; }
   .dg-lead b { display: block; margin-top: 4px; font: 500 20px/1.25 var(--serif); }
   .dg-d { display: block; margin-top: 6px; font-size: 12px; color: #8a8178; }
   .dg-list { list-style: none; margin-top: 14px; border-top: 1px solid #e6ddd0; }
@@ -853,7 +854,7 @@
     <div class="sec-head reveal">
       <div>
         <div class="idx fname">diagnosis.md</div>
-        <h2>Diagnosis.</h2>
+        <h2>Diagnosis<span style="color:#c0392b">.</span></h2>
       </div>
       <div class="aside">Independent<br>economic analysis</div>
     </div>
@@ -863,8 +864,8 @@
         <p class="dg-line">My independent analysis of Vietnam's economy. Each piece takes the official claim seriously, then tests it against the data, against how the data was produced, and against what people inside the economy see.</p>
         <p class="dg-meta mono">Long reads since April 2026 · Ho Chi Minh City</p>
         <div class="dg-links">
-          <a class="sk-go" style="--c:#c9503a" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener">Read Diagnosis ↗</a>
-          <a class="sk-go" style="--c:#e8573f" href="https://www.youtube.com/@DiagnosisVietnam" target="_blank" rel="noopener">YouTube ↗</a>
+          <a class="sk-go" style="--c:#c0392b" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener">Read Diagnosis ↗</a>
+          <a class="sk-go" style="--c:#c0392b" href="https://www.youtube.com/@DiagnosisVietnam" target="_blank" rel="noopener">YouTube ↗</a>
         </div>
       </div>
       <div class="mac">
