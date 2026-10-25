@@ -100,8 +100,23 @@
   #ui.compact .li .t small { font-size: 1.05rem; }
   #ui.compact .pill { padding: .55rem 1rem; font-size: 1.05rem; gap: .6rem; }
   #ui.compact .pill .dot { width: .75rem; height: .75rem; }
-  .mini { display: flex; gap: .4rem; align-items: center; font-size: 1.05rem; color: var(--dim); }
-  .mini i { width: .7rem; height: .7rem; border-radius: 50%; background: rgba(26,26,26,.15); }
+  /* the compact side panel: a stack of glass cards, one per area. Scroll, drag or use the arrow keys to flip */
+  .stack { position: absolute; right: 1rem; top: 1rem; width: 26rem; height: 27rem; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; outline: none; }
+  .stack .card { position: absolute; left: 0; right: 0; top: 0; height: 24.6rem; box-sizing: border-box; padding: 1.4rem 1.5rem 1.3rem; display: flex; flex-direction: column; gap: .8rem;
+    border-radius: 1.4rem; background: rgba(255,255,255,.7); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
+    border: 1px solid rgba(255,255,255,.95); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 1.2rem 3rem rgba(20,16,12,.22);
+    transform-origin: 50% 100%; transition: transform .5s cubic-bezier(.34,1.56,.64,1), opacity .35s; cursor: pointer; }
+  .stack .card > * { transition: opacity .25s; }
+  .stack .card:not(.front) > * { opacity: 0; }
+  .stack .card.front { cursor: grab; }
+  .stack .hd { display: flex; align-items: center; gap: .8rem; }
+  .stack .hd b { font-size: 1.6rem; font-weight: 600; letter-spacing: -.02em; }
+  .stack .hd .n { margin-left: auto; font: 500 1rem 'IBM Plex Mono', monospace; color: var(--dim); }
+  .stack .kv { display: flex; align-items: baseline; gap: .7rem; }
+  .stack .kv .v { font: 500 3rem/1 'IBM Plex Mono', monospace; letter-spacing: -.04em; }
+  .stack .kv .l { font-size: 1rem; color: var(--dim); }
+  .stack .open { margin-top: auto; align-self: flex-start; border: 0; border-radius: 99rem; padding: .65rem 1.1rem; background: #1f1d1b; color: #fff; font-size: 1rem; cursor: pointer; }
+  .stack .open:hover { background: #000; }
 </style>
 <script type="importmap">
 { "imports": {
@@ -1071,12 +1086,13 @@ const motoBody = new Inst(rbox(0.95, 0.3, 0.26, 0.1), mat('#ffffff', 0.5), 40), 
 const riders = new Inst(rbox(0.3, 0.46, 0.3, 0.1), mat('#ffffff', 0.8), 40), helmets = new Inst(new THREE.SphereGeometry(0.15, 12, 10), mat('#ffffff', 0.4), 40);
 const VEH = [];   // every vehicle's position function, so walkers can wait for a gap before crossing
 const MOTO_C = ['#2a2725', '#c9443a', '#3f7fd0', '#f4efe6', '#6b645d', '#d9a441'], HELM = ['#f4efe6', '#e8573f', '#3f7fd0', '#e6a15b', '#57cbbb', '#2a2725'];
-for (const [off, n, k] of [[-1.75, 6, 1], [0.95, 8, 1], [1.7, 7, 1]]) {
+// k = laps per full 60s loop. It was 6 (one per beat); 4 and 5 bring traffic to about 75%, in whole laps so the loop stays seamless
+for (const [off, n, k] of [[-1.75, 6, 4], [0.95, 8, 5], [1.7, 7, 5]]) {
   const lp = offLoop(off), ph0 = rng();
   for (let i = 0; i < n; i++) {
-    const ph = ph0 + i / n, wob = rng(), mc = pick(MOTO_C), at = t => { const p = lp.at(fract(k * t / D + ph) * lp.L), w = 0.08 * wave(t, 3, wob); return { x: p.x + p.nx * w, z: p.z + p.nz * w, h: p.h }; };
+    const ph = ph0 + i / n, wob = rng(), mc = pick(MOTO_C), at = (t, tf) => { const p = lp.at(fract(k * tf / LOOP + ph) * lp.L), w = 0.08 * wave(t, 3, wob); return { x: p.x + p.nx * w, z: p.z + p.nz * w, h: p.h }; };
     VEH.push({ at, along: 1.5 });
-    const p = at(0), part = (inst, y, back, color) => inst.add('base', p.x, y, p.z, { color, anim: (S, t) => { const q = at(t); S.x = q.x - Math.cos(q.h) * back; S.z = q.z + Math.sin(q.h) * back; S.ry = q.h; } });
+    const p = at(0, 0), part = (inst, y, back, color) => inst.add('base', p.x, y, p.z, { color, anim: (S, t, tf) => { const q = at(t, tf); S.x = q.x - Math.cos(q.h) * back; S.z = q.z + Math.sin(q.h) * back; S.ry = q.h; } });
     part(motoBase, 0.16, 0, '#2a2725'); part(motoBody, 0.38, 0, mc); part(riders, 0.78, 0.12, pick(SHIRTS)); part(helmets, 1.1, 0.1, pick(HELM));
   }
 }
@@ -1089,10 +1105,10 @@ function car(color, van) {
   return g;
 }
 const carLane = offLoop(-0.45), CARS = [['#f4efe6', false], ['#e6a15b', true], ['#57cbbb', false]];
-CARS.forEach(([c, van], i) => { const g = car(c, van), at = t => carLane.at(fract(t / D + i / CARS.length + 0.12) * carLane.L), p = at(0);
-  VEH.push({ at, along: 3.2 });
+CARS.forEach(([c, van], i) => { const g = car(c, van), at = tf => carLane.at(fract(4 * tf / LOOP + i / CARS.length + 0.12) * carLane.L), p = at(0);   // 4 laps per loop
+  VEH.push({ at: (t, tf) => at(tf), along: 3.2 });
   g.position.set(p.x, 0.06, p.z); g.rotation.y = p.h;
-  piece(g, 'base', { anim: (o, t) => { const p = at(t); o.position.set(p.x, 0.06, p.z); o.rotation.y = p.h; } }); });
+  piece(g, 'base', { anim: (o, t, tf) => { const p = at(tf); o.position.set(p.x, 0.06, p.z); o.rotation.y = p.h; } }); });
 
 // ---------- people: long walks over the full loop (the sidewalks, round the hub, to a bench). Before each
 // crossing a walker waits at the curb for a real gap in the traffic; start times are chosen so walkers don't meet.
@@ -1104,11 +1120,11 @@ function crossClear(c, from, to, t0) {
   const conflict = (x, z, t) => {
     const o = (x - c.cx) * nx + (z - c.cz) * nz;
     if (Math.abs(o) > 2.4) return false;                                         // still on the sidewalk
-    for (const v of VEH) { const p = v.at(t), a = (p.x - c.cx) * tx + (p.z - c.cz) * tz, b = (p.x - c.cx) * nx + (p.z - c.cz) * nz;
+    for (const v of VEH) { const p = v.at(t % D, t), a = (p.x - c.cx) * tx + (p.z - c.cz) * tz, b = (p.x - c.cx) * nx + (p.z - c.cz) * nz;
       if (Math.abs(a) < v.along && Math.abs(b - o) < 1.3) return true; }
     return false;
   };
-  for (let s = 0; s <= CROSS_T; s += 0.04) { const e = smooth(s / CROSS_T); if (conflict(from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e, (t0 + s) % D)) return false; }
+  for (let s = 0; s <= CROSS_T; s += 0.04) { const e = smooth(s / CROSS_T); if (conflict(from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e, (t0 + s) % LOOP)) return false; }   // traffic repeats over the full loop now
   return true;
 }
 // a route is a start point and steps ([x, z], or { to: [x, z], cross: index into CROSS }), walked at one pace
@@ -1218,7 +1234,38 @@ ORDER.forEach(k => {
   const c = el('panel kpi hit', html, kp); c.style.setProperty('--c', a.color); c.onclick = () => select(k); refs.kpis[k] = c;
 });
 const SIDE = !COMPACT || W > 760;
-if (SIDE) refs.side = el('panel side', '');
+if (SIDE && !COMPACT) refs.side = el('panel side', '');
+if (SIDE && COMPACT) {
+  refs.side = el('stack', ''); refs.side.tabIndex = 0;
+  refs.side.setAttribute('aria-label', 'Areas: scroll, drag or use the arrow keys to flip');
+  refs.cards = ORDER.map((k, i) => {
+    const a = AREAS[k];
+    const c = el('card', `<div class="hd"><span class="dot" style="background:${a.color};width:1.1rem;height:1.1rem"></span><b>${esc(a.name)}</b><span class="n">${i + 1} / ${ORDER.length}</span></div>
+      <div class="place up">${esc(a.place)}</div>
+      <div class="kv"><span class="v">${esc(a.kpi.v)}</span><span class="l up">${esc(a.kpi.l)}</span></div>
+      <div class="list">${a.list.slice(0, 3).map(([n, t]) => `<div class="li">${n ? `<span class="k">${esc(n)}</span>` : ''}<span class="t">${esc(t)}</span></div>`).join('')}</div>
+      <button type="button" class="open up">Open its work →</button>`, refs.side);
+    c.dataset.area = k;
+    c.querySelector('.open').addEventListener('click', e => { e.stopPropagation(); select(k, true); });
+    return c;
+  });
+  // flipping only changes the selection; "Open its work" (or a click on the map) opens the work
+  const flip = dir => select(ORDER[(ORDER.indexOf(selected) + dir + ORDER.length) % ORDER.length], false);
+  let acc = 0, last = 0;
+  refs.side.addEventListener('wheel', e => {
+    e.preventDefault();
+    const now = performance.now();
+    if (now - last > 450) acc = 0;
+    acc += e.deltaY;
+    if (Math.abs(acc) > 40 && now - last > 450) { flip(Math.sign(acc)); acc = 0; last = now; }
+  }, { passive: false });
+  let sy = null, dragged = false;
+  refs.side.addEventListener('pointerdown', e => { sy = e.clientY; dragged = false; });
+  refs.side.addEventListener('pointermove', e => { if (sy !== null && !dragged && Math.abs(e.clientY - sy) > 24) { dragged = true; flip(e.clientY < sy ? 1 : -1); } });
+  refs.side.addEventListener('pointerup', e => { const c = e.target.closest('.card'); if (!dragged && c && c.dataset.area !== selected) select(c.dataset.area, false); sy = null; });
+  refs.side.addEventListener('pointerleave', () => { sy = null; });
+  refs.side.addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); flip(e.key === 'ArrowDown' ? 1 : -1); } });
+}
 if (!COMPACT) refs.flow = el('panel flow', '');
 ORDER.forEach(k => { const a = AREAS[k];
   const p = el('pill hit', `<span class="dot" style="background:${a.color}"></span>${esc(a.name)}${COMPACT ? '' : `<em>· ${esc(a.kpi.v)} ${esc(a.kpi.short)}</em>`}`);
@@ -1227,7 +1274,14 @@ refs.hubPill = el('pill hub', `<span class="dot" style="background:${ACC}"></spa
 
 function renderSide() {
   const a = AREAS[selected];
-  if (refs.side) {
+  if (refs.cards) refs.cards.forEach((c, i) => {                                // the front card, then the next two peeking below
+    const d = (i - ORDER.indexOf(selected) + ORDER.length) % ORDER.length;
+    c.classList.toggle('front', d === 0);
+    c.style.transform = `translateY(${(d * 1.2).toFixed(2)}rem) scale(${(1 - d * 0.06).toFixed(2)})`;
+    c.style.zIndex = String(ORDER.length - d);
+    c.style.opacity = String(1 - d * 0.22);
+  });
+  if (refs.side && !COMPACT) {
     const items = COMPACT ? a.list.slice(0, 4) : a.list;
     let h = `<div><div class="sh"><span class="dot" style="background:${a.color};width:1.2rem;height:1.2rem"></span><b>${esc(a.name)}</b></div><div class="place up">${esc(a.place)}</div></div>
       <div class="chips"><span class="chip up"><span class="dot" style="background:${a.color}"></span>${esc(a.role)}</span></div>`;
@@ -1235,7 +1289,6 @@ function renderSide() {
     h += `<div><div class="sec up">${esc(a.listTitle)}</div><div class="list">${items.map(([n, t, s]) => `<div class="li">${n ? `<span class="k">${esc(n)}</span>` : ''}<span class="t">${esc(t)}${s && !COMPACT ? `<small>${esc(s)}</small>` : ''}</span></div>`).join('')}</div></div>`;
     if (!COMPACT && a.agents) h += `<div><div class="sec up">Tools</div><div class="chips">${a.agents.map(n => `<span class="chip">${esc(n)}</span>`).join('')}</div></div>`;
     if (!COMPACT && a.list2) h += `<div><div class="sec up">${esc(a.list2Title)}</div><div class="list">${a.list2.slice(0, 3).map(([t, r]) => `<div class="li"><span class="t">${esc(t)}</span><span class="r">${esc(r)}</span></div>`).join('')}</div></div>`;
-    if (COMPACT) h += `<div class="mini">${a.flow.map((_, i) => `<i data-mini="${i}"></i>`).join('')}<span class="up" data-mininame style="margin-left:.4rem"></span></div>`;
     refs.side.innerHTML = h;
   }
   if (refs.flow) refs.flow.innerHTML = `<div class="main"><div class="hd"><span class="dot" style="background:${a.color}"></span>Workflow · ${esc(a.name)}</div>
@@ -1243,10 +1296,10 @@ function renderSide() {
     <div class="item"><span class="up">Current item</span><b>${esc(a.item[0])}</b><span>${esc(a.item[1])}</span></div>`;
   ORDER.forEach(k => { refs.kpis[k].classList.toggle('on', k === selected); refs.pills[k].classList.toggle('on', k === selected); refs.tabs[k]?.classList.toggle('on', k === selected); selRings[k].visible = k === selected; });
 }
-function select(k) {
+function select(k, open = true) {
   if (!AREAS[k]) return;
   selected = k; renderSide();
-  if (EMBED && parent !== window) parent.postMessage({ type: 'studio:area', area: k }, '*');
+  if (open && EMBED && parent !== window) parent.postMessage({ type: 'studio:area', area: k }, '*');
   if (EXPORT || paused) draw(lastT);
 }
 const ANCHOR = { research: new THREE.Vector3(-18.9, 3.6, 0), ai: new THREE.Vector3(-4.6, 3.0, -16.9), production: new THREE.Vector3(19.0, 4.6, -6.0) };
@@ -1265,10 +1318,6 @@ function drawOverlay(T, t) {
     refs.flow.style.opacity = fade((T - 0.6) / 0.4);
     refs.flow.querySelectorAll('.step').forEach((s, i) => { s.classList.toggle('now', i === step); s.classList.toggle('done', i < step); s.querySelector('i').style.background = i < step ? a.color : i === step ? '#fff' : '#fff'; s.querySelector('i').style.borderColor = i <= step ? a.color : ''; });
     refs.flow.querySelector('.fill').style.width = `${((step + within) / 4.5) * 100}%`;
-  }
-  if (refs.side) {
-    refs.side.querySelectorAll('[data-mini]').forEach(m => { const i = +m.dataset.mini; m.style.background = i <= step ? a.color : ''; });
-    const mn = refs.side.querySelector('[data-mininame]'); if (mn) mn.textContent = a.flow[step];
   }
   if (refs.clock) refs.clock.textContent = EXPORT ? '' : `HCMC ${clockFmt.format(new Date())} ICT`;   // live only; hidden in exports
 }
