@@ -38,6 +38,14 @@ never their assets. His calls on 2026-10-25:
   street life; different lighting per area; research as papers, binders and books instead of
   monitors; a hologram in the middle of AI work; more lights, a crane and cameras in video
   production; the camera holds still (no spin). Layout signed off: "layout is alright".
+- **Hero (revised again, 2026-10-25): no more desktop.** "the whole map thing should be the hero".
+  - The 3D map fills the first screen, with the Ember background showing through it. The
+    headline, the line under it, the status and the two buttons sit in a band above it.
+  - The 34 videos still live in the `WORK` list. Clicking an area on the map opens its work in
+    the same windows as before: AI work opens the AI Systems folder, video production opens the
+    four production folders, research opens the Tool tests note. "Browse the work" opens
+    everything.
+  - The map keeps its own KPI cards and area sidebar. The desktop icons and the dock are gone.
 - **What I Do:** on a sky panel, with "rates on request". No public prices.
 - **Left out:** testimonial wall, project counter, FAQ, signed founder note.
 

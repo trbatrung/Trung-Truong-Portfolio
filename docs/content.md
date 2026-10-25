@@ -12,39 +12,40 @@ then mirror them into the HTML. **Status** says where each section stands in the
 - **Motifs:** film grain, vignette, live running timecode, crop-mark corners, mono spec-sheet labels.
 - Entrance motion is enhancement only (guarded by `prefers-reduced-motion`, `<noscript>` fallback).
   Content is never hidden if JS or animation don't run.
-- **Hero:** a fixed-size desktop on the Ember ombre (teal to amber): the headline and the live
-  dashboard window on the left, files on the right. Other palettes stay in the CSS as `data-bg`
-  options (`teal`, `amber`, `dusk`). No photos.
+- **Hero:** the live 3D map on the Ember ombre (teal to amber), with the headline in a band above
+  it. No desktop since 2026-10-25. Other palettes stay in the CSS as `data-bg` options (`teal`,
+  `amber`, `dusk`). No photos.
 - **Windows (from the heyclicky pass):** every framed piece of media sits in a white Mac window
-  with traffic lights and a filename in the title bar, like the desktop's own windows.
+  with traffic lights and a filename in the title bar, like the work windows.
 
 ## Nav (fixed)
 Logo "Ethan." · Work (opens Finder) · Systems · Approach · About · Contact · live timecode (teal).
 
 ## Word budget
 The page below the hero runs about 480 words (down from about 1,360 on 2026-10-08). Depth lives
-on the desktop: every video in Finder, the full point of view and the full tool tests as notes.
+in windows: every video in Finder, the full point of view and the full tool tests as notes.
 Say each idea once. Before adding a line, check it isn't already said in another section.
 
-## Hero `#top` · Status: heyclicky pass, needs sign-off
-A fixed 1440x900 desktop screen (390x1210 on phones), scaled to fit. See `positioning.md`.
-Top left: the headline, small. Under it, a Mac window titled `dashboard.live` with the live 3D
-dashboard (`studio/index.html?embed=1`, `?embed=1&quality=low` on phones, plus `w` and `h` at twice
-the window size so it fills the window). It loads only when that file exists; until then three cards stand in: "AI work · 3 · AI systems, directed end to end",
-"Video production · 8+ · Years in production", "Research · Tool tests · Same brief, head to head".
-The window's green light opens the full dashboard in a desktop window, and clicking an area in the
-dashboard opens its work (AI work: AI Systems, production: all work, research: Tool tests).
+## Hero `#top` · Status: map hero, needs sign-off
+The first screen is the live 3D map (`studio/index.html?embed=1&bg=none`, plus `&quality=low` on
+phones), with a transparent background so the Ember ombre shows through. The headline sits in a
+band above it: the copy on the left, the buttons on the right (stacked on phones). See
+`positioning.md`. Until the map loads, three cards stand in: "Research · Tool tests · Same
+brief, head to head", "AI work · 3 · AI systems, directed end to end", "Video production · 8+ ·
+Years in production". Clicking an area on the map opens its work: AI work opens the AI Systems
+folder, video production opens the four production folders, research opens the Tool tests note.
 - Eyebrow: "Trung (Ethan) Truong · Creative Direction & Production Systems"
 - H1: "Where does **AI** belong in your video?" + "AI has a defined place in it. The **standard**
   doesn't move." Picked 2026-10-08 from six neutral options: the headline from option 3, the
   second line from option 6. Replaces the first-person "I own the video pipeline end to end."
   Ethan found it too self-focused.
 - Status: "Ho Chi Minh City · Open to senior roles and select projects"
-- CTAs, bottom left of the desktop: "Browse the work" (opens Finder) · "Get in touch"
+- CTAs, right of the headline: "Browse the work" (opens Finder) · "Get in touch". Under them,
+  a hint: "Click an area on the map to open its work".
 - Sub "Script to final master, end to end." dropped on 2026-10-25 to make room for the dashboard
   (the idea is said again in What I Do and About).
-- Desktop: 5 loose videos, 2 notes (Tool tests, How I think), 5 folders, dock (Work, About,
-  Contact, LinkedIn, Email).
+- Desktop (icons, folders, dock): removed 2026-10-25. The videos stay in Finder; How I think opens
+  from the Approach section.
 
 ## Stat strip · Status: done
 8+ Years in production · 10+ Team built & directed · Full Pipeline ownership · Both AI & real

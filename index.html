@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto}.stage{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto;padding:8rem 1.5rem 3rem}.stage-text{position:static;width:auto;max-width:880px}.hero-cta{position:static;margin-top:1.5rem}.dt-icons,.dt-dock{display:none}</style></noscript>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto;min-height:0}.map{display:none}</style></noscript>
 <style>
   :root {
     --bg: #0a0b0d;
@@ -74,11 +74,11 @@
   .nav-tc::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 2s infinite; }
 
   /* ---------- HERO ----------
-     The hero is a desktop: one fixed screen (1440x900, or 390x1210 on phones) scaled to fit
-     with --s, on a full-bleed color / ombre background. The headline sits at the top left with
-     the dashboard window under it; files, folders and a dock fill the right side. Windows open in
-     a fixed layer above the page. --p (0 to 1, set on scroll) bleeds the desktop into the page. */
-  .hero { --p: 0; --s: 1; position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+     The hero is the live 3D map of the three areas: studio/index.html in an iframe with a
+     transparent background, so the Ember ombre shows through. The headline sits in a band
+     above it. Clicking an area on the map opens its work in a window. --p (0 to 1, set on
+     scroll) bleeds the background into the page. */
+  .hero { --p: 0; position: relative; height: 100vh; height: 100svh; min-height: 680px; overflow: hidden; display: flex; flex-direction: column; }
   .hero::after { /* vignette */
     content: ''; position: absolute; inset: 0; pointer-events: none;
     box-shadow: inset 0 0 200px 30px rgba(0,0,0,0.45);
@@ -92,7 +92,12 @@
   .hero h1 .l2 { display: block; font-family: var(--sans); font-size: 20px; font-style: normal; font-weight: 500; color: rgba(241,237,230,.8); letter-spacing: -0.01em; margin-top: 10px; line-height: 1.3; }
   .hero h1 .ai { color: var(--teal); font-weight: 600; }
   .hero h1 .craft { color: var(--amber); font-weight: 600; }
-  .hero-cta { position: absolute; left: 80px; bottom: 34px; display: flex; gap: 12px; align-items: center; }
+  .hero-copy { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px; padding: 104px 48px 0; pointer-events: none; }
+  .hero-copy .lead { max-width: 860px; }
+  .hero-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: auto; }
+  .hero-cta .btns { display: flex; gap: 12px; }
+  .map-hint { margin: 0; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,237,230,.6); }
+  .map-hint::before { content: '↓ '; color: var(--teal); }
   .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
   .btn svg { width: 15px; height: 15px; }
   button.btn { cursor: pointer; }
@@ -128,9 +133,10 @@
       radial-gradient(55% 50% at 68% 88%, #b4642e, transparent 70%),
       #17141d; }
 
-  /* the screen */
-  .stage { position: absolute; left: 50%; top: 0; z-index: 2; width: 1440px; height: 900px; transform: translateX(-50%) scale(var(--s)); transform-origin: top center; }
-  .stage-text { position: absolute; left: 80px; top: 96px; width: 880px; }
+  /* the map: fills the rest of the first screen */
+  .map { position: relative; z-index: 1; flex: 1; min-height: 340px; margin-top: 4px; }
+  .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .8s; }
+  .map.live iframe { opacity: 1; }
 
   /* Mac windows on the page: white, traffic lights, a filename in the title bar */
   .mac { background: #fff; color: #111; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -12px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.25); }
@@ -143,88 +149,33 @@
   .mac-lights button:not(:disabled):hover::after { content: "+"; position: absolute; inset: 0; text-align: center; }
   .mac-title { font: 500 12.5px var(--mono); letter-spacing: .02em; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* the dashboard window: the live 3D dashboard (studio/index.html, built separately) loads here
-     once that file exists; until then three plain cards stand in for it */
-  .dash-win { margin-top: 22px; }
-  .dash-view { position: relative; height: 490px; background: #f1ede6; }
-  .dash-view iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .6s; }
-  .dash-view.live iframe { opacity: 1; }
-  .dash-empty { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-content: center; padding: 0 36px; transition: opacity .6s; }
-  .dash-view.live .dash-empty { opacity: 0; }
+  /* until studio/index.html loads (or if it is missing), three plain cards stand in for the map */
+  .dash-empty { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 300px)); justify-content: center; gap: 14px; align-content: center; padding: 0 48px; transition: opacity .6s; }
+  .map.live .dash-empty { opacity: 0; pointer-events: none; }
   .dash-card { background: #fff; border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(42,39,36,.08); }
   .dash-card span { display: flex; align-items: center; gap: 8px; font: 600 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #2a2724; }
   .dash-card span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
   .dash-card b { display: block; margin-top: 14px; font: 400 40px/1 var(--serif); letter-spacing: -.02em; color: #1a1a1a; }
   .dash-card em { display: block; margin-top: 8px; font: 400 13.5px/1.45 var(--sans); font-style: normal; color: #6f6a64; }
 
-  /* icons and folders: right side, like a Mac desktop; draggable */
-  .dt-icons { position: absolute; inset: 0; pointer-events: none; opacity: calc(1 - var(--p) * 1.8); transform: translateY(calc(var(--p) * -50px)); }
-  .dt-icon { position: absolute; transform: translate(-50%,-50%); pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 128px; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: default; touch-action: none; outline: none; user-select: none; -webkit-user-select: none; }
-  .dt-thumb { padding: 4px; border-radius: 7px; border: 1px solid transparent; transition: background .1s; }
-  .dt-icon img { width: 80px; height: 52px; object-fit: cover; border-radius: 4px; background: #333; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; -webkit-user-drag: none; }
-  .dt-icon.vertical img { width: 36px; height: 56px; }
-  .dt-folder svg { display: block; width: 70px; height: 57px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
-  /* AI Systems: a red folder with a slow glow, so it reads as the one to open */
+  @media (max-width: 760px) {
+    .hero { min-height: 700px; }
+    .hero-copy { padding: 88px 18px 0; gap: 16px; }
+    .hero h1 { font-size: 34px; }
+    .hero h1 .l2 { font-size: 16.5px; }
+    .hero-eyebrow, .hero-status { font-size: 9.5px; }
+    .hero-cta { align-items: flex-start; }
+    .hero-cta .btn-ghost { display: none; }
+    .dash-empty { grid-template-columns: 1fr; padding: 0 18px; gap: 8px; }
+    .dash-card { padding: 12px 14px; }
+    .dash-card b { font-size: 24px; margin-top: 6px; }
+    .dash-card em { display: none; }
+  }
+
+  /* AI Systems is the red folder, so it reads as the one to open (the Finder sidebar uses it) */
   [data-cat="ai"] svg path { fill: #c33a28; }
   [data-cat="ai"] svg rect:nth-of-type(1) { fill: #e8573f; }
   [data-cat="ai"] svg rect:nth-of-type(2) { fill: #f8977f; }
-  .dt-folder[data-cat="ai"] svg { animation: aiGlow 2.8s ease-in-out infinite; }
-  @keyframes aiGlow {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(232,87,63,.45)) drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
-    50% { filter: drop-shadow(0 0 20px rgba(232,87,63,.85)) drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
-  }
-  .dt-folder[data-cat="ai"] .dt-label::after { content: ' ✦'; color: #ffb39d; }
-  .dt-doc svg { display: block; width: 44px; height: 56px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.3)); }
-  .dt-label { font-size: 12.5px; font-weight: 500; line-height: 1.35; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); padding: 1px 6px; border-radius: 4px; max-width: 128px; text-align: center; }
-  .dt-icon.selected .dt-thumb { background: rgba(0,0,0,.22); border-color: rgba(255,255,255,.18); }
-  .dt-icon.selected .dt-label { background: #0a5cd6; text-shadow: none; }
-  .dt-icon.dragging { z-index: 5; opacity: .9; }
-  .dt-icon:focus-visible .dt-thumb { outline: 2px solid #0a5cd6; outline-offset: 1px; }
-
-  /* dock */
-  .dt-dock { position: absolute; left: 50%; bottom: 26px; transform: translate(-50%, calc(var(--p) * 40px)); opacity: calc(1 - var(--p) * 2); display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
-    border-radius: 22px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.26);
-    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
-  .dt-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.4); }
-  .dt-tile { position: relative; width: 52px; height: 52px; border-radius: 13px; display: grid; place-items: center; border: 0; padding: 0; cursor: pointer; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.22); transition: transform .2s cubic-bezier(.16,1,.3,1); }
-  .dt-tile svg { width: 24px; height: 24px; }
-  .dt-tile:hover, .dt-tile:focus-visible { transform: translateY(-7px) scale(1.12); outline: none; }
-  .dt-tip { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); padding: 4px 9px; border-radius: 6px; background: rgba(28,28,28,.88); color: #fff; font: 500 12px var(--sans); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .12s; }
-  .dt-tile:hover .dt-tip, .dt-tile:focus-visible .dt-tip { opacity: 1; }
-  .dt-work { background: #f4f6fa; }
-  .dt-work svg { width: 34px; height: 28px; }
-  .dt-avatar { background: var(--paper); color: #111; font: 500 19px var(--serif); font-style: italic; }
-  .dt-notes { background: linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat, repeating-linear-gradient(to bottom, transparent 0 9px, #e4dfd2 9px 10px) 0 100%/100% 68% no-repeat, #fcfbf7; }
-
-  /* phone screen (390x1210): headline, the dashboard window, a home-screen grid, the dock */
-  .hero.is-phone .stage { width: 390px; height: 1210px; }
-  .hero.is-phone .stage-text { position: static; width: auto; padding: 92px 16px 0; }
-  .hero.is-phone .hero-eyebrow { font-size: 9.5px; letter-spacing: .18em; margin: 0 8px 12px; }
-  .hero.is-phone h1 { font-size: 36px; margin: 0 8px; }
-  .hero.is-phone h1 .l2 { font-size: 17px; }
-  .hero.is-phone .hero-status { font-size: 9.5px; margin: 12px 8px 0; }
-  .hero.is-phone .dash-win { margin-top: 20px; }
-  .hero.is-phone .dash-view { height: 380px; }
-  .hero.is-phone .dash-view iframe { pointer-events: none; }
-  .hero.is-phone .dash-empty { grid-template-columns: 1fr; gap: 10px; padding: 0 18px; }
-  .hero.is-phone .dash-card { padding: 14px 16px; }
-  .hero.is-phone .dash-card b { font-size: 30px; margin-top: 8px; }
-  .hero.is-phone .dash-card em { font-size: 12.5px; margin-top: 4px; }
-  .hero.is-phone .hero-cta { display: none; }
-  .hero.is-phone .dt-icons { position: static; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 4px; padding: 24px 14px 0; pointer-events: auto; }
-  .hero.is-phone .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
-  .hero.is-phone .dt-thumb { padding: 2px; }
-  .hero.is-phone .dt-icon img, .hero.is-phone .dt-icon.vertical img { width: 60px; height: 60px; border-radius: 14px; }
-  .hero.is-phone .dt-folder svg, .hero.is-phone .dt-doc svg { width: 60px; height: 60px; }
-  .hero.is-phone .dt-label { font-size: 11px; max-width: 86px; }
-  .hero.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; opacity: 1; transform: translateX(-50%); }
-  .hero.is-phone .dt-icons { opacity: 1; transform: none; }
-  .hero.is-phone .desk-bg::before { opacity: calc(var(--p) * .6); }
-
-  /* the dashboard, opened full size in a desktop window */
-  .dt-win.studio { height: calc(100% - 32px); }
-  .dt-win.studio .dt-body { padding: 0; flex: 1; min-height: 0; overflow: hidden; }
-  .dt-win.studio iframe { display: block; width: 100%; height: 100%; border: 0; }
 
   /* windows: a fixed layer, so they open at real size from anywhere on the page */
   .dt-wins { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
@@ -342,26 +293,15 @@
     .fd-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .desk-bg, .dt-icons { transform: none; }
-    .dt-dock { transform: translateX(-50%); }
-    .dt-folder[data-cat="ai"] svg { animation: none; filter: drop-shadow(0 0 12px rgba(232,87,63,.6)); }
+    .desk-bg { transform: none; }
     .dt-win, .dt-win.closing { animation-duration: 1ms; }
-    .dt-tile { transition: none; }
   }
 
   /* ---------- LIQUID GLASS ----------
-     Pressable things on the desktop layer (dock, hero buttons, icon selection) and the phone
-     sheet controls are glass: a translucent, blurred, saturated fill, a bright rim and top glint,
-     and a springy press. Solid fallbacks below for browsers without blur and for people who
-     reduce transparency. Chromium also gets real refraction on the dock (see #lg-refract). */
+     The hero buttons and the phone sheet controls are glass: a translucent, blurred, saturated
+     fill, a bright rim and top glint, and a springy press. Solid fallbacks below for browsers
+     without blur and for people who reduce transparency. */
   :root { --spring: cubic-bezier(.34, 1.56, .64, 1); }
-
-  .dt-dock { border: 0; background: linear-gradient(180deg, rgba(255,255,255,.24), rgba(255,255,255,.08));
-    -webkit-backdrop-filter: blur(16px) saturate(1.9); backdrop-filter: blur(16px) saturate(1.9);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -1px 0 rgba(255,255,255,.14), inset 0 0 0 1px rgba(255,255,255,.18), 0 14px 34px rgba(0,0,0,.3); }
-  html.refract .dt-dock { -webkit-backdrop-filter: url(#lg-refract) blur(10px) saturate(1.9); backdrop-filter: url(#lg-refract) blur(10px) saturate(1.9); }
-  .dt-tile { transition: transform .45s var(--spring); }
-  .dt-tile:active { transform: translateY(-3px) scale(.94); transition-duration: .12s; }
 
   .hero .btn { position: relative; isolation: isolate; border: 0; border-radius: 999px; padding: 1rem 1.75rem;
     -webkit-backdrop-filter: blur(16px) saturate(1.9); backdrop-filter: blur(16px) saturate(1.9);
@@ -375,12 +315,6 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(255,255,255,.2), 0 10px 30px rgba(0,0,0,.25); }
   .hero .btn-ghost:hover { background: rgba(255,255,255,.18); color: #fff; transform: translateY(-2px); }
   .hero .btn:active { transform: scale(.95); transition-duration: .12s; }
-
-  .dt-thumb { transition: background .15s, box-shadow .15s; }
-  .dt-icon:hover .dt-thumb { background: rgba(255,255,255,.08); }
-  .dt-icon.selected .dt-thumb { border-color: transparent; background: rgba(255,255,255,.14);
-    -webkit-backdrop-filter: blur(10px) saturate(1.6); backdrop-filter: blur(10px) saturate(1.6);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.18); }
 
   @media (max-width: 700px) {
     /* the top and bottom controls float over the scrolling content */
@@ -407,15 +341,12 @@
 
   /* solid fallbacks: no blur support, or the visitor asked for less transparency */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .dt-dock { background: rgba(48,50,54,.92); }
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.88); }
     .dt-title, .dt-ctx, .dt-done, .dt-win.finder .dt-title, .dt-sheetbar button.ghost, .fd-menu:not([hidden]) { background: #f0f0f2; }
     .dt-sheetbar button { background: #111; }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .dt-dock { background: rgba(48,50,54,.96); -webkit-backdrop-filter: none; backdrop-filter: none; }
-    html.refract .dt-dock { -webkit-backdrop-filter: none; backdrop-filter: none; }
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.92); }
     .dt-title, .dt-ctx, .dt-done, .dt-win.finder .dt-title, .dt-sheetbar button.ghost, .fd-menu:not([hidden]) { background: #f0f0f2; -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -558,58 +489,35 @@
 <!-- ---------- HERO ---------- -->
 <header class="hero" id="top" data-bg="ember">
   <div class="desk-bg" aria-hidden="true"></div>
-  <div class="stage" id="stage">
-    <div class="stage-text">
+  <div class="hero-copy">
+    <div class="lead">
       <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
       <h1 class="reveal">
         Where does <span class="ai">AI</span> belong in your video?
         <span class="l2">AI has a defined place in it. The <span class="craft">standard</span> doesn't move.</span>
       </h1>
       <div class="hero-status mono reveal"><span class="live"></span>Ho Chi Minh City · Open to senior roles and select projects</div>
-      <figure class="mac dash-win">
-        <div class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><button type="button" class="mac-zoom" tabindex="-1" title="Open full size" disabled></button></span><span class="mac-title">dashboard.live</span></div>
-        <div class="dash-view" id="studio">
-          <div class="dash-empty">
-            <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>3</b><em>AI systems, directed end to end</em></div>
-            <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>8+</b><em>Years in production</em></div>
-            <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Tool tests</b><em>Same brief, head to head</em></div>
-          </div>
-        </div>
-      </figure>
     </div>
     <div class="hero-cta reveal">
-      <button type="button" class="btn btn-primary" data-open="finder">
-        Browse the work
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      </button>
-      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <div class="btns">
+        <button type="button" class="btn btn-primary" data-open="finder">
+          Browse the work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </button>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+      <p class="map-hint mono">Click an area on the map to open its work</p>
     </div>
-    <div class="dt-icons" role="group" aria-label="Work">
-      <button class="dt-icon" type="button" data-project="jH6LaZDXNMs" style="left:1060px;top:195px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Joe Schaeffer</span></button>
-      <button class="dt-icon vertical" type="button" data-project="vwf4U1WzQ0s" style="left:1195px;top:270px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">No More Solo</span></button>
-      <button class="dt-icon" type="button" data-project="HBTfzwOwkxY" style="left:1060px;top:385px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/HBTfzwOwkxY/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Powerlift Hangar</span></button>
-      <button class="dt-icon" type="button" data-project="pR03yYZbI8E" style="left:1195px;top:460px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/pR03yYZbI8E/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Founder Intro</span></button>
-      <button class="dt-icon" type="button" data-project="asW50LOVYrs" style="left:1060px;top:575px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/asW50LOVYrs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">8 Edges Portal Tour</span></button>
-      <button class="dt-icon dt-doc" type="button" data-note="tests" style="left:1195px;top:650px"><span class="dt-thumb"><svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg></span><span class="dt-label">Tool tests</span></button>
-      <button class="dt-icon dt-doc" type="button" data-note="pov" style="left:1060px;top:765px"><span class="dt-thumb"><svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg></span><span class="dt-label">How I think</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="ai" style="left:1335px;top:160px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">AI Systems</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="brand" style="left:1335px;top:272px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Brand Film</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="client" style="left:1335px;top:384px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Client &amp; Story</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="ads" style="left:1335px;top:496px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Video Ads</span></button>
-      <button class="dt-icon dt-folder" type="button" data-cat="long" style="left:1335px;top:608px"><span class="dt-thumb"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg></span><span class="dt-label">Long-form</span></button>
-    </div>
-    <div class="dt-dock" role="toolbar" aria-label="Dock">
-      <button class="dt-tile dt-work" type="button" data-open="finder" aria-label="Work"><svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg><span class="dt-tip">Work</span></button>
-      <button class="dt-tile dt-avatar" type="button" data-open="about" aria-label="About">E<span class="dt-tip">About</span></button>
-      <button class="dt-tile dt-notes" type="button" data-open="contact" aria-label="Contact"><span class="dt-tip">Contact</span></button>
-      <span class="dt-sep"></span>
-      <a class="dt-tile" style="background:#0a66c2" href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg><span class="dt-tip">LinkedIn</span></a>
-      <a class="dt-tile" style="background:#1d1d1f" href="mailto:trbatrung@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg><span class="dt-tip">Email</span></a>
+  </div>
+  <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
+    <div class="dash-empty">
+      <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Tool tests</b><em>Same brief, head to head</em></div>
+      <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>3</b><em>AI systems, directed end to end</em></div>
+      <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>8+</b><em>Years in production</em></div>
     </div>
   </div>
 </header>
 <div class="dt-wins" id="dtWins"></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="lg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='90' viewBox='0 0 400 90'><defs><linearGradient id='r' x1='0' x2='1'><stop offset='0' stop-color='%23000'/><stop offset='1' stop-color='%23f00'/></linearGradient><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23000'/><stop offset='1' stop-color='%230f0'/></linearGradient><filter id='b'><feGaussianBlur stdDeviation='9'/></filter></defs><rect width='400' height='90' fill='url(%23r)'/><rect width='400' height='90' fill='url(%23g)' style='mix-blend-mode:screen'/><rect x='18' y='16' width='364' height='58' rx='20' fill='rgb(128,128,0)' filter='url(%23b)'/></svg>" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <noscript>
 <section class="wrap">
   <h2>Work</h2>
@@ -910,15 +818,12 @@
     // note: the mailto navigation still fires for anyone with a mail client set up
   });
 
-  // ----- the dashboard window -----
-  // The live 3D dashboard is its own page in studio/, built separately. It loads into the window
-  // on the desktop only once that file exists; until then three plain cards stand in for it. The
-  // green light opens the full version in a desktop window, and a click on an area in the dashboard
-  // opens that area's work.
+  // ----- the map -----
+  // The hero is the live 3D map, its own page in studio/. It loads once that file exists (three
+  // plain cards stand in until then) with a transparent background, so the Ember ombre shows
+  // through. Phones get the lighter version. A click on an area opens that area's work.
   const studio = document.getElementById('studio');
-  const studioZoom = document.querySelector('.mac-zoom');
   const STUDIO_SRC = 'studio/index.html';
-  const STUDIO_TITLE = 'Live 3D dashboard: AI work, video production and research';
   let studioMode = '';
   function mountStudio() {
     const mode = isPhone() ? 'phone' : 'wide';
@@ -927,38 +832,25 @@
     let f = studio.querySelector('iframe');
     if (!f) {
       f = document.createElement('iframe');
-      f.title = STUDIO_TITLE;
+      f.title = 'Live 3D map: research, AI work and video production';
       f.addEventListener('load', () => studio.classList.add('live'));
       studio.appendChild(f);
     }
-    // the dashboard draws at a fixed size and scales to fit, so ask for the window's own shape,
-    // at twice its layout size so it stays sharp
-    const size = `&w=${studio.clientWidth * 2}&h=${studio.clientHeight * 2}`;
-    f.src = STUDIO_SRC + (mode === 'phone' ? '?embed=1&quality=low' : '?embed=1') + size;
+    f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '');
   }
   fetch(STUDIO_SRC, { method: 'HEAD' })
-    .then(r => {
-      if (!r.ok) return;
-      mountStudio();
-      addEventListener('resize', mountStudio);
-      studioZoom.disabled = false;
-      studioZoom.tabIndex = 0;
-      studioZoom.parentElement.removeAttribute('aria-hidden');
-      studioZoom.setAttribute('aria-label', 'Open the dashboard full size');
-    })
+    .then(r => { if (r.ok) { mountStudio(); addEventListener('resize', mountStudio); } })
     .catch(() => {});
-  studioZoom.addEventListener('click', () => openWindow('studio', 'dashboard.live', `<iframe src="${STUDIO_SRC}" title="${STUDIO_TITLE}"></iframe>`, studioZoom, 'studio max'));
   addEventListener('message', e => {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'studio:area') return;
     if (e.data.area === 'ai') openFinder('ai');
-    else if (e.data.area === 'production') openFinder('all');
+    else if (e.data.area === 'production') openFinder('production');
     else if (e.data.area === 'research') openNote('tests');
   });
 
-  // ----- desktop hero -----
-  // The hero is one fixed screen, 1440x900 (390x1210 on phones), scaled with --s to fit.
-  // Every video lives here: loose files on the desktop, the rest in folders, all in Finder.
-  // AI-system details are read from the Systems section, so that copy has one source.
+  // ----- the work -----
+  // Every video lives in WORK, in folders, all in Finder. The map's areas, the nav and "Browse the
+  // work" open it. AI-system details are read from the Systems section, so that copy has one source.
   const CATS = {
     ai:     { name: 'AI Systems', role: 'Director, end to end', desc: 'Each system was designed, directed and delivered end to end, and each one solves a specific production problem.' },
     brand:  { name: 'Brand Film', role: 'Edit & planning', desc: 'The calls here are structure and pace: which story the footage holds, and what gets cut to tell it.' },
@@ -1012,31 +904,15 @@
   const thumb = (id, q = 'mqdefault') => `https://img.youtube.com/vi/${id}/${q}.jpg`;
   const watchUrl = p => p.short ? `https://youtube.com/shorts/${p.id}` : `https://youtu.be/${p.id}`;
   const sheet = () => matchMedia('(max-width:700px)').matches;      // windows become full-screen sheets
-  const isPhone = () => hero.classList.contains('is-phone');
-  const FOLDER_SVG = hero.querySelector('.dt-folder svg').outerHTML;   // AI Systems is recoloured in CSS via [data-cat="ai"]
-  // only Chromium renders SVG filters inside backdrop-filter; everyone else keeps the plain glass
-  if (navigator.userAgentData && navigator.userAgentData.brands.some(b => b.brand === 'Chromium')) document.documentElement.classList.add('refract');
-
-  // fit the fixed screen to the viewport: as large as fits, never cropped, and the hero is
-  // exactly as tall as the scaled screen (any spare width shows the background)
-  let scale = 1;
-  function fit() {
-    const phone = innerWidth < 760 || innerWidth / innerHeight < 0.8;
-    const [w, h] = phone ? [390, 1210] : [1440, 900];
-    hero.classList.toggle('is-phone', phone);
-    scale = phone ? Math.min(innerWidth / w, 1.4) : Math.min(innerWidth / w, innerHeight / h);
-    hero.style.height = Math.round(h * scale) + 'px';
-    hero.style.setProperty('--s', scale.toFixed(4));
-  }
-  addEventListener('resize', fit);
-  fit();
+  const isPhone = () => matchMedia('(max-width: 760px)').matches;
+  const FOLDER_SVG = '<svg viewBox="0 0 64 52" aria-hidden="true"><path d="M4 8a4 4 0 0 1 4-4h15l5 5h28a4 4 0 0 1 4 4v4H4z" fill="#4f9fe6"/><rect x="4" y="13" width="56" height="35" rx="4" fill="#76baf4"/><rect x="4" y="13" width="56" height="2.5" rx="1" fill="#a3d2fb"/></svg>';   // AI Systems is recoloured in CSS via [data-cat="ai"]
 
   // ----- windows -----
   let z = 10;
   const openWins = new Map();
   const stack = () => [...openWins.values()].sort((a, b) => a.style.zIndex - b.style.zIndex);   // back to front
   // On phones every window is a full-screen sheet. The top bar says where you are and has Done
-  // (back to the desktop); the bottom bar has Back (to the window underneath, or the desktop) and,
+  // (back to the map); the bottom bar has Back (to the window underneath, or the map) and,
   // for videos, Next. Each sheet adds a history entry, so the phone's back gesture closes it.
   let skipPop = 0;
   function updateBars() {
@@ -1044,7 +920,7 @@
     const onHero = scrollY < hero.offsetHeight / 2;
     wins.forEach((w, i) => {
       const prev = wins[i - 1];
-      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onHero ? '← Back to desktop' : '← Close';
+      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onHero ? '← Back to the map' : '← Close';
       const video = w.classList.contains('project');
       w.querySelector('.dt-sheetbar').innerHTML = `<button type="button" data-act="back"${video ? ' class="ghost"' : ''}>${back}</button>`
         + (video ? '<button type="button" data-act="next">Next →</button>' : '');
@@ -1207,15 +1083,18 @@
     updateBars();
   }
 
+  const PRODUCTION = ['brand', 'client', 'ads', 'long'];   // the map's video production area opens these four
   function openFinder(active = 'all', opener) {
+    const keys = active === 'all' ? Object.keys(CATS) : active === 'production' ? PRODUCTION : [active];
+    const name = active === 'all' ? 'All work' : active === 'production' ? 'Video production' : CATS[active].name;
     const side = [['all', 'All work'], ...Object.entries(CATS).map(([k, c]) => [k, c.name])]
       .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
-    const group = k => `<div class="fd-group">${active === 'all' ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="fd-role">Role · ${esc(CATS[k].role)}</p><p class="dt-desc">${esc(CATS[k].desc)}</p>
+    const group = k => `<div class="fd-group">${keys.length > 1 ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="fd-role">Role · ${esc(CATS[k].role)}</p><p class="dt-desc">${esc(CATS[k].desc)}</p>
       <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
         `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy">${p.len ? `<span class="fd-len">${esc(p.len)}</span>` : ''}</span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
-    const main = active === 'all' ? `<h2>All work</h2>${Object.keys(CATS).map(group).join('')}` : `<h2>${esc(CATS[active].name)}</h2>${group(active)}`;
+    const main = `<h2>${esc(name)}</h2>${keys.map(group).join('')}`;
     const menu = `<div class="fd-menu" hidden>${side}</div>`;
-    const w = openWindow('finder', active === 'all' ? 'Work' : CATS[active].name, `<div class="fd">${menu}<div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
+    const w = openWindow('finder', active === 'all' ? 'Work' : name, `<div class="fd">${menu}<div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
     w.classList.remove('menu-open');
     const t = w.querySelector('.dt-title');   // the title doubles as the folder switcher on phones
     t.setAttribute('role', 'button');
@@ -1227,71 +1106,21 @@
     if (tpl) openWindow('note-' + key, tpl.dataset.title, tpl.innerHTML, opener, 'note');
   }
 
-  function openAbout(opener) {
-    const paras = [...document.querySelectorAll('#about .about-body p')].map(p => `<p class="dt-desc">${p.innerHTML}</p>`).join('');
-    const stats = [...document.querySelectorAll('.stats .stat')].map(s => `<div><dt>${esc(txt(s.querySelector('.l')))}</dt><dd>${esc(txt(s.querySelector('.n')))}</dd></div>`).join('');
-    openWindow('about', 'About', `<h2>Trung (Ethan) Truong</h2>${paras}<dl class="dt-meta">${stats}</dl>
-      <div class="dt-links"><a href="#about">Read more ↓</a><a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a></div>`, opener);
-  }
-  function openContact(opener) {
-    const c = document.getElementById('contact');
-    openWindow('contact', 'Notes', `<h2>${esc(txt(c.querySelector('h2')))}</h2><p class="dt-desc">${esc(txt(c.querySelector('p')))}</p>
-      <div class="dt-links"><a href="mailto:trbatrung@gmail.com">trbatrung@gmail.com</a><a href="https://www.linkedin.com/in/trungtrr1379/" target="_blank" rel="noopener">LinkedIn</a></div>`, opener);
-  }
-
-  // ----- openers outside the desktop: CTA, dock, nav, Systems chips, Approach notes -----
-  const OPENERS = { finder: el => openFinder('all', el), about: openAbout, contact: openContact };
+  // ----- openers: the hero CTA, the nav, Systems chips, Approach notes -----
+  const OPENERS = { finder: el => openFinder('all', el) };
   document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
     if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
     OPENERS[el.dataset.open](el);
   }));
   document.querySelectorAll('.watch-chip').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
-  document.querySelectorAll('[data-note]:not(.dt-icon)').forEach(el => el.addEventListener('click', () => openNote(el.dataset.note, el)));
-
-  // ----- desktop icons and folders: click opens, drag moves (desktop screen only) -----
-  const icons = [...hero.querySelectorAll('.dt-icon')];
-  const deselect = () => icons.forEach(i => i.classList.remove('selected'));
-  const activate = icon => icon.dataset.project ? openProject(icon.dataset.project, icon)
-    : icon.dataset.cat ? openFinder(icon.dataset.cat, icon) : openNote(icon.dataset.note, icon);
-  icons.forEach(icon => {
-    icon.addEventListener('pointerdown', e => {
-      if (e.button !== 0) return;
-      deselect(); icon.classList.add('selected');
-      if (isPhone()) return;
-      const sx = e.clientX, sy = e.clientY, sl = parseFloat(icon.style.left), st = parseFloat(icon.style.top);
-      let moved = false;
-      icon.setPointerCapture(e.pointerId);
-      const move = ev => {
-        const dx = (ev.clientX - sx) / scale, dy = (ev.clientY - sy) / scale;
-        if (!moved && Math.hypot(dx, dy) < 4) return;   // a small wobble still counts as a click
-        moved = true; icon.classList.add('dragging');
-        icon.style.left = clamp(sl + dx, 60, 1380) + 'px';
-        icon.style.top = clamp(st + dy, 100, 790) + 'px';
-      };
-      const up = ev => {
-        icon.removeEventListener('pointermove', move); icon.removeEventListener('pointerup', up); icon.removeEventListener('pointercancel', up);
-        icon.classList.remove('dragging');
-        if (!moved && ev.type === 'pointerup') activate(icon);
-      };
-      icon.addEventListener('pointermove', move);
-      icon.addEventListener('pointerup', up);
-      icon.addEventListener('pointercancel', up);
-    });
-    // keyboard (detail 0) and phone taps open on click
-    icon.addEventListener('click', e => { if (e.detail === 0 || isPhone()) activate(icon); });
-  });
-  hero.addEventListener('pointerdown', e => { if (!e.target.closest('.dt-icon')) deselect(); });
+  document.querySelectorAll('[data-note]').forEach(el => el.addEventListener('click', () => openNote(el.dataset.note, el)));
 
   // scroll bleed: --p runs 0 to 1 across the hero's height
   let bleedQueued = false;
-  // On phones the hero is taller than the screen and the icons sit low, so the bleed waits until
-  // the bottom of the hero is on screen and then runs over a full screen of scrolling.
   function bleed() {
     bleedQueued = false;
-    const h = hero.offsetHeight;
-    const [start, span] = isPhone() ? [Math.max(0, h - innerHeight), innerHeight] : [0, h];
-    hero.style.setProperty('--p', clamp((scrollY - start) / span, 0, 1).toFixed(3));
+    hero.style.setProperty('--p', clamp(scrollY / hero.offsetHeight, 0, 1).toFixed(3));
   }
   addEventListener('scroll', () => { if (!bleedQueued) { bleedQueued = true; requestAnimationFrame(bleed); } }, { passive: true });
   bleed();

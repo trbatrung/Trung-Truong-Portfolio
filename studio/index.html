@@ -12,6 +12,7 @@
   html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
   body { font-family: 'Space Grotesk', system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
   #frame { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: hidden; background: var(--bg); }
+  html.clear, html.clear body, html.clear #frame { background: transparent; }   /* ?bg=none: the site's hero shows through */
   #frame canvas { display: block; }
   #ui { position: absolute; inset: 0; pointer-events: none; }
   .hit { pointer-events: auto; cursor: pointer; }
@@ -175,7 +176,8 @@ const ORDER = ['research', 'ai', 'production'];
 
 // ---------- URL overrides
 const Q = new URLSearchParams(location.search);
-const EXPORT = Q.get('export') === '1', EMBED = Q.get('embed') === '1';
+const EXPORT = Q.get('export') === '1', EMBED = Q.get('embed') === '1', CLEAR = Q.get('bg') === 'none';
+if (CLEAR) document.documentElement.classList.add('clear');
 if (Q.get('quality') === 'low') CONFIG.quality = 'low';
 if (Q.get('intro') === '0') CONFIG.intro = false;
 if (AREAS[Q.get('area')]) CONFIG.selected = Q.get('area');
@@ -206,7 +208,8 @@ const pick = arr => arr[Math.floor(rng() * arr.length)];
 
 // ---------- renderer, camera, light, passes
 const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: CLEAR, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+if (CLEAR) renderer.setClearColor(0x000000, 0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -250,8 +253,8 @@ resizeGL();
 
 // ACES shifts every color, the background too: solve once for the input that lands on the exact off-white
 const bgTarget = new THREE.Color(N.background), bg = bgTarget.clone();
-scene.background = bg;
-{
+if (!CLEAR) scene.background = bg;
+if (!CLEAR) {
   const gl = renderer.getContext(), px = new Uint8Array(4), got = new THREE.Color();
   camera.position.set(0, 60, 120); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
   for (let i = 0; i < 10; i++) {
