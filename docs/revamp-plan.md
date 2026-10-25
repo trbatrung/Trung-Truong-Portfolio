@@ -46,6 +46,11 @@ never their assets. His calls on 2026-10-25:
     four production folders, research opens the Tool tests note. "Browse the work" opens
     everything.
   - The map keeps its own KPI cards and area sidebar. The desktop icons and the dock are gone.
+- **Positioning (2026-10-25, later): AI is not the pitch.** "i dont want using AI as a usp of me.
+  i want my direction as a ... senior creative? like we solve peolpe issues".
+  - The hero now asks "What is this video actually for?", with the eyebrow "Creative Direction".
+  - "Senior creative" names the roles he's open to, not a past title.
+  - The rest of the site follows one section at a time; see `positioning.md`.
 - **What I Do:** on a sky panel, with "rates on request". No public prices.
 - **Left out:** testimonial wall, project counter, FAQ, signed founder note.
 

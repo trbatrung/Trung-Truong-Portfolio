@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trung (Ethan) Truong. Creative Direction & Production Systems</title>
-<meta name="description" content="Trung (Ethan) Truong. Creative direction and production systems for video. AI where it has been tested, one standard from script to final master.">
+<title>Trung (Ethan) Truong. Creative Direction</title>
+<meta name="description" content="Trung (Ethan) Truong. Creative direction for video that starts with the problem: brand films, ads, long-form and the systems behind them, script to final master.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0b0d'/%3E%3Ctext x='50' y='55' font-family='Georgia,serif' font-size='56' font-style='italic' font-weight='600' fill='%23e6a15b' text-anchor='middle' dominant-baseline='central'%3ETT%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,8 +96,6 @@
   .hero-copy .lead { max-width: 860px; }
   .hero-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: auto; }
   .hero-cta .btns { display: flex; gap: 12px; }
-  .map-hint { margin: 0; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,237,230,.6); }
-  .map-hint::before { content: '↓ '; color: var(--teal); }
   .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
   .btn svg { width: 15px; height: 15px; }
   button.btn { cursor: pointer; }
@@ -160,10 +158,12 @@
 
   @media (max-width: 760px) {
     .hero { min-height: 700px; }
-    .hero-copy { padding: 88px 18px 0; gap: 16px; }
-    .hero h1 { font-size: 34px; }
-    .hero h1 .l2 { font-size: 16.5px; }
-    .hero-eyebrow, .hero-status { font-size: 9.5px; }
+    .hero-copy { padding: 84px 18px 0; gap: 14px; }
+    .hero h1 { font-size: 28px; }
+    .hero h1 .l2 { font-size: 14.5px; margin-top: 8px; }
+    .hero-eyebrow, .hero-status { font-size: 8.5px; letter-spacing: .12em; }
+    .hero-eyebrow { margin-bottom: 10px; }
+    .hero .btn { padding: .8rem 1.35rem; font-size: .66rem; }
     .hero-cta { align-items: flex-start; }
     .hero-cta .btn-ghost { display: none; }
     .dash-empty { grid-template-columns: 1fr; padding: 0 18px; gap: 8px; }
@@ -491,12 +491,11 @@
   <div class="desk-bg" aria-hidden="true"></div>
   <div class="hero-copy">
     <div class="lead">
-      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
+      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction · Ho Chi Minh City</div>
       <h1 class="reveal">
-        Where does <span class="ai">AI</span> belong in your video?
-        <span class="l2">AI has a defined place in it. The <span class="craft">standard</span> doesn't move.</span>
+        What is this video <span class="craft">actually for</span>?
+        <span class="l2">Start with the problem. The people, the tools and the cut follow from it.</span>
       </h1>
-      <div class="hero-status mono reveal"><span class="live"></span>Ho Chi Minh City · Open to senior roles and select projects</div>
     </div>
     <div class="hero-cta reveal">
       <div class="btns">
@@ -506,7 +505,7 @@
         </button>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
       </div>
-      <p class="map-hint mono">Click an area on the map to open its work</p>
+      <div class="hero-status mono"><span class="live"></span>Open to senior creative roles and select projects</div>
     </div>
   </div>
   <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
@@ -579,7 +578,7 @@
         <div class="idx mono">01 — Systems · Directed end to end</div>
         <h2>Three systems, and the problem each one solves.</h2>
       </div>
-      <div class="aside">Every video lives<br>on the desktop above</div>
+      <div class="aside">Every video is<br>on the map above</div>
     </div>
     <div class="sys-grid reveal">
       <div class="sys" id="sys-01">

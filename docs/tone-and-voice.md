@@ -7,9 +7,10 @@ First person, professional with personality. Not corporate, not quirky. Blunt, s
 practical. Senior and selective, not eager.
 
 ## The central narrative
-Ethan owns the pipeline and sets the standard inside it, including where AI belongs. The
-"both lenses" idea (AI and real production) still runs underneath, but the line a reader should
-take away is about **decisions and standards**, not about being good with two kinds of tools.
+_Revised 2026-10-25._ Ethan starts every job with the problem: **what is this video actually
+for?** The people, the tools and the cut follow from it. AI is one of those tools, not the pitch.
+A reader should take away **problems solved and decisions made**, not a skill with any one kind of
+tool. Ownership and the standard still run underneath.
 
 ## Do
 - **State the decision, not the task.** Directed, owned, set, built, defined. Not produced,
@@ -46,6 +47,8 @@ take away is about **decisions and standards**, not about being good with two ki
 - "Most producers see the picture through one lens. I see both."
 - "I've already broken it, so you don't have to."
 - "Script to final master."
+- "What is this video actually for?" + "Start with the problem. The people, the tools and the cut
+  follow from it." (the hero, 2026-10-25)
 
 ## Retired phrases (don't reuse)
 - "Two crafts. One producer." (the old producer/editor framing)

@@ -1,7 +1,7 @@
 # Positioning
 
 The strategic spine of the site. Everything else (design, copy, structure) serves this.
-_Revised with Ethan on 2026-10-08. Supersedes the 2026-07-21 blueprint, which is still in git history._
+_Revised with Ethan on 2026-10-08, and again on 2026-10-25 (problem first, AI is not the pitch). Supersedes the 2026-07-21 blueprint, which is still in git history._
 
 ## Who the site is for: both, leadership leads
 - **Primary reader:** a hiring manager or founder filling a senior creative leadership role, one
@@ -15,12 +15,23 @@ banned any leadership claim. The August brief (`copy-rewrite-brief.md`) moved th
 creative leadership roles. This doc reconciles the two.
 
 ## The core position
-From *"a producer who sees the picture through both lenses"* to *"someone who owns the pipeline
-and sets the standard inside it, including where AI belongs."*
+**Revised 2026-10-25: a senior creative who starts with the problem.** In Ethan's words: "i dont
+want using AI as a usp of me ... i want my direction as a ... senior creative? like we solve
+peolpe issues". The site no longer sells AI.
 
-The fusion from July still holds and is still the differentiator. Most creative leads can't show a
-documented point of view on tooling. Most AI operators can't run a production. Ethan does both,
-and has the systems to show for it.
+Every job starts from the question in his own POV: **what is this video actually for?** The
+people, the tools (AI included) and the cut follow from the answer.
+
+AI stays on the site as one of the tools he has tested and runs, and the three systems stay as
+proof of judgment. AI is not the headline, the eyebrow or the first thing a reader sees.
+
+- **"Senior creative" is what he is open to, not a past title.** His CV titles are video editor,
+  agency founder, project manager / video editor and AI video producer. Use "Creative Direction"
+  as the descriptor, and say "senior creative roles" only for what he's looking for.
+- **The earlier positions, for the record:**
+  - 2026-07: "a producer who sees the picture through both lenses".
+  - 2026-10-08: "someone who owns the pipeline and sets the standard inside it, including where
+    AI belongs".
 
 ## The governing rules
 1. **Every line says what Ethan decided, not what he did.** Decision verbs (directed, owned, set,
@@ -41,22 +52,22 @@ and has the systems to show for it.
   a gap. Failure stories in particular come from Ethan, never from the writer.
 
 ## Page structure
-**Hero (desktop) → Systems → How I Choose Tools → What I Do + About → Contact.**
-- **Hero is the desktop.** One fixed screen (1440x900, 390x1210 on phones) scaled to fit, on a
-  color or ombre background (no photos). The H1 is read first, then the live dashboard window
-  under it (AI work, video production, research), then the icons. Dashboard added 2026-10-25; see
-  `revamp-plan.md`.
-- **All work lives on the desktop:** loose files, six folders, and Finder. No video grid on the
-  page.
-- **Depth lives on the desktop too.** The page carries one line per idea, about 480 words below
-  the hero. The full point of view and the full tool tests open as notes.
+**Hero (the map) → Systems → How I Choose Tools → What I Do + About → Contact.**
+- **The hero is the live 3D map** (since 2026-10-25), with the headline in a band above it, on
+  the Ember ombre (no photos). The H1 is read first, then the map's three areas. Clicking an area
+  opens its work. See `revamp-plan.md`.
+- **All work lives in Finder windows,** opened from the map, the nav and "Browse the work". There
+  is no video grid on the page.
+- **Depth lives in windows too.** The page carries one line per idea, about 480 words below the
+  hero. The full point of view and the full tool tests open as notes.
 
 ## The two-layer read (revised)
-- **Skim layer (first 5 seconds):** ownership and standard-setting in plain words. No buzzwords.
+- **Skim layer (first 5 seconds):** the question he starts from, and the problems the work
+  solves, in plain words. No buzzwords, and no AI pitch.
   A hiring manager sees a lead. A client still sees someone who delivers.
 - **Depth layer:** the systems (including what broke), the tool-vetting findings, the POV.
 
-## AI-Augmented Production: systems, not demos
+## AI-Augmented Production: systems, not demos (proof of judgment, not the pitch)
 Three systems (code-based animation, avatar video at volume, end-to-end AI lesson). Each one says
 what it is, how it runs, and **what broke and what Ethan changed as a result.** The failure line is
 the credibility anchor and is not optional.

@@ -34,14 +34,21 @@ band above it: the copy on the left, the buttons on the right (stacked on phones
 brief, head to head", "AI work · 3 · AI systems, directed end to end", "Video production · 8+ ·
 Years in production". Clicking an area on the map opens its work: AI work opens the AI Systems
 folder, video production opens the four production folders, research opens the Tool tests note.
-- Eyebrow: "Trung (Ethan) Truong · Creative Direction & Production Systems"
-- H1: "Where does **AI** belong in your video?" + "AI has a defined place in it. The **standard**
-  doesn't move." Picked 2026-10-08 from six neutral options: the headline from option 3, the
-  second line from option 6. Replaces the first-person "I own the video pipeline end to end."
-  Ethan found it too self-focused.
-- Status: "Ho Chi Minh City · Open to senior roles and select projects"
-- CTAs, right of the headline: "Browse the work" (opens Finder) · "Get in touch". Under them,
-  a hint: "Click an area on the map to open its work".
+- Eyebrow: "Trung (Ethan) Truong · Creative Direction · Ho Chi Minh City" (was "· Creative
+  Direction & Production Systems" until 2026-10-25)
+- H1: "What is this video **actually for**?" + "Start with the problem. The people, the tools and
+  the cut follow from it." Picked 2026-10-25 when Ethan dropped AI as the pitch. It comes from his
+  own POV line: "I don't start with a tool. I start with a question: what is this video actually
+  for?"
+  - The headline before that was "Where does AI belong in your video?" + "AI has a defined place
+    in it. The standard doesn't move." (2026-10-08).
+  - Before that, the first-person "I own the video pipeline end to end.", which Ethan found too
+    self-focused.
+- Status, under the buttons: "Open to senior creative roles and select projects". It replaced the
+  map hint ("Click an area on the map to open its work") on 2026-10-25 when Ethan found the hero
+  too crowded. On the map, the hero hides the map's own KPI strip and the hub's "One standard"
+  tag, and the area cards open on Video production.
+- CTAs, right of the headline: "Browse the work" (opens Finder) · "Get in touch".
 - Sub "Script to final master, end to end." dropped on 2026-10-25 to make room for the dashboard
   (the idea is said again in What I Do and About).
 - Desktop (icons, folders, dock): removed 2026-10-25. The videos stay in Finder; How I think opens
