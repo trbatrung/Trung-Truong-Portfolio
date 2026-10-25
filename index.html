@@ -173,14 +173,10 @@
   .mac-lights button:not(:disabled):hover::after { content: "+"; position: absolute; inset: 0; text-align: center; }
   .mac-title { font: 500 12.5px var(--mono); letter-spacing: .02em; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* until studio/index.html loads (or if it is missing), three plain cards stand in for the map */
-  .dash-empty { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 300px)); justify-content: center; gap: 14px; align-content: center; padding: 0 48px; transition: opacity .6s; }
-  .map.live .dash-empty { opacity: 0; pointer-events: none; }
-  .dash-card { background: #fff; border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(42,39,36,.08); }
-  .dash-card span { display: flex; align-items: center; gap: 8px; font: 600 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #2a2724; }
-  .dash-card span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
-  .dash-card b { display: block; margin-top: 14px; font: 400 40px/1 var(--serif); letter-spacing: -.02em; color: #1a1a1a; }
-  .dash-card em { display: block; margin-top: 8px; font: 400 13.5px/1.45 var(--sans); font-style: normal; color: #6f6a64; }
+  /* until the map has drawn its first frame: a quiet label, gone the moment the map is ready (no overlap) */
+  .map-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .7rem; color: rgba(241,237,230,.55); transition: opacity .15s; }
+  .map-loading i { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 1.4s infinite; }
+  .map.live .map-loading { opacity: 0; pointer-events: none; }
 
   @media (max-width: 760px) {
     .hero { min-height: 700px; }
@@ -196,10 +192,6 @@
     .tri span { display: none; }
     .tri-hint { font-size: 9px; }
     .tri-hint .arr::before { content: '↑ '; }
-    .dash-empty { grid-template-columns: 1fr; padding: 0 18px; gap: 8px; }
-    .dash-card { padding: 12px 14px; }
-    .dash-card b { font-size: 24px; margin-top: 6px; }
-    .dash-card em { display: none; }
   }
 
   /* AI Systems is the red folder, so it reads as the one to open (the Finder sidebar uses it) */
@@ -671,11 +663,7 @@
     </div>
   </div>
   <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
-    <div class="dash-empty">
-      <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Ben Thanh Market</b><em>Tool tests, same brief, head to head</em></div>
-      <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>By Bitexco</b><em>Systems, directed end to end</em></div>
-      <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>Riverside lot</b><em>Edit &amp; planning</em></div>
-    </div>
+    <div class="map-loading mono"><i></i>Loading the map</div>
   </div>
 </header>
 <div class="dt-wins" id="dtWins"></div>
@@ -984,7 +972,7 @@
 
   // ----- the map -----
   // The hero is the live 3D map, its own page in studio/, with a transparent background so the
-  // Ember ombre shows through. Three plain cards stand in until it loads. Phones get the lighter
+  // Ember ombre shows through. A quiet label stands in until it has drawn. Phones get the lighter
   // version. A click on an area opens that area's board.
   const studio = document.getElementById('studio');
   const STUDIO_SRC = 'studio/index.html';

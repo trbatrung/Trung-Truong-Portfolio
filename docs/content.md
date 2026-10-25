@@ -114,9 +114,7 @@ Say each idea once. Before adding a line, check it isn't already said in another
 The first screen is the live 3D map (`studio/index.html?embed=1&bg=none`, plus `&quality=low` on
 phones), with a transparent background so the Ember ombre shows through. The headline sits in a
 band above it: the copy on the left, the buttons on the right (stacked on phones). See
-`positioning.md`. Until the map loads, three cards stand in: "Research · Tool tests · Same
-brief, head to head", "AI work · 3 · AI systems, directed end to end", "Video production · 8+ ·
-Years in production". Clicking an area on the map opens its work: AI work opens the AI Systems
+`positioning.md`. Until the map has drawn its first frame, a quiet "Loading the map" label holds the space (it replaced three placeholder cards on 2026-10-26, which overlapped the map for half a second as it faded in). Clicking an area on the map opens its work: AI work opens the AI Systems
 folder, video production opens the four production folders, research opens the Tool tests note.
 - Eyebrow: "Trung (Ethan) Truong · Creative Direction · Ho Chi Minh City" (was "· Creative
   Direction & Production Systems" until 2026-10-25)
