@@ -58,7 +58,7 @@ proof of judgment. AI is not the headline, the eyebrow or the first thing a read
   a gap. Failure stories in particular come from Ethan, never from the writer.
 
 ## Page structure
-**Hero (the map) → Systems → How I Choose Tools → What I Do + About → Contact.**
+**Hero (the map) → proof strip → What I Do → About note → Contact** (short, since 2026-10-25; the projects live on the map and in their windows).
 - **The hero is the live 3D map** (since 2026-10-25), with the headline in a band above it, on
   the Ember ombre (no photos). The H1 is read first, then the map's three areas. Clicking an area
   opens its work. See `revamp-plan.md`.

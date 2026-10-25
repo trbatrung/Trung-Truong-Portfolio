@@ -394,30 +394,7 @@
   .idx.fname { font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--teal); }
   .mac-lights i:nth-child(3) { background: #28c840; }
 
-  /* systems: a video in a Mac window, waveform dots, the problem in blue and the fix in orange */
-  .cases { display: flex; flex-direction: column; gap: clamp(3.5rem, 8vw, 6rem); }
-  .case { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(1.6rem, 4vw, 3.6rem); align-items: center; }
-  .case:nth-child(even) .shot { order: 2; }
-  .shot { display: block; width: 100%; padding: 0; border: 0; text-align: left; font: inherit; cursor: pointer; }
-  .shot .mac-bar { display: flex; }
-  .shot-img { position: relative; display: block; aspect-ratio: 16 / 9; background: #111; overflow: hidden; }
-  .shot-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
-  .shot:hover .shot-img img { transform: scale(1.03); }
-  .shot .play { position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%; background: rgba(255,255,255,.9); box-shadow: 0 8px 24px rgba(0,0,0,.35); }
-  .shot .play::after { content: ''; position: absolute; left: 25px; top: 20px; border-left: 16px solid #111; border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
-  .talk h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -.01em; margin-bottom: 1rem; }
-  .wave { display: flex; align-items: center; gap: 5px; height: 24px; margin-bottom: 1.3rem; overflow: hidden; }
-  .wave i { width: 5px; border-radius: 3px; background: rgba(241,237,230,.26); }
-  .bubble { width: fit-content; max-width: 30rem; padding: .85rem 1.1rem; border-radius: 1.25rem; font-size: 1rem; line-height: 1.45; margin-bottom: .7rem; }
-  .bubble span { display: block; font-family: var(--mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; opacity: .78; margin-bottom: .3rem; }
-  .bubble.ask { background: linear-gradient(180deg, #8bb8ef, #5f95dc); color: #fff; border-bottom-left-radius: .3rem; }
-  .bubble.fix { margin-left: auto; background: linear-gradient(180deg, #f3bd85, #e6a15b); color: #1d150b; border-bottom-right-radius: .3rem; }
-  .tools-line { margin-top: 1.1rem; font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
-  /* how I work: two short lines */
-  .ap-short { max-width: 42rem; }
-  .ap-short p { font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.5; color: var(--ink); }
-  .ap-short p.dim { margin: .9rem 0 1.8rem; font-size: 1rem; color: var(--ink-dim); }
 
   /* about: a short note card, one line in highlighter */
   .note-card { max-width: 34rem; margin: clamp(3.5rem, 7vw, 5rem) auto 0; padding: 2.1rem 2.3rem 1.7rem; background: #fbf8f2; color: #1a1a1a; border-radius: 14px; box-shadow: 0 30px 70px -20px rgba(0,0,0,.6); transform: rotate(-.6deg); }
@@ -425,12 +402,11 @@
   .note-card p { font-size: 1.05rem; line-height: 1.6; color: #2a2724; }
   .note-card p + p { margin-top: .6rem; }
   .note-card mark { background: linear-gradient(transparent 52%, #f6d36b 52%); color: inherit; padding: 0 .1em; }
+  .note-links { display: flex; gap: 1.2rem; margin-top: 1.1rem; }
+  .note-links button { padding: 0; border: 0; background: none; font: 500 .72rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8a5a22; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
   .note-card .sig { display: flex; align-items: center; gap: .7rem; margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px dashed #ddd5c8; font-size: .88rem; color: #6f6a64; }
   .note-card .av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #1f1d1b; color: #fbf8f2; font-family: var(--serif); font-style: italic; }
   @media (max-width: 760px) {
-    .case { grid-template-columns: 1fr; }
-    .case:nth-child(even) .shot { order: 0; }
-    .bubble { font-size: .95rem; }
     .note-card { padding: 1.6rem 1.5rem 1.3rem; transform: none; }
   }
 
@@ -521,8 +497,6 @@
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="#top" data-open="finder">Work</a></li>
-      <li><a href="#systems">Systems</a></li>
-      <li><a href="#approach">How I work</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -614,80 +588,7 @@
   </div>
 </div>
 
-<!-- ---------- SYSTEMS ---------- -->
-<section id="systems">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <div class="idx fname">systems.md</div>
-        <h2>Systems I built. Each one fixed a problem.</h2>
-      </div>
-      <div class="aside">Every video is<br>on the map above</div>
-    </div>
-    <div class="cases">
-      <article class="case reveal" id="sys-01">
-        <button class="mac shot" type="button" data-project="pR03yYZbI8E" aria-label="Play Founder Intro">
-          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">founder-intro.mov</span></span>
-          <span class="shot-img"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
-        </button>
-        <div class="talk">
-          <h3 class="feat-title">Code-based animation</h3>
-          <div class="wave" aria-hidden="true"><i style="height:12px"></i><i style="height:14px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:8px"></i><i style="height:10px"></i><i style="height:17px"></i><i style="height:22px"></i><i style="height:21px"></i><i style="height:15px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:18px"></i><i style="height:18px"></i><i style="height:15px"></i><i style="height:10px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:17px"></i><i style="height:19px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:9px"></i><i style="height:17px"></i><i style="height:21px"></i><i style="height:21px"></i></div>
-          <p class="bubble ask"><span>The problem</span>Without a real brief, AI first passes landed far from final.</p>
-          <p class="bubble fix"><span>The fix</span>Every job starts from a context package now. The first pass lands close.</p>
-          <p class="tools-line">Claude Code · Final Cut Pro</p>
-        </div>
-      </article>
-      <article class="case reveal" id="sys-02">
-        <button class="mac shot" type="button" data-project="WlB4_OJTftM" aria-label="Play Executive Scale">
-          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">executive-scale.mp4</span></span>
-          <span class="shot-img"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
-        </button>
-        <div class="talk">
-          <h3 class="feat-title">Avatar video at volume</h3>
-          <div class="wave" aria-hidden="true"><i style="height:21px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:12px"></i><i style="height:7px"></i><i style="height:10px"></i><i style="height:17px"></i><i style="height:21px"></i><i style="height:20px"></i><i style="height:14px"></i><i style="height:5px"></i><i style="height:14px"></i><i style="height:19px"></i><i style="height:20px"></i><i style="height:16px"></i><i style="height:10px"></i><i style="height:7px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:17px"></i><i style="height:15px"></i><i style="height:9px"></i></div>
-          <p class="bubble ask"><span>The problem</span>At volume, AI artifacts slipped through.</p>
-          <p class="bubble fix"><span>The fix</span>QC runs inline at every stage. No separate review team.</p>
-          <p class="tools-line">HeyGen · ElevenLabs</p>
-        </div>
-      </article>
-      <article class="case reveal" id="sys-03">
-        <button class="mac shot" type="button" data-project="8EKCg3SiSPI" aria-label="Play AI Language Lesson">
-          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">ai-language-lesson.mov</span></span>
-          <span class="shot-img"><img src="https://img.youtube.com/vi/8EKCg3SiSPI/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
-        </button>
-        <div class="talk">
-          <h3 class="feat-title">A full lesson, no studio</h3>
-          <div class="wave" aria-hidden="true"><i style="height:11px"></i><i style="height:7px"></i><i style="height:15px"></i><i style="height:21px"></i><i style="height:22px"></i><i style="height:17px"></i><i style="height:9px"></i><i style="height:9px"></i><i style="height:16px"></i><i style="height:18px"></i><i style="height:16px"></i><i style="height:11px"></i><i style="height:6px"></i><i style="height:10px"></i><i style="height:16px"></i><i style="height:19px"></i><i style="height:18px"></i><i style="height:13px"></i><i style="height:6px"></i><i style="height:15px"></i><i style="height:20px"></i><i style="height:21px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:8px"></i><i style="height:13px"></i></div>
-          <p class="bubble ask"><span>The problem</span>One wrong line in a lesson teaches the wrong thing.</p>
-          <p class="bubble fix"><span>The fix</span>Every line is proofed against a teaching-accuracy bar before it ships.</p>
-          <p class="tools-line">HeyGen · Veo 3</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
 
-<!-- ---------- APPROACH ---------- -->
-<section class="approach" id="approach">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <div class="idx fname">how-i-work.md</div>
-        <h2>What is this video actually for?</h2>
-      </div>
-      <div class="aside">The tools<br>come after</div>
-    </div>
-    <div class="ap-short reveal">
-      <p>I start there. The people, the tools and the cut follow.</p>
-      <p class="dim">New tools get the same test every time: same brief, head to head. I log where they break.</p>
-      <div class="ap-links">
-        <button class="btn btn-ghost" type="button" data-note="pov">How I think</button>
-        <button class="btn btn-ghost" type="button" data-note="tests">The test notes</button>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- full-length notes, opened as desktop windows -->
 <template id="note-tests" data-title="Tool tests">
@@ -739,7 +640,9 @@
       <p>I started in the edit.</p>
       <p>Then I built a team of 10+, and the workflows it ran on.</p>
       <p>Now I own a pipeline end to end, and I know the stack under it: Claude Code, GitHub, Vercel, Supabase.</p>
+      <p>Every job starts with one question: what is this actually for?</p>
       <p><mark>I care about what we build, why we build it, and how we bring it to life.</mark></p>
+      <div class="note-links"><button type="button" data-note="pov">How I think</button><button type="button" data-note="tests">Tool tests</button></div>
       <div class="sig"><span class="av">E</span><span>Trung (Ethan) Truong · Ho Chi Minh City</span></div>
     </div>
   </div>
