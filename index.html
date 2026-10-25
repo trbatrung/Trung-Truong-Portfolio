@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>   <!-- three.js, for the map -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Newsreader:opsz,wght@6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto;min-height:0}.map{display:none}</style></noscript>
 <style>
   :root {
@@ -310,6 +310,14 @@
   .bd-file.doc:hover .th, .bd-file.doc:focus-visible .th { box-shadow: none; }
   .bd-file:hover .lb, .bd-file:focus-visible .lb { background: #0a5cd6; text-shadow: none; }
   .bd-file:focus-visible, .bd-sticky:focus-visible { outline: none; }
+  /* Diagnosis: one card, its wordmark on its own cream */
+  .bd-diag { width: 360px; height: 236px; display: flex; flex-direction: column; gap: 8px; padding: 22px 24px 20px; border-radius: 12px; background: #faf6f0; color: #111; cursor: pointer;
+    box-shadow: 0 16px 34px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2); transition: transform .35s var(--spring); }
+  .bd-diag:hover, .bd-diag:focus-visible { transform: translateY(-3px) scale(1.02); outline: none; }
+  .bd-diag .wm { font: 500 34px/1 'Newsreader', Georgia, serif; letter-spacing: -.01em; }
+  .bd-diag .tl { font: italic 400 17px/1.3 'Newsreader', Georgia, serif; color: #3a332c; }
+  .bd-diag .cp { font-size: 13px; line-height: 1.5; color: #6f665d; }
+  .bd-diag .go { margin-top: auto; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #111; }
   /* the tool tests as sticky notes */
   .bd-sticky { width: 168px; height: 150px; padding: 14px 14px 12px; border: 0; border-radius: 3px; background: #f6d36b; color: #2a2316; text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 6px; transform: rotate(var(--r, 0deg)); box-shadow: 0 12px 24px rgba(0,0,0,.3); transition: transform .35s var(--spring); }
   .bd-sticky.no { background: #f2a46a; }
@@ -517,8 +525,8 @@
   .dg-meta { margin-top: 1.2rem; color: var(--muted); }
   .dg-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.6rem; }
   .dg-links .sk-go { margin-top: 0; }
-  .dg-site { background: #f7f2ea; color: #1d1a17; padding: 18px 20px 8px; }
-  .dg-mast { font: 500 22px var(--serif); color: #9e4434; padding-bottom: 12px; border-bottom: 1px solid #e6ddd0; margin-bottom: 14px; }
+  .dg-site { background: #faf6f0; color: #1d1a17; padding: 18px 20px 8px; }
+  .dg-mast { font: 500 24px 'Newsreader', Georgia, serif; color: #111; padding-bottom: 12px; border-bottom: 1px solid #e6ddd0; margin-bottom: 14px; }
   .dg-lead { display: block; }
   .dg-lead img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #e9e2d6; }
   .dg-k { display: block; margin-top: 10px; font: 600 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #9e4434; }
@@ -1255,26 +1263,19 @@
     ai:         { name: 'AI work', c: '#57cbbb', tag: CATS.ai.role, line: CATS.ai.desc },
     production: { name: 'Video production', c: '#e6a15b', tag: 'Edit & planning', line: 'Brand films, client stories, ads and long-form.' },
   };
-  const SIZE = { file: [176, 150], v: [108, 204], doc: [112, 136], sticky: [168, 150] };   // each item's cell on the board
+  const SIZE = { file: [176, 150], v: [108, 204], doc: [112, 136], sticky: [168, 150], diag: [360, 236] };   // each item's cell on the board
   const TILT = [-2, 1.5, -1, 2, -1.5, 1, -.5];
   const fileHTML = p => `<button type="button" class="bd-file${p.short ? ' v' : ''}" data-project="${esc(p.id)}"><span class="th"><img src="${thumb(p.id)}" alt="" loading="lazy" decoding="async" draggable="false">${p.len ? `<span class="len">${esc(p.len)}</span>` : ''}</span><span class="lb">${esc(p.title)}</span></button>`;
-  // Diagnosis, newest first, as on the site: [slug, title, kicker, date, read time, thumbnail]
-  const DIAG_URL = 'https://diagnosis-omega.vercel.app';
-  const DIAG = [
-    ['growth-quota', "Vietnam's growth is real. It is also an order.", 'Second opinion', 'Oct 20, 2026', '14 min', 'growth-quota.png'],
-    ['certificate-economy', 'Everything is certified. Nothing is checked.', 'Case notes', 'Aug 2, 2026', '17 min', 'certificate-economy.png'],
-    ['ip-crackdown', "The crackdown is real. The alternative isn't.", 'Case notes', 'May 29, 2026', '14 min', 'ip-crackdown.png'],
-    ['housing-collapse', "Vietnam's Property Market Is Not Collapsing. That's the Problem.", 'Case notes', 'May 15, 2026', '14 min', 'housing-collapse.png'],
-    ['degree-trap', 'Vietnam Trained a Generation for the Wrong Economy', 'Case notes', 'Apr 28, 2026', '15 min', 'degree-trap.png'],
-    ['retail-investors-savings-desert', "Vietnam's Retail Investors Aren't Gamblers. The System Made Them Into One.", 'Case notes', 'Apr 27, 2026', '15 min', 'retail-investors-hero.png'],
-    ['gdp-vs-living-standards', "Vietnam's Economy Is Growing. Most Vietnamese Can't Afford to Live in It.", 'Case notes', 'Apr 24, 2026', '18 min', 'two-towers-distribution.jpeg'],
-  ];
-  const diagHTML = ([slug, title, , , read, img]) => `<a class="bd-file" href="${DIAG_URL}/posts/${slug}" target="_blank" rel="noopener" draggable="false"><span class="th"><img src="${DIAG_URL}/thumbnails/${img}" alt="" loading="lazy" decoding="async" draggable="false"><span class="len">${esc(read)}</span></span><span class="lb">${esc(title)}</span></a>`;
+  // Diagnosis on the Research board: one card with its wordmark, not every piece
+  const DIAG_CARD = `<a class="bd-diag" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener" draggable="false">
+    <span class="wm">Diagnosis</span><span class="tl">Vietnam's economy, as it actually is.</span>
+    <span class="cp">My independent analysis of the economy I live in. Each piece takes an official claim and checks it against the data, and against what people on the ground see.</span>
+    <span class="go">Since April 2026 · Read it ↗</span></a>`;
   function boardGroups(area) {
     if (area === 'research') return [
+      { items: [['diag', DIAG_CARD]] },
       { items: [['doc', `<button type="button" class="bd-file doc" data-note="tests"><span class="th">${DOC_SVG}</span><span class="lb">tool-tests.md</span></button>`],
                 ['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`]] },
-      { head: `<div class="bd-folder">${FOLDER_SVG}Diagnosis <em>${DIAG.length}</em></div>`, items: DIAG.map(d => ['file', diagHTML(d)]) },
       { head: `<div class="bd-folder">${FOLDER_SVG}Tool tests <em>${TESTS.length}</em></div>`, items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
     ];
     const pov = area === 'ai' ? [{ items: [['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`],

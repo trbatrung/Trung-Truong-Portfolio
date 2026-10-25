@@ -50,8 +50,11 @@ them, not sum them all in 1".
   - "Long reads since April 2026 · Ho Chi Minh City", then links to Read Diagnosis and YouTube.
   - **A Mac window previewing the site:** the latest piece with its illustration, then three
     more pieces with titles, dates and read times taken from the site.
-  - **The Research board** has a Diagnosis folder with all seven pieces (illustration, title, read
-    time), each opening on the site, above the tool-test sticky notes.
+  - **The Research board** has one Diagnosis card (Ethan: "not too much - just a overall piece, with
+    the logo"). The wordmark "Diagnosis" is set in Newsreader, as on the site; the tagline is
+    "Vietnam's economy, as it actually is."; the copy is "My independent analysis of the economy I
+    live in. Each piece takes an official claim and checks it against the data, and against what
+    people on the ground see."; then "Since April 2026 · Read it ↗". The tool-test notes sit below.
   - **Open:** Diagnosis is published without a personal name (its About page says so). Linking it
     from the named portfolio makes it his publicly. Ethan to confirm before it goes live.
 - **Boards replace Finder.** Each area has its own endless desktop on the Ember wallpaper
