@@ -988,7 +988,9 @@
       f.addEventListener('load', () => setTimeout(() => studio.classList.add('live'), 8000));   // a fallback; normally the map says when it has drawn
       studio.appendChild(f);
     }
-    f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '');
+    // the version follows this page's publish time, so a phone never keeps an old map from its cache
+    const v = (Date.parse(document.lastModified) || 0).toString(36);
+    f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '') + '&v=' + v;
   }
   function openArea(area, opener) {
     openBoard(area, opener);
