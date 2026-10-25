@@ -16,6 +16,8 @@
   /* in the site's hero: a vertical swipe scrolls the page, taps still click, and a long press doesn't select the map's text */
   html.embed, html.embed body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: pan-y; }
   html.embed canvas { touch-action: pan-y; }
+  /* zoomed in, a one-finger drag moves the map instead of scrolling the page */
+  html.embed.zoomed-in, html.embed.zoomed-in body, html.embed.zoomed-in canvas { touch-action: none; }
   /* the site's hero keeps the map quiet: its own stats row and the hub's tag would repeat the page */
   html.embed .kpis, html.embed .pill.hub { display: none; }
   #frame canvas { display: block; }
@@ -1632,6 +1634,7 @@ const turned = () => { const a = ((view.tr % TAU) + TAU) % TAU; return a > 1e-3 
 function viewChanged(snap) {
   const zoomed = view.tz > 1.001 || turned();
   document.documentElement.classList.toggle('zoomed', zoomed);
+  document.documentElement.classList.toggle('zoomed-in', view.tz > 1.001);
   if (refs.zoomReset) refs.zoomReset.hidden = !zoomed;
   if (refs.zoomIn) { refs.zoomIn.disabled = view.tz >= ZMAX - 1e-3; refs.zoomOut.disabled = view.tz <= 1.001; }
   if (zoomed && refs.zoomHint) refs.zoomHint.hidden = true;
@@ -1732,9 +1735,9 @@ if (ZOOM_ON) {
     canvas.addEventListener('gesturestart', e => { e.preventDefault(); gs = 1; });
     canvas.addEventListener('gesturechange', e => { e.preventDefault(); zoomAt(W / 2, H / 2, e.scale / gs, true); gs = e.scale; });
   }
-  // drag to move, once zoomed in (mouse and pen)
-  // drag: at rest it turns the map, zoomed in it moves it. On touch a sideways swipe turns it,
-  // a vertical swipe is left to the page (touch-action: pan-y), and two fingers pinch.
+  // drag: at rest it turns the map, zoomed in it moves it. On touch at rest a sideways swipe turns it and a
+  // vertical swipe is left to the page (touch-action: pan-y); zoomed in, one finger moves the map in any
+  // direction (touch-action: none). Two fingers pinch, move and twist.
   let drag = null, pinch = null;
   canvas.addEventListener('pointerdown', e => {
     if (e.button !== 0) return;
@@ -1746,8 +1749,9 @@ if (ZOOM_ON) {
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
     if (!drag.mode) {
       if (Math.hypot(dx, dy) < 6) return;
-      if (drag.touch && Math.abs(dx) < Math.abs(dy)) { drag = null; return; }   // vertical swipes scroll the page
-      drag.mode = !drag.touch && view.tz > 1.001 ? 'pan' : 'turn';
+      const zoomedIn = view.tz > 1.001;
+      if (drag.touch && !zoomedIn && Math.abs(dx) < Math.abs(dy)) { drag = null; return; }   // at rest, vertical swipes scroll the page
+      drag.mode = zoomedIn ? 'pan' : 'turn';
       try { canvas.setPointerCapture(e.pointerId); } catch {}
       document.documentElement.classList.add('panning', 'seen');
     }
