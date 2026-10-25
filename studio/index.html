@@ -547,8 +547,8 @@ function kf(keys) {   // [[t, x, z], ...] over one period (a beat, or the full l
   };
 }
 // tamarind trees: wide, low canopies in deep green
-const trunks = new Inst(cylGeo(0.1, 0.15, 1), mat('#8c7158'), 140);
-const crowns = new Inst(new THREE.IcosahedronGeometry(0.85, 1), mat('#ffffff', 0.85), 140);
+const trunks = new Inst(cylGeo(0.1, 0.15, 1), mat('#8c7158'), 180);
+const crowns = new Inst(new THREE.IcosahedronGeometry(0.85, 1), mat('#ffffff', 0.85), 180);
 const LEAVES = ['#7f9c6c', '#728f61', '#8aa778', '#6c8a5c'];
 function tree(group, x, z, s = 1, y0 = 0) {
   trunks.add(group, x, y0 + 0.5 * s, z, { sx: s, sy: s, sz: s });
@@ -751,8 +751,55 @@ function tubeHouse(cx, cz, ry, w, d, floors) {
   if (rng() < 0.5) for (let k = 0; k < 3; k++) add(TH.plant, rr(-w / 3, w / 3), H + 0.2, rr(-d / 3, d / 4), { color: pick(LEAF) });
 }
 // far bank: riverside tube houses and trees
-for (const [x, w, n] of [[-24.5, 3.2, 2], [-20.6, 3.6, 3], [-16.5, 3.0, 2], [-12.6, 3.8, 3], [-4.2, 3.4, 2], [0.2, 3.0, 3], [21.5, 3.4, 2]]) tubeHouse(x, -33.4, 0, w, 3.4, n);
-for (const x of [-26.5, -22.5, -18.5, -14.6, -10.3, -2.0, 2.4, 5.0, 19.2, 23.8]) tree('base', x + rr(-0.3, 0.3), -31.6, rr(0.55, 0.8));
+tubeHouse(21.5, -33.4, 0, 3.4, 3.4, 2);
+for (const x of [5.0, 19.2, 23.8]) tree('base', x + rr(-0.3, 0.3), -31.6, rr(0.55, 0.8));
+// Saigon Zoo (Thao Cam Vien), between Bitexco and the bridge: dense old trees behind the yellow gate, a pond with
+// flamingos, two giraffes and an elephant, and the Hung Kings Temple under its red-tile roof
+{ const g = grp('base', -17.6, -33.7);
+  box(g, 19.6, 0.12, 5.2, '#a9c493', 0, 0, 0, 0.08);
+  box(g, 19.6, 0.5, 0.18, '#efcf86', 0, 0, 2.5, 0.04);                                            // the low yellow wall on the river side
+  box(g, 3.4, 0.06, 2.0, '#7fb0c0', 2.6, 0.12, 0.2, 0.06); box(g, 1.2, 0.08, 0.3, '#c9503a', 2.6, 0.22, 0.2, 0.03);   // pond, little red bridge
+  // the gate: two yellow piers and an arch over the path
+  for (const x of [-1.0, 1.0]) box(g, 0.5, 1.6, 0.5, '#efcf86', x - 6.0, 0, 2.5, 0.04);
+  box(g, 2.5, 0.35, 0.5, '#efcf86', -6.0, 1.6, 2.5, 0.04); gable(g, 2.6, 0.45, 0.6, '#b65a42', -6.0, 1.95, 2.5);
+  // Hung Kings Temple
+  { const t = new THREE.Group(); t.position.set(6.6, 0.12, -0.6); g.add(t);
+    box(t, 2.6, 0.3, 2.0, '#d9d1c4', 0, 0, 0, 0.04); box(t, 2.2, 1.1, 1.6, '#f2c94c', 0, 0.3, 0, 0.04);
+    for (const x of [-0.8, -0.27, 0.27, 0.8]) box(t, 0.12, 1.1, 0.12, '#b65a42', x, 0.3, 0.84, 0.02);
+    gable(t, 2.8, 0.75, 2.2, '#a8432f', 0, 1.4, 0, Math.PI / 2);
+    for (const [x, z] of [[-1.35, 1.05], [1.35, 1.05], [-1.35, -1.05], [1.35, -1.05]]) { const c = mesh(new THREE.ConeGeometry(0.08, 0.35, 6), '#a8432f', x, 1.55, z, t); c.rotation.z = x < 0 ? 0.7 : -0.7; } }
+  // giraffes: tall necks that dip, slowly
+  const SPOT = '#d9a35b', DARK = '#8a5a2e', necks = [];
+  [[-2.4, 0.6, 0.4, 0], [-1.3, -0.5, -0.6, 0.5]].forEach(([x, z, ry, ph]) => {
+    const a = new THREE.Group(); a.position.set(x, 0.12, z); a.rotation.y = ry; g.add(a);
+    box(a, 0.9, 0.42, 0.36, SPOT, 0, 0.75, 0, 0.12);
+    for (const [lx, lz] of [[-0.32, -0.12], [-0.32, 0.12], [0.32, -0.12], [0.32, 0.12]]) box(a, 0.08, 0.78, 0.08, SPOT, lx, 0, lz, 0.02);
+    const neck = new THREE.Group(); neck.position.set(0.36, 1.05, 0); a.add(neck);
+    const n = box(neck, 0.14, 1.05, 0.14, SPOT, 0, 0, 0, 0.05); n.rotation.z = -0.32; n.position.x = 0.17;
+    box(neck, 0.34, 0.16, 0.16, SPOT, 0.42, 0.95, 0, 0.06); box(neck, 0.04, 0.12, 0.04, DARK, 0.28, 1.08, 0.05, 0.01); box(neck, 0.04, 0.12, 0.04, DARK, 0.28, 1.08, -0.05, 0.01);
+    for (const [sx, sy] of [[-0.2, 0.86], [0.12, 0.92], [0.3, 0.8], [-0.05, 1.0]]) box(a, 0.14, 0.02, 0.37, DARK, sx, sy + 0.2, 0, 0.005);
+    necks.push([neck, ph]); });
+  lastPiece().anim = (o, t) => { for (const [n, ph] of necks) n.rotation.z = 0.12 * (0.5 + 0.5 * wave(t, 1, ph)); };
+  // the elephant, by the pond
+  { const e = new THREE.Group(); e.position.set(0.6, 0.12, 0.8); e.rotation.y = -0.5; g.add(e); const GR = '#9a958e';
+    box(e, 1.2, 0.75, 0.75, GR, 0, 0.45, 0, 0.3);
+    for (const [lx, lz] of [[-0.4, -0.22], [-0.4, 0.22], [0.4, -0.22], [0.4, 0.22]]) box(e, 0.22, 0.48, 0.22, GR, lx, 0, lz, 0.06);
+    box(e, 0.45, 0.48, 0.5, GR, 0.72, 0.68, 0, 0.18);
+    for (const z of [-0.33, 0.33]) box(e, 0.08, 0.42, 0.36, '#8f8a83', 0.62, 0.66, z, 0.06);
+    const tr = mesh(cylGeo(0.07, 0.1, 0.55, 8), GR, 0.98, 0.5, 0, e); tr.rotation.z = 0.25; }
+  // flamingos in the pond
+  for (const [x, z] of [[1.9, 0.6], [2.4, -0.2], [3.2, 0.5], [3.5, -0.3]]) { const f = new THREE.Group(); f.position.set(x, 0.18, z); g.add(f);
+    box(f, 0.02, 0.32, 0.02, '#e88aa0', 0, 0, 0, 0.005); box(f, 0.2, 0.12, 0.1, '#f19ab0', 0, 0.32, 0, 0.04); box(f, 0.03, 0.2, 0.03, '#f19ab0', 0.08, 0.42, 0, 0.01); } }
+for (const [x, z, s] of [[-26.0, -32.4, 1.0], [-24.6, -34.9, 1.2], [-22.5, -32.6, 0.9], [-21.0, -35.3, 1.25], [-19.4, -32.3, 0.8], [-16.0, -35.4, 1.1],
+  [-14.2, -32.5, 0.85], [-12.6, -35.6, 1.0], [-9.4, -32.6, 0.9], [-9.0, -35.2, 1.15], [-26.8, -35.6, 0.95], [-17.4, -35.9, 0.9]]) tree('base', x, z, s, 0.12);
+// Ba Son, between the bridge and Landmark 81: the twin Grand Marina towers, glass banded white, on one podium
+{ const g = grp('base', -1.2, -33.9);
+  const glass = new THREE.MeshStandardMaterial({ color: '#a9bfc8', roughness: 0.25, metalness: 0.15 });
+  box(g, 6.2, 1.0, 3.2, '#e7e1d8', 0, 0, 0, 0.08); box(g, 6.3, 0.12, 3.3, '#f4efe6', 0, 1.0, 0, 0.03);
+  for (const [x, h] of [[-1.55, 8.4], [1.55, 10.4]]) {
+    box(g, 2.3, h, 2.3, glass, x, 1.0, 0, 0.25);
+    for (let y = 1.6; y < h + 0.6; y += 0.7) box(g, 2.36, 0.07, 2.36, '#f6f2ea', x, y, 0, 0.12);
+    box(g, 1.6, 0.5, 1.6, '#f6f2ea', x, 1.0 + h, 0, 0.12); box(g, 0.05, 0.9, 0.05, '#d9d3ca', x, 1.5 + h, 0, 0.01); } }
 
 // Bitexco, behind AI work: tapered tower, helipad out the side near the top
 { const g = grp('base', -19.6, -19.7);
@@ -942,8 +989,10 @@ pool('hub', 0, 0, 3.6, '#9feadf', 0.3, 0.3);
 const selRings = {};
 const padMeshes = [];   // each area's floor: what the pointer is over, without testing every prop
 function pad(key, group, cx, cz, w, d, color) {
-  const g = grp(group, cx, cz); padMeshes.push(box(g, w, PAD_Y, d, tint(color, 0.34), 0, 0, 0, 0.08));
-  const ring = new THREE.Mesh(rbox(w + 0.9, 0.04, d + 0.9, 0.3), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false }));
+  const g = grp(group, cx, cz); padMeshes.push(box(g, w, PAD_Y, d, tint(color, 0.48), 0, 0, 0, 0.08));
+  const edge = glowMat(color, 1.5);   // a neon edge, always on, so each area stands out from the busy city around it
+  for (const [ex, ez, ew, ed] of [[0, -d / 2, w + 0.16, 0.16], [0, d / 2, w + 0.16, 0.16], [-w / 2, 0, 0.16, d], [w / 2, 0, 0.16, d]]) box(g, ew, 0.1, ed, edge, ex, PAD_Y - 0.04, ez, 0.03);
+  const ring = new THREE.Mesh(rbox(w + 1.4, 0.04, d + 1.4, 0.4), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false }));
   ring.position.set(cx, 0.02, cz); ring.userData.noAO = true; scene.add(ring); selRings[key] = ring;
 }
 const curbStripe = (group, x, z, w, d, color) => { const g = grp(group, x, z); box(g, w, 0.215, d, color, 0, 0, 0, 0.03); };
@@ -1492,7 +1541,7 @@ function renderSide() {
   if (refs.flow) refs.flow.innerHTML = `<div class="main"><div class="hd"><span class="dot" style="background:${a.color}"></span>Workflow · ${esc(a.name)}</div>
       <div class="steps"><div class="track"><div class="fill" style="background:${a.color}"></div></div>${a.flow.map(s => `<div class="step"><i></i><span>${esc(s)}</span></div>`).join('')}</div></div>
     <div class="item"><span class="up">Current item</span><b>${esc(a.item[0])}</b><span>${esc(a.item[1])}</span></div>`;
-  ORDER.forEach(k => { refs.kpis[k].classList.toggle('on', k === selected); refs.pills[k].classList.toggle('on', k === selected); refs.tabs[k]?.classList.toggle('on', k === selected); selRings[k].visible = k === selected || k === hot; });
+  ORDER.forEach(k => { refs.kpis[k].classList.toggle('on', k === selected); refs.pills[k].classList.toggle('on', k === selected); refs.tabs[k]?.classList.toggle('on', k === selected); selRings[k].material.opacity = k === selected || k === hot ? 0.9 : 0.45; });
 }
 function select(k, open = true) {
   if (!AREAS[k]) return;
@@ -1728,7 +1777,7 @@ const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
 function setHot(k) {
   if (hot === k) return;
   hot = k;
-  ORDER.forEach(a => { refs.pills[a].classList.toggle('hot', a === k); selRings[a].visible = a === selected || a === k; });
+  ORDER.forEach(a => { refs.pills[a].classList.toggle('hot', a === k); selRings[a].material.opacity = a === selected || a === k ? 0.9 : 0.45; });
   if (paused) draw(lastT);
 }
 function areaAt(cx, cy) {

@@ -50,7 +50,13 @@ never their assets. His calls on 2026-10-25:
     fountain, people strolling, and colorful shophouses.
   - Its eye-catcher is the café apartment block at **42 Nguyen Hue**, at the river end facing the
     camera. Every balcony is its own lit café. (Ethan: "have apartment 42 as the main eye catcher")
-  - The houses across the river use the same shophouse builder.
+  - Across the river, the stretch between Bitexco and the bridge is the **Saigon Zoo**: trees, the
+    gate, a pond with flamingos, giraffes, an elephant and the Hung Kings Temple. Between the bridge
+    and Landmark 81 stand the **Ba Son twin towers**. (Ethan also named "the newest ETC
+    building"; it's not built, since we don't know which one he means.)
+  - **The areas stand out more** now that the city is busier: a stronger floor tint, a neon edge
+    in each area's color, and a glow ring that's always faintly on and brightens on hover or
+    selection.
   - Phones load less: the minified three.js, no ambient-occlusion files, and no waiting for fonts.
 - **Hero (revised again, 2026-10-25): no more desktop.** "the whole map thing should be the hero".
   - The 3D map fills the first screen, with the Ember background showing through it. The
