@@ -33,6 +33,11 @@ never their assets. His calls on 2026-10-25:
   Edge8 Four Offices dashboard, with real data only. It is its own page (`studio/index.html`),
   built in a separate session. The first try (a loop-street scene above a separate Work section)
   was rejected: "its kinda bad".
+- **Dashboard scene (Ethan, later the same day):** Saigon map-ish, with real landmarks and the
+  river (Bitexco, Landmark 81, Ben Thanh, the cathedral and post office, the Opera House) and
+  street life; different lighting per area; research as papers, binders and books instead of
+  monitors; a hologram in the middle of AI work; more lights, a crane and cameras in video
+  production; the camera holds still (no spin). Layout signed off: "layout is alright".
 - **What I Do:** on a sky panel, with "rates on request". No public prices.
 - **Left out:** testimonial wall, project counter, FAQ, signed founder note.
 
