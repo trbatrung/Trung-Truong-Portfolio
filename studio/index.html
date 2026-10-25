@@ -1589,9 +1589,13 @@ function freeRect() {
 function frameCamera() {
   camera.aspect = W / H;
   const free = freeRect();
-  const pts = [];                                                            // the ground of the block and its river; towers may run off the top
+  const pts = [];                                                            // the ground of the block and its river
   for (const x of [-29, 25.6]) for (const z of [-31, 25]) for (const y of [-3.2, 1.5]) pts.push(new THREE.Vector3(x, y, z));
   pts.push(new THREE.Vector3(-7.5, 7.0, 20.2), new THREE.Vector3(4.0, 3.6, 20.6));
+  // and the skyline, so a wide, short screen doesn't cut the towers off: Landmark 81, Bitexco, the bridge pylon,
+  // the Ba Son towers, 42 Nguyen Hue
+  pts.push(new THREE.Vector3(13.5, 19.2, -33.6), new THREE.Vector3(-19.6, 14.8, -19.7), new THREE.Vector3(-6.4, 12.8, -31.6),
+    new THREE.Vector3(0.35, 12.4, -33.9), new THREE.Vector3(-26.75, 10.4, -17.6));
   camera.clearViewOffset();
   const bounds = dist => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; placeCamera(BASE_YAW, dist);
     for (const p of pts) { _v.copy(p).project(camera); const px = (_v.x + 1) / 2 * W, py = (1 - _v.y) / 2 * H; x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); }
