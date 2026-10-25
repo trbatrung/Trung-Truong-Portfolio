@@ -95,7 +95,21 @@
   .hero-copy { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px; padding: 104px 48px 0; pointer-events: none; }
   .hero-copy .lead { max-width: 860px; }
   .hero-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: auto; }
-  .hero-cta .btns { display: flex; gap: 12px; }
+  .cta-row { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; }
+  /* the three areas as one glass control; each opens that area's work, like the map */
+  .tri { display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6); backdrop-filter: blur(16px) saturate(1.6);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.16), 0 10px 30px rgba(0,0,0,.25); }
+  .tri button { position: relative; display: inline-flex; align-items: center; gap: .55rem; padding: .9rem 1.3rem; border: 0; border-radius: 999px; background: transparent; color: #f4f0ea;
+    font: 500 .74rem/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .45s var(--spring); }
+  .tri button + button::before { content: ''; position: absolute; left: -1px; top: 28%; bottom: 28%; width: 1px; background: rgba(255,255,255,.18); }
+  .tri button:hover { background: rgba(255,255,255,.12); }
+  .tri button:active { transform: scale(.96); transition-duration: .12s; }
+  .tri b { font-weight: 500; }
+  .tri i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+  .tri span { opacity: .6; }
+  .tri-hint { margin: 0; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,237,230,.72); }
+  .tri-hint .arr::before { content: '← '; color: var(--teal); }   /* beside the control on wide screens, under it on phones */
   .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
   .btn svg { width: 15px; height: 15px; }
   button.btn { cursor: pointer; }
@@ -164,8 +178,12 @@
     .hero-eyebrow, .hero-status { font-size: 8.5px; letter-spacing: .12em; }
     .hero-eyebrow { margin-bottom: 10px; }
     .hero .btn { padding: .8rem 1.35rem; font-size: .66rem; }
-    .hero-cta { align-items: flex-start; }
-    .hero-cta .btn-ghost { display: none; }
+    .hero-cta { align-items: stretch; }
+    .tri { display: flex; width: 100%; }
+    .tri button { flex: 1; justify-content: center; text-align: center; padding: .8rem .35rem; gap: .35rem; font-size: .56rem; letter-spacing: .05em; }
+    .tri span { display: none; }
+    .tri-hint { font-size: 9px; }
+    .tri-hint .arr::before { content: '↑ '; }
     .dash-empty { grid-template-columns: 1fr; padding: 0 18px; gap: 8px; }
     .dash-card { padding: 12px 14px; }
     .dash-card b { font-size: 24px; margin-top: 6px; }
@@ -516,12 +534,13 @@
       </h1>
     </div>
     <div class="hero-cta reveal">
-      <div class="btns">
-        <button type="button" class="btn btn-primary" data-open="finder">
-          Browse the work
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </button>
-        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <div class="cta-row">
+        <div class="tri" role="group" aria-label="Open the work by area">
+          <button type="button" data-area="research"><i style="--c:#4f9fe6"></i><b>Research</b><span>↗</span></button>
+          <button type="button" data-area="ai"><i style="--c:#57cbbb"></i><b>AI work</b><span>↗</span></button>
+          <button type="button" data-area="production"><i style="--c:#e6a15b"></i><b>Video production</b><span>↗</span></button>
+        </div>
+        <p class="tri-hint mono"><span class="arr"></span>Tap one to see the work</p>
       </div>
       <div class="hero-status mono"><span class="live"></span>Ho Chi Minh City · Open to senior creative roles</div>
     </div>
@@ -753,12 +772,19 @@
   fetch(STUDIO_SRC, { method: 'HEAD' })
     .then(r => { if (r.ok) { mountStudio(); addEventListener('resize', mountStudio); } })
     .catch(() => {});
+  function openArea(area, opener) {
+    if (area === 'ai') openFinder('ai', opener);
+    else if (area === 'production') openFinder('production', opener);
+    else if (area === 'research') openNote('tests', opener);
+  }
   addEventListener('message', e => {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'studio:area') return;
-    if (e.data.area === 'ai') openFinder('ai');
-    else if (e.data.area === 'production') openFinder('production');
-    else if (e.data.area === 'research') openNote('tests');
+    openArea(e.data.area);
   });
+  document.querySelectorAll('.tri [data-area]').forEach(b => b.addEventListener('click', () => {
+    try { studio.querySelector('iframe')?.contentWindow?.selectArea?.(b.dataset.area, false); } catch {}   // the map highlights it too
+    openArea(b.dataset.area, b);
+  }));
 
   // ----- the work -----
   // Every video lives in WORK, in folders, all in Finder. The map's areas, the nav and "Browse the

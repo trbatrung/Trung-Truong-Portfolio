@@ -1507,7 +1507,7 @@ if (ZOOM_ON) {
     refs.zoomReset = el('txt', 'Reset', zc, 'button');
   }
   refs.zoomReset.title = 'Show the whole map';
-  el('tap-hint', `<i></i>${TOUCH ? 'Tap a place to see its work' : 'Click a place to see its work · drag to turn'}`);
+  el('tap-hint', `<i></i>${TOUCH ? 'Swipe sideways to turn' : 'Drag to turn the map'}`);
   refs.zoomReset.hidden = true;                                             // only once zoomed in
   refs.zoomReset.onclick = () => { view.tz = 1; view.tr = Math.round(view.tr / TAU) * TAU; clampView(); viewChanged(false); };   // straighten by the short way
   document.documentElement.addEventListener('mouseenter', () => { hovering = true; armHome(); });

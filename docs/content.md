@@ -21,6 +21,9 @@ then mirror them into the HTML. **Status** says where each section stands in the
 ## Live copy v4 (2026-10-25): short, heyclicky style
 Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is in `profile.md`.
 - **Hero:**
+  - under the line, one three-part control: Research ↗ | AI work ↗ | Video production ↗, which
+    opens the same work as the map. Beside it: "← Tap one to see the work" (↑ on phones). It
+    replaced "Browse the work" and "Get in touch"; the nav's Work and Contact still reach those.
   - eyebrow "Trung (Ethan) Truong · Creative Producer & Technologist";
   - H1 "I build the work, **and the systems behind it**.";
   - line "Film, motion and creative technology. Eight years, concept to delivery.";
