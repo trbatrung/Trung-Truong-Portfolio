@@ -213,7 +213,7 @@
   .dt-min { background: #febc2e; cursor: default !important; } .dt-min::after { content: "\2212"; }
   .dt-max { background: #28c840; } .dt-max::after { content: "+"; }
   .dt-title { font-size: 13px; font-weight: 500; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .dt-ctx, .dt-nav, .dt-done, .fd-menu { display: none; }
+  .dt-ctx, .dt-nav, .dt-done { display: none; }
   .dt-win.project .dt-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
   .dt-nav button { width: 26px; height: 24px; border: 0; border-radius: 6px; background: #f0f0f2; color: #333; font: 600 13px/1 var(--sans); cursor: pointer; }
   .dt-nav button:hover { background: #e4e4e8; }
@@ -258,47 +258,76 @@
   .dt-win.note .dt-body h3 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1a1a1a; margin: 22px 0 6px; }
   .dt-win.note .dt-body .pull { font-family: var(--serif); font-style: italic; font-size: 20px; line-height: 1.45; color: #b26a24; border-left: 2px solid #e6a15b; padding-left: 14px; margin: 18px 0; }
 
-  /* Finder: the whole body of work, by folder */
-  .dt-win.finder { width: min(980px, calc(100vw - 48px)); height: min(640px, calc(100% - 140px)); }
-  .dt-win.finder .dt-body { padding: 0; flex: 1; min-height: 0; overflow: hidden; display: flex; }
-  .fd { display: flex; width: 100%; min-height: 0; }
-  .fd-side { flex: none; width: 200px; background: #f5f5f7; border-right: 1px solid #ececec; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; overflow: auto; }
-  .fd-side .h { font: 600 11px var(--sans); color: #9a9a9a; padding: 4px 10px 6px; }
-  .fd-side button { display: flex; align-items: center; gap: 9px; text-align: left; border: 0; background: none; padding: 7px 10px; border-radius: 6px; font: 500 13.5px var(--sans); color: #333; cursor: pointer; }
-  .fd-side button svg { width: 17px; height: 14px; flex: none; }
-  .fd-side button:hover { background: rgba(0,0,0,.05); }
-  .fd-side button.on { background: rgba(0,0,0,.09); }
-  .fd-main { flex: 1; min-width: 0; overflow: auto; overscroll-behavior: contain; padding: 22px 24px 28px; }
-  .fd-main h2 { font-size: 32px; margin-bottom: 8px; }
-  .fd-group h3 { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1a1a1a; margin: 28px 0 6px; }
-  .fd-group .dt-desc { font-size: 14px; max-width: 62ch; }
-  .fd-role { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #b26a24; margin: 4px 0 4px; }
-  .fd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 12px; margin-top: 14px; }
-  .fd-item { display: flex; flex-direction: column; border: 0; background: none; padding: 6px; border-radius: 8px; text-align: left; cursor: pointer; font: inherit; }
-  .fd-item:hover, .fd-item:focus-visible { background: #f1f1f3; outline: none; }
-  .fd-th { position: relative; display: block; }
-  .fd-item img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; background: #ddd; }
-  .fd-len { position: absolute; right: 6px; bottom: 6px; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.75); color: #fff; font: 500 11px var(--mono); }
-  .fd-item .t { font: 500 13.5px var(--sans); color: #111; margin-top: 8px; }
-  .fd-item .s { font: 12px var(--sans); color: #8a8a8a; margin-top: 2px; }
+  /* the board: all the work on one endless desktop, like the old hero. Drag to move around,
+     scroll or pinch to zoom. It is a window like the others (Esc, the phone back gesture, Done),
+     just full-screen and always at the back, so videos and notes open on top of it. */
+  .dt-win.board { left: 12px !important; top: 12px !important; width: calc(100% - 24px); height: calc(100% - 24px); max-height: none; z-index: 1 !important; }
+  .dt-win.board .dt-title { font: 500 12.5px var(--mono); letter-spacing: .02em; }
+  .dt-win.board .dt-body { flex: 1; min-height: 0; padding: 0; overflow: hidden; position: relative; }
+  .bd { position: absolute; inset: 0; overflow: hidden; touch-action: none; cursor: grab; outline: none; color: var(--ink); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+    background:
+      radial-gradient(55% 55% at 82% 72%, rgba(230,161,91,.5), transparent 70%),
+      radial-gradient(50% 55% at 10% 15%, rgba(87,203,187,.28), transparent 70%),
+      linear-gradient(155deg, #0f2a2c 0%, #142229 48%, #2b1c15 100%); }
+  .bd.panning { cursor: grabbing; }
+  .bd-dots { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle, rgba(255,255,255,.16) 1px, transparent 1.6px) var(--gx, 0) var(--gy, 0) / var(--gs, 28px) var(--gs, 28px); }
+  .bd-world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .bd-world > * { position: absolute; }
+  /* the three areas, in their map colors */
+  .bd-head { pointer-events: none; }
+  .bd-head .tag { display: flex; align-items: center; gap: 10px; font: 500 13px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(241,237,230,.75); }
+  .bd-head .tag::before { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: 0 0 14px var(--c); }
+  .bd-head h2 { font: 400 72px/1 var(--serif); letter-spacing: -.025em; margin: 14px 0 12px; }
+  .bd-head p { font-size: 18px; line-height: 1.5; color: rgba(241,237,230,.72); }
+  .bd-folder { display: flex; align-items: center; gap: 10px; font: 600 12.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(241,237,230,.92); pointer-events: none; white-space: nowrap; }
+  .bd-folder svg { width: 26px; height: 21px; }
+  .bd-folder em { font-style: normal; font-weight: 400; color: rgba(241,237,230,.5); }
+  /* files: a thumbnail with its name under it, like desktop icons */
+  .bd-file { width: 176px; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+  .bd-file.v { width: 108px; }
+  .bd-file.doc { width: 112px; }
+  .bd-file .th { position: relative; display: block; width: 176px; height: 99px; border-radius: 8px; overflow: hidden; background: #222; box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.12); transition: transform .35s var(--spring), box-shadow .2s; }
+  .bd-file.v .th { width: 84px; height: 150px; }
+  .bd-file img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+  .bd-file .len { position: absolute; right: 5px; bottom: 5px; padding: 1px 5px; border-radius: 4px; background: rgba(0,0,0,.72); color: #fff; font: 500 10.5px var(--mono); }
+  .bd-file .lb { max-width: 100%; padding: 2px 7px; border-radius: 5px; font: 500 13px/1.3 var(--sans); text-align: center; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.6); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .bd-file.doc .th { width: 64px; height: 80px; background: none; box-shadow: none; overflow: visible; }
+  .bd-file.doc .th svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+  .bd-file.doc .lb { font: 500 12.5px/1.3 var(--mono); }
+  .bd-file:hover .th, .bd-file:focus-visible .th { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 34px rgba(0,0,0,.45), 0 0 0 2px #fff; }
+  .bd-file.doc:hover .th, .bd-file.doc:focus-visible .th { box-shadow: none; }
+  .bd-file:hover .lb, .bd-file:focus-visible .lb { background: #0a5cd6; text-shadow: none; }
+  .bd-file:focus-visible, .bd-sticky:focus-visible { outline: none; }
+  /* the tool tests as sticky notes */
+  .bd-sticky { width: 168px; height: 150px; padding: 14px 14px 12px; border: 0; border-radius: 3px; background: #f6d36b; color: #2a2316; text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 6px; transform: rotate(var(--r, 0deg)); box-shadow: 0 12px 24px rgba(0,0,0,.3); transition: transform .35s var(--spring); }
+  .bd-sticky.no { background: #f2a46a; }
+  .bd-sticky .n { font: 600 11px var(--mono); letter-spacing: .12em; color: rgba(42,35,22,.55); }
+  .bd-sticky b { font: 600 14.5px/1.25 var(--sans); }
+  .bd-sticky span:last-child { font-size: 13px; line-height: 1.35; color: rgba(42,35,22,.8); }
+  .bd-sticky:hover, .bd-sticky:focus-visible { transform: translateY(-3px) scale(1.04); }
+  /* controls float over the board */
+  .bd-ui { position: absolute; inset: 0; pointer-events: none; }
+  .bd-ui > * { pointer-events: auto; }
+  .bd-ui .tri { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); }
+  .bd-ui .tri button.on { background: rgba(255,255,255,.2); }
+  @media (min-width: 701px) { .bd-ui .tri button { white-space: nowrap; } }
+  .bd-zoom { position: absolute; right: 16px; bottom: 16px; display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6); backdrop-filter: blur(16px) saturate(1.6);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.16), 0 10px 30px rgba(0,0,0,.25); }
+  .bd-zoom button { min-width: 40px; height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: none; color: #f4f0ea; font: 500 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+  .bd-zoom button[data-zoom="-1"], .bd-zoom button[data-zoom="1"] { font-size: 18px; padding: 0; }
+  .bd-zoom button:hover { background: rgba(255,255,255,.12); }
+  .bd-hint { position: absolute; left: 20px; bottom: 28px; margin: 0; font-size: 10.5px; letter-spacing: .12em; color: rgba(241,237,230,.62); pointer-events: none !important; }
 
   @media (max-width: 700px) {
     /* full-screen sheets with a bottom action bar; no traffic lights */
-    .dt-win, .dt-win.finder, .dt-win.note { left: 8px !important; top: 8px !important; width: calc(100% - 16px); height: calc(100% - 16px); max-height: none; border-radius: 14px; }
+    .dt-win, .dt-win.note { left: 8px !important; top: 8px !important; width: calc(100% - 16px); height: calc(100% - 16px); max-height: none; border-radius: 14px; }
     .dt-bar { display: grid; grid-template-columns: 64px 1fr 64px; align-items: center; gap: 0; height: 48px; padding: 0 8px; }
     .dt-lights, .dt-nav, .dt-win.project .dt-nav { display: none; }
     .dt-title, .dt-ctx { grid-column: 2; text-align: center; font-size: 15px; font-weight: 600; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .dt-win.project .dt-title { display: none; }
     .dt-win.project .dt-ctx { display: block; }
     .dt-done { display: block; grid-column: 3; justify-self: end; border: 0; background: none; padding: 8px 4px; font: 600 15px var(--sans); color: #0a5cd6; cursor: pointer; }
-    /* the folder title is a pill button with a chevron, so it reads as "tap to switch" */
-    .dt-win.finder .dt-title { justify-self: center; position: relative; display: inline-block; max-width: 100%; padding: 7px 32px 7px 15px; border-radius: 999px; background: #efeff2; box-shadow: inset 0 0 0 1px #e2e2e7; cursor: pointer; }
-    .dt-win.finder .dt-title::after { content: ''; position: absolute; right: 14px; top: 50%; width: 6px; height: 6px; margin-top: -5px; border-right: 2px solid #111; border-bottom: 2px solid #111; transform: rotate(45deg); transition: transform .2s; }
-    .dt-win.finder.menu-open .dt-title::after { margin-top: -1px; transform: rotate(-135deg); }
-    .fd-menu:not([hidden]) { display: flex; flex-direction: column; position: absolute; top: 48px; left: 0; right: 0; z-index: 3; background: #fff; border-bottom: 1px solid #ececec; box-shadow: 0 12px 24px rgba(0,0,0,.12); padding: 6px 8px 10px; }
-    .fd-menu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; text-align: left; padding: 12px 10px; border-radius: 10px; font: 500 16px var(--sans); color: #111; }
-    .fd-menu button svg { width: 20px; height: 16px; }
-    .fd-menu button.on { background: #f0f0f2; }
     .dt-body { flex: 1; min-height: 0; }
     .dt-sheetbar { display: flex; gap: 8px; flex: none; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid #ececec; background: #fafafa; }
     .dt-sheetbar button { flex: 1; min-width: 0; height: 48px; border: 0; border-radius: 12px; background: #111; color: #fff; font: 600 15px var(--sans); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 14px; }
@@ -306,10 +335,8 @@
     html.sheet-open, html.sheet-open body { overflow: hidden; }
     .dt-split { grid-template-columns: 1fr; }
     .dt-split .dt-media.vertical { max-width: 280px; width: 100%; margin: 0 auto; }
-    .fd { flex-direction: column; }
-    .fd-side { display: none; }
-    .fd-grid { grid-template-columns: repeat(2, 1fr); }
   }
+  html.board-open, html.board-open body { overflow: hidden; }
   @media (prefers-reduced-motion: reduce) {
     .desk-bg { transform: none; }
     .dt-win, .dt-win.closing { animation-duration: 1ms; }
@@ -339,12 +366,10 @@
     .dt-bar { position: absolute; top: 0; left: 0; right: 0; z-index: 4; height: 60px; padding: 0 10px; border-bottom: 0; background: none; pointer-events: none; grid-template-columns: 80px 1fr 80px; }
     .dt-bar > * { pointer-events: auto; }
     .dt-body { padding-top: 66px; padding-bottom: 104px; }
-    .dt-win.finder .fd-main { padding-top: 66px; padding-bottom: 104px; }
-    .dt-title, .dt-ctx, .dt-done, .dt-win.finder .dt-title, .dt-sheetbar button.ghost, .fd-menu:not([hidden]) {
+    .dt-title, .dt-ctx, .dt-done, .dt-sheetbar button.ghost {
       background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(18px) saturate(1.9); backdrop-filter: blur(18px) saturate(1.9);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(0,0,0,.07), 0 6px 20px rgba(0,0,0,.12); }
     .dt-title, .dt-ctx { justify-self: center; max-width: 100%; padding: 8px 16px; border-radius: 999px; }
-    .dt-win.finder .dt-title { padding-right: 34px; }
     .dt-done { padding: 8px 14px; border-radius: 999px; transition: transform .45s var(--spring); }
     .dt-sheetbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; border-top: 0; background: none; pointer-events: none; padding: 12px 12px calc(14px + env(safe-area-inset-bottom)); }
     .dt-sheetbar button { pointer-events: auto; border-radius: 999px; height: 50px; background: rgba(17,17,19,.88); color: #fff;
@@ -352,22 +377,33 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 1px rgba(255,255,255,.08), 0 10px 26px rgba(0,0,0,.24);
       transition: transform .45s var(--spring), background .2s; }
     .dt-sheetbar button.ghost { color: #111; }
-    .dt-sheetbar button:active, .dt-done:active, .dt-win.finder .dt-title:active { transform: scale(.95); transition-duration: .12s; }
-    .fd-menu:not([hidden]) { top: 58px; left: 10px; right: 10px; border: 0; border-radius: 20px; padding: 6px; background: rgba(255,255,255,.78); }
-    .fd-menu button.on { background: rgba(0,0,0,.06); }
+    .dt-sheetbar button:active, .dt-done:active { transform: scale(.95); transition-duration: .12s; }
+    /* the board goes edge to edge; the area control moves to the bottom, Fit to the top left */
+    .dt-win.board { left: 0 !important; top: 0 !important; width: 100%; height: 100%; border-radius: 0; }
+    .dt-win.board .dt-body { padding: 0; }
+    .dt-win.board .dt-sheetbar { display: none; }
+    .bd-ui .tri { top: auto; bottom: calc(14px + env(safe-area-inset-bottom)); left: 12px; right: 12px; width: auto; transform: none; display: flex; }
+    .bd-ui .tri button { flex: 1; min-width: 0; justify-content: center; text-align: center; padding: .8rem .3rem; gap: .35rem; font-size: .54rem; letter-spacing: .04em; }
+    .bd-ui .tri span { display: none; }
+    .bd-zoom { right: auto; bottom: auto; left: 10px; top: 10px; }
+    .bd-zoom button { height: 40px; }
+    .bd-zoom button[data-zoom="-1"], .bd-zoom button[data-zoom="1"] { display: none; }
+    .bd-hint { left: 50%; right: auto; transform: translateX(-50%); bottom: calc(78px + env(safe-area-inset-bottom)); padding: 6px 12px; border-radius: 999px; background: rgba(10,14,16,.55); white-space: nowrap; font-size: 9px; }
+    .bd-head h2 { font-size: 46px; }
+    .bd-head p { font-size: 15.5px; }
   }
 
   /* solid fallbacks: no blur support, or the visitor asked for less transparency */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.88); }
-    .dt-title, .dt-ctx, .dt-done, .dt-win.finder .dt-title, .dt-sheetbar button.ghost, .fd-menu:not([hidden]) { background: #f0f0f2; }
+    .dt-title, .dt-ctx, .dt-done, .dt-sheetbar button.ghost { background: #f0f0f2; }
     .dt-sheetbar button { background: #111; }
   }
   @media (prefers-reduced-transparency: reduce) {
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.92); }
-    .dt-title, .dt-ctx, .dt-done, .dt-win.finder .dt-title, .dt-sheetbar button.ghost, .fd-menu:not([hidden]) { background: #f0f0f2; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .dt-title, .dt-ctx, .dt-done, .dt-sheetbar button.ghost { background: #f0f0f2; -webkit-backdrop-filter: none; backdrop-filter: none; }
     .dt-sheetbar button { background: #111; -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
 
@@ -426,6 +462,8 @@
   .note-card .av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #1f1d1b; color: #fbf8f2; font-family: var(--serif); font-style: italic; }
   @media (max-width: 760px) {
     .note-card { padding: 1.6rem 1.5rem 1.3rem; transform: none; }
+    .sk-log { padding: 6px 14px 8px; font-size: 12px; }
+    .bub { font-size: .95rem; }
   }
 
   .ap-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
@@ -441,15 +479,54 @@
   .vet-call { font-size: .95rem; color: var(--ink-dim); line-height: 1.55; }
   .vet-row.no-ai .vet-use .ut, .vet-row.no-ai .vet-call, .vet-row.no-ai .vet-use .rn { color: var(--amber); }
 
-  /* ---------- SERVICES ---------- */
-  .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-  .svc { padding: 2.4rem clamp(1.4rem,2vw,2rem); border-right: 1px solid var(--line); transition: background .3s; }
-  .svc:last-child { border-right: none; }
-  .svc:hover { background: var(--bg-2); }
-  .svc .step { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; color: var(--teal); margin-bottom: 1.4rem; display: flex; justify-content: space-between; }
-  .svc .step .ph { color: var(--muted); }
-  .svc h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: .9rem; }
-  .svc p { font-size: .9rem; color: var(--ink-dim); line-height: 1.65; }
+  /* ---------- SKILLS ----------
+     Three blocks in the heyclicky style: the skill on one side; on the other a Mac window, a row of
+     waveform dots, the ask in a blue bubble and my answer in an orange one. */
+  .skill { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; padding: clamp(3.5rem, 7vw, 5.5rem) 0; border-top: 1px solid var(--line); }
+  .sec-head + .skill { border-top: 0; padding-top: 0; }
+  .skill.flip .sk-copy { order: 2; }
+  .sk-tag { display: flex; align-items: center; gap: .7rem; color: var(--ink-dim); }
+  .sk-tag i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+  .skill h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 5.4vw, 4.4rem); letter-spacing: -.025em; line-height: 1; margin: 1.1rem 0 1.2rem; }
+  .sk-line { font-size: clamp(1.05rem, 1.5vw, 1.22rem); line-height: 1.6; color: var(--ink-dim); max-width: 30em; }
+  .sk-stack { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.3rem; }
+  .sk-stack span { font: 500 .64rem var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: .38rem .75rem; border-radius: 999px; border: 1px solid rgba(87,203,187,.35); color: var(--ink); }
+  .sk-go { margin-top: 1.8rem; display: inline-flex; align-items: center; gap: .6rem; padding: .9rem 1.35rem; border: 0; border-radius: 999px; background: rgba(255,255,255,.08); color: #f4f0ea; font: 500 .72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 0 1px rgba(255,255,255,.14); transition: background .2s, transform .45s var(--spring); }
+  .sk-go::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+  .sk-go:hover { background: rgba(255,255,255,.16); transform: translateY(-2px); }
+  .sk-go:active { transform: scale(.96); transition-duration: .12s; }
+  .sk-demo { min-width: 0; }
+  .mac-len { margin-left: auto; font: 500 11.5px var(--mono); color: #aaa; }
+  .sk-media { aspect-ratio: 16/9; background: #111; }
+  .sk-media img, .sk-media iframe { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
+  /* tool-tests.log */
+  .sk-log { list-style: none; padding: 8px 20px 10px; font: 13px/1.45 var(--mono); }
+  .sk-log li { display: grid; grid-template-columns: 2.4em 1fr; padding: 8px 0; border-bottom: 1px dashed #ececec; }
+  .sk-log li:last-child { border-bottom: 0; }
+  .sk-log span { color: #4f9fe6; }
+  .sk-log b { font-weight: 600; color: #111; }
+  .sk-log em { display: block; font-style: normal; color: #8a8a8a; }
+  .sk-log li.no span, .sk-log li.no b { color: #c56b1e; }
+  /* waveform dots */
+  .wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 46px; margin: 22px 0 16px; overflow: hidden; }
+  .wave i { flex: none; width: 6px; height: calc(var(--h) * 1px); border-radius: 3px; background: rgba(241,237,230,.28); }
+  /* the chat: the ask in blue on the right, my answer in orange on the left */
+  .chat { display: flex; flex-direction: column; gap: 10px; }
+  .bub { margin: 0; max-width: 82%; padding: .72rem 1.05rem; border-radius: 20px; font-size: 1rem; line-height: 1.4; }
+  .bub.ask { align-self: flex-end; color: #fff; background: linear-gradient(180deg, #8ab6ef, #5b93e0); border-bottom-right-radius: 6px; transform-origin: 100% 100%; }
+  .chat .re { display: flex; align-items: flex-end; gap: 8px; }
+  .chat .av { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #f1ede6; color: #1a1a1a; font: italic 500 14px var(--serif); }
+  .re .bub { color: #24160a; background: linear-gradient(180deg, #f3bb80, #e6a15b); border-bottom-left-radius: 6px; transform-origin: 0 100%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .skill.visible .wave i { animation: wave 1.4s ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1s); }
+    .skill.visible .bub { animation: pop .5s var(--spring) both .45s; }
+    .skill.visible .re .bub { animation-delay: 1.1s; }
+  }
+  @keyframes wave { to { transform: scaleY(.4); } }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.88); } }
+  #about { padding-top: 0; }
+  #about .note-card { margin-top: 0; }
 
   /* ---------- ABOUT ---------- */
   .about-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; margin-top: clamp(3.5rem, 7vw, 5.5rem); }
@@ -502,8 +579,8 @@
     .sys:last-child { border-bottom: none; }
     .ap-grid { grid-template-columns: 1fr; }
     .vet-row { grid-template-columns: 1fr; gap: .35rem; }
-    .svc-grid { grid-template-columns: 1fr; }
-    .svc { border-right: none; border-bottom: 1px solid var(--line); }
+    .skill { grid-template-columns: 1fr; gap: 2rem; }
+    .skill.flip .sk-copy { order: 0; }
     .about-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -514,7 +591,8 @@
   <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#top" data-open="finder">Work</a></li>
+      <li><a href="#top" data-open="board">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -639,21 +717,93 @@
   <p class="close">Most producers see the picture through one lens: AI <em>or</em> real production. I see both. That's the whole job.</p>
 </template>
 
-<!-- ---------- ABOUT ---------- -->
-<section id="about">
+<!-- ---------- SKILLS ----------
+     Three blocks in the heyclicky style, one per area of the map. "See" opens that area on the
+     board. The tool-tests log is the one source for the board's sticky notes. -->
+<section id="skills">
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
         <div class="idx fname">what-i-do.md</div>
-        <h2>Three ways to work together.</h2>
+        <h2>Three skills, one owner.</h2>
       </div>
       <div class="aside">Rates<br>on request</div>
     </div>
-    <div class="svc-grid reveal">
-      <div class="svc"><div class="step">01</div><h3>Shape the idea</h3><p>What the work is for, before anything gets made.</p></div>
-      <div class="svc"><div class="step">02</div><h3>Make the work</h3><p>Script to final master. One owner, no handoffs.</p></div>
-      <div class="svc"><div class="step">03</div><h3>Build the system</h3><p>When the work repeats, a workflow that keeps the standard.</p></div>
-    </div>
+
+    <article class="skill reveal" style="--c:#4f9fe6">
+      <div class="sk-copy">
+        <div class="sk-tag mono"><i></i>01 · Research</div>
+        <h3>Shape the idea</h3>
+        <p class="sk-line">What the work is for, before anything gets made. Then the right tool, tested head to head.</p>
+        <button type="button" class="sk-go" data-area="research">See the tool tests ↗</button>
+      </div>
+      <div class="sk-demo">
+        <div class="mac">
+          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">tool-tests.log</span></div>
+          <ol class="sk-log" id="skLog">
+            <li><span>01</span><p><b>Product → ad creatives</b><em>Steer it. Full auto is hit or miss.</em></p></li>
+            <li><span>02</span><p><b>UGC actor ads</b><em>Branding garbles in motion on cheap tiers.</em></p></li>
+            <li><span>03</span><p><b>A/B tests and localization</b><em>Where AI wins on volume.</em></p></li>
+            <li><span>04</span><p><b>Long-form → short-form</b><em>A repurposing accelerator, not an ad maker.</em></p></li>
+            <li><span>05</span><p><b>Relighting real footage</b><em>Breaks on glass, liquid, hair and fast moves.</em></p></li>
+            <li><span>06</span><p><b>Agent builders</b><em>Only as good as the brief.</em></p></li>
+            <li class="no"><span>07</span><p><b>When not to use AI</b><em>The one hero film that has to be perfect.</em></p></li>
+          </ol>
+        </div>
+        <div class="wave" aria-hidden="true"></div>
+        <div class="chat">
+          <p class="bub ask">Which AI tool should we use for this?</p>
+          <div class="re"><span class="av" aria-hidden="true">E</span><p class="bub">First, what is this video actually for?</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="skill flip reveal" style="--c:#e6a15b">
+      <div class="sk-copy">
+        <div class="sk-tag mono"><i></i>02 · Video production</div>
+        <h3>Make the work</h3>
+        <p class="sk-line">Script to final master: edit, motion, sound and color. One owner, no handoffs.</p>
+        <button type="button" class="sk-go" data-area="production">See the videos ↗</button>
+      </div>
+      <div class="sk-demo">
+        <div class="mac">
+          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">joe-schaeffer.mov</span><span class="mac-len">5:59</span></div>
+          <div class="sk-media"><button class="dt-poster" data-yt="jH6LaZDXNMs" aria-label="Play Joe Schaeffer"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/maxresdefault.jpg" alt="" loading="lazy"><span class="dt-play"></span></button></div>
+        </div>
+        <div class="wave" aria-hidden="true"></div>
+        <div class="chat">
+          <p class="bub ask">We have the footage. Can you make it a film?</p>
+          <div class="re"><span class="av" aria-hidden="true">E</span><p class="bub">On it. First, which story the footage holds.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="skill reveal" style="--c:#57cbbb">
+      <div class="sk-copy">
+        <div class="sk-tag mono"><i></i>03 · AI work</div>
+        <h3>Build the system</h3>
+        <p class="sk-line">When the work repeats, a workflow that holds the standard: briefs, tools and QC. I know the stack under it.</p>
+        <div class="sk-stack"><span>Claude Code</span><span>GitHub</span><span>Vercel</span><span>Supabase</span></div>
+        <button type="button" class="sk-go" data-area="ai">See the systems ↗</button>
+      </div>
+      <div class="sk-demo">
+        <div class="mac">
+          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">founder-intro.mov</span><span class="mac-len">1:07</span></div>
+          <div class="sk-media"><button class="dt-poster" data-yt="pR03yYZbI8E" aria-label="Play Founder Intro"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="" loading="lazy"><span class="dt-play"></span></button></div>
+        </div>
+        <div class="wave" aria-hidden="true"></div>
+        <div class="chat">
+          <p class="bub ask">The AI drafts never land close to final.</p>
+          <div class="re"><span class="av" aria-hidden="true">E</span><p class="bub">So every job starts from a structured brief. Now the first pass lands close.</p></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ---------- ABOUT ---------- -->
+<section id="about">
+  <div class="wrap">
     <div class="note-card reveal">
       <div class="fname-top">about-me.txt</div>
       <p>I started in the edit.</p>
@@ -773,9 +923,7 @@
     .then(r => { if (r.ok) { mountStudio(); addEventListener('resize', mountStudio); } })
     .catch(() => {});
   function openArea(area, opener) {
-    if (area === 'ai') openFinder('ai', opener);
-    else if (area === 'production') openFinder('production', opener);
-    else if (area === 'research') openNote('tests', opener);
+    openBoard(area, opener);
   }
   addEventListener('message', e => {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'studio:area') return;
@@ -785,10 +933,11 @@
     try { studio.querySelector('iframe')?.contentWindow?.selectArea?.(b.dataset.area, false); } catch {}   // the map highlights it too
     openArea(b.dataset.area, b);
   }));
+  document.querySelectorAll('.sk-go').forEach(b => b.addEventListener('click', () => openArea(b.dataset.area, b)));
 
   // ----- the work -----
-  // Every video lives in WORK, in folders, all in Finder. The map's areas, the nav and "Browse the
-  // work" open it. AI-system details are read from the Systems section, so that copy has one source.
+  // Every video lives in WORK, in folders, all on the board. The map's areas, the three-part
+  // control, the skills and the nav open it.
   const CATS = {
     ai:     { name: 'AI Systems', role: 'Director, end to end', desc: 'Each system was designed, directed and delivered end to end, and each one solves a specific production problem.' },
     brand:  { name: 'Brand Film', role: 'Edit & planning', desc: 'The calls here are structure and pace: which story the footage holds, and what gets cut to tell it.' },
@@ -857,8 +1006,9 @@
     const wins = stack();
     const onHero = scrollY < hero.offsetHeight / 2;
     wins.forEach((w, i) => {
+      if (w.classList.contains('board')) return;   // the board has its own controls
       const prev = wins[i - 1];
-      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onHero ? '← Back to the map' : '← Close';
+      const back = prev ? (prev.classList.contains('board') ? '← Back to the board' : `← ${esc(prev.getAttribute('aria-label'))}`) : onHero ? '← Back to the map' : '← Close';
       const video = w.classList.contains('project');
       w.querySelector('.dt-sheetbar').innerHTML = `<button type="button" data-act="back"${video ? ' class="ghost"' : ''}>${back}</button>`
         + (video ? '<button type="button" data-act="next">Next →</button>' : '');
@@ -869,6 +1019,7 @@
     if (w.classList.contains('closing')) return;
     w.classList.add('closing');
     openWins.delete(w.dataset.key);
+    if (w.classList.contains('board')) closeBoard();
     w.addEventListener('animationend', () => w.remove(), { once: true });
     if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
     if (w._hist && !fromHistory) { skipPop++; history.back(); }
@@ -910,7 +1061,7 @@
       openWins.set(key, w);
       if (sheet()) { history.pushState({ dtWin: key }, ''); w._hist = true; }
     }
-    w.style.zIndex = ++z;
+    w.style.zIndex = w.classList.contains('board') ? 1 : ++z;   // the board always sits at the back
     w.focus({ preventScroll: true });
     updateBars();
     return w;
@@ -931,29 +1082,21 @@
     }
     if (e.target.closest('[data-act="next"]')) return stepProject(w, 1);
     if (e.target.closest('[data-act="prev"]')) return stepProject(w, -1);
-    if (e.target.closest('.dt-title') && w.classList.contains('finder') && sheet()) {
-      const menu = w.querySelector('.fd-menu');
-      menu.hidden = !menu.hidden;
-      w.classList.toggle('menu-open', !menu.hidden);
-      return;
-    }
-    if (e.target.closest('.dt-max')) return w.classList.toggle('max');
+    if (e.target.closest('.dt-max')) return w.classList.contains('board') || w.classList.toggle('max');
     const poster = e.target.closest('.dt-poster');
-    if (poster) {   // poster swaps to the player
-      poster.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(poster.dataset.yt)}?autoplay=1&rel=0&playsinline=1&modestbranding=1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(poster.getAttribute('aria-label'))}"></iframe>`;
-      return;
-    }
+    if (poster) return playPoster(poster);
     const item = e.target.closest('[data-project]');
     if (item) return openProject(item.dataset.project, item);
-    const folder = e.target.closest('[data-cat]');
-    if (folder) return openFinder(folder.dataset.cat);
+    const note = e.target.closest('[data-note]');
+    if (note) return openNote(note.dataset.note, note);
   });
   winsEl.addEventListener('dblclick', e => {
-    if (e.target.closest('.dt-bar') && !e.target.closest('.dt-lights')) e.target.closest('.dt-win').classList.toggle('max');
+    const w = e.target.closest('.dt-win');
+    if (e.target.closest('.dt-bar') && !e.target.closest('.dt-lights') && !w.classList.contains('board')) w.classList.toggle('max');
   });
   winsEl.addEventListener('pointerdown', e => {   // bring forward; drag by the title bar
     const w = e.target.closest('.dt-win');
-    if (!w) return;
+    if (!w || w.classList.contains('board')) return;
     w.style.zIndex = ++z;
     const bar = e.target.closest('.dt-bar');
     if (!bar || e.button !== 0 || e.target.closest('.dt-lights, button') || sheet() || w.classList.contains('max')) return;
@@ -972,8 +1115,15 @@
     const front = stack().pop();
     if (!front) return;
     if (e.key === 'Escape') closeWin(front);
+    else if (front.classList.contains('board')) boardKey(e);
     else if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && front.classList.contains('project')) stepProject(front, e.key === 'ArrowRight' ? 1 : -1);
   });
+
+  // a poster swaps to the player, in windows and on the page
+  function playPoster(poster) {
+    poster.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(poster.dataset.yt)}?autoplay=1&rel=0&playsinline=1&modestbranding=1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" title="${esc(poster.getAttribute('aria-label'))}"></iframe>`;
+  }
+  document.querySelectorAll('.sk-media .dt-poster').forEach(p => p.addEventListener('click', () => playPoster(p)));
 
   // ----- window content -----
   // Kept short on purpose: title, the video, one line, one line of facts. AI-system details live in
@@ -1021,31 +1171,269 @@
     updateBars();
   }
 
-  const PRODUCTION = ['brand', 'client', 'ads', 'long'];   // the map's video production area opens these four
-  function openFinder(active = 'all', opener) {
-    const keys = active === 'all' ? Object.keys(CATS) : active === 'production' ? PRODUCTION : [active];
-    const name = active === 'all' ? 'All work' : active === 'production' ? 'Video production' : CATS[active].name;
-    const side = [['all', 'All work'], ...Object.entries(CATS).map(([k, c]) => [k, c.name])]
-      .map(([k, n]) => `<button type="button" data-cat="${k}"${k === active ? ' class="on"' : ''}>${FOLDER_SVG}${esc(n)}</button>`).join('');
-    const group = k => `<div class="fd-group">${keys.length > 1 ? `<h3>${esc(CATS[k].name)}</h3>` : ''}<p class="fd-role">Role · ${esc(CATS[k].role)}</p><p class="dt-desc">${esc(CATS[k].desc)}</p>
-      <div class="fd-grid">${WORK.filter(p => p.cat === k).map(p =>
-        `<button type="button" class="fd-item" data-project="${esc(p.id)}"><span class="fd-th"><img src="${thumb(p.id)}" alt="" loading="lazy">${p.len ? `<span class="fd-len">${esc(p.len)}</span>` : ''}</span><span class="t">${esc(p.title)}</span><span class="s">${esc(p.type)}</span></button>`).join('')}</div></div>`;
-    const main = `<h2>${esc(name)}</h2>${keys.map(group).join('')}`;
-    const menu = `<div class="fd-menu" hidden>${side}</div>`;
-    const w = openWindow('finder', active === 'all' ? 'Work' : name, `<div class="fd">${menu}<div class="fd-side"><div class="h">Work</div>${side}</div><div class="fd-main">${main}</div></div>`, opener, 'finder');
-    w.classList.remove('menu-open');
-    const t = w.querySelector('.dt-title');   // the title doubles as the folder switcher on phones
-    t.setAttribute('role', 'button');
-    t.setAttribute('aria-label', 'Switch folder: ' + t.textContent);
+  // ----- the board -----
+  // Each area has its own endless desktop, like the old hero: every video is a file, in folders,
+  // in the area's map color. Drag to move around, scroll or pinch to zoom. The map, the three-part
+  // control, the skills and the nav open an area's board; the control on the board switches.
+  const PRODUCTION = ['brand', 'client', 'ads', 'long'];   // the map's video production area holds these four
+  const DOC_SVG = '<svg viewBox="0 0 44 56" aria-hidden="true"><path d="M3 3h26l12 12v38H3z" fill="#fff"/><path d="M29 3v12h12z" fill="#dcdcdc"/><g stroke="#c4c4c4" stroke-width="2"><path d="M10 25h24M10 31h24M10 37h24M10 43h15"/></g></svg>';
+  const TESTS = [...document.querySelectorAll('#skLog li')].map(li => [txt(li.querySelector('b')), txt(li.querySelector('em'))]);
+  const AREAS = {
+    research:   { name: 'Research', c: '#4f9fe6', tag: 'Tool tests', line: 'Same brief, head to head. I log where each tool breaks.' },
+    ai:         { name: 'AI work', c: '#57cbbb', tag: CATS.ai.role, line: CATS.ai.desc },
+    production: { name: 'Video production', c: '#e6a15b', tag: 'Edit & planning', line: 'Brand films, client stories, ads and long-form.' },
+  };
+  const SIZE = { file: [176, 150], v: [108, 204], doc: [112, 136], sticky: [168, 150] };   // each item's cell on the board
+  const TILT = [-2, 1.5, -1, 2, -1.5, 1, -.5];
+  const fileHTML = p => `<button type="button" class="bd-file${p.short ? ' v' : ''}" data-project="${esc(p.id)}"><span class="th"><img src="${thumb(p.id)}" alt="" loading="lazy" decoding="async" draggable="false">${p.len ? `<span class="len">${esc(p.len)}</span>` : ''}</span><span class="lb">${esc(p.title)}</span></button>`;
+  function boardGroups(area) {
+    if (area === 'research') return [
+      { items: [['doc', `<button type="button" class="bd-file doc" data-note="tests"><span class="th">${DOC_SVG}</span><span class="lb">tool-tests.md</span></button>`],
+                ['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`]] },
+      { items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
+    ];
+    return (area === 'ai' ? ['ai'] : PRODUCTION).map(k => {
+      const list = WORK.filter(p => p.cat === k);
+      return { head: area === 'ai' ? '' : `<div class="bd-folder" data-cat="${k}">${FOLDER_SVG}${esc(CATS[k].name)} <em>${list.length}</em></div>`,
+        items: list.map(p => [p.short ? 'v' : 'file', fileHTML(p)]) };
+    });
   }
+
+  let bd = null;   // the open board: its elements, the view (s, tx, ty) and gesture state
+  const BOARD_HTML = `<div class="bd" tabindex="-1"><div class="bd-dots"></div><div class="bd-world"></div></div>
+    <div class="bd-ui">
+      <div class="tri" role="group" aria-label="Go to an area">${Object.entries(AREAS).map(([k, a]) => `<button type="button" data-fly="${k}"><i style="--c:${a.c}"></i><b>${esc(a.name)}</b></button>`).join('')}</div>
+      <div class="bd-zoom"><button type="button" data-zoom="-1" aria-label="Zoom out">−</button><button type="button" data-zoom="fit">Fit</button><button type="button" data-zoom="1" aria-label="Zoom in">+</button></div>
+      <p class="bd-hint mono">${matchMedia('(pointer: coarse)').matches ? 'Drag to move · pinch to zoom' : 'Drag or scroll to move · pinch to zoom'}</p>
+    </div>`;
+
+  const boardName = area => (area === 'ai' ? 'ai-work' : area) + '.board';
+  function openBoard(area = 'production', opener) {
+    if (!AREAS[area]) area = 'production';
+    if (openWins.get('board')) return flyTo(area, true);
+    const w = openWindow('board', boardName(area), BOARD_HTML, opener, 'board');
+    w.setAttribute('aria-label', 'The board');
+    document.documentElement.classList.add('board-open');
+    const el = w.querySelector('.bd');
+    bd = { w, el, world: el.querySelector('.bd-world'), s: 1, tx: 0, ty: 0, pts: new Map(), drag: null, pinch: null, anim: 0, glide: 0, quiet: 0, area, regions: null };
+    flyTo(area, false);
+    el.addEventListener('pointerdown', bdDown);
+    el.addEventListener('pointermove', bdMove);
+    el.addEventListener('pointerup', bdUp);
+    el.addEventListener('pointercancel', bdUp);
+    el.addEventListener('wheel', bdWheel, { passive: false });
+    el.addEventListener('click', e => { if (performance.now() < bd.quiet) { e.preventDefault(); e.stopPropagation(); } }, true);   // a drag isn't a click
+    // Safari's trackpad pinch (on phones the pointers handle it)
+    let g0 = 1;
+    el.addEventListener('gesturestart', e => { e.preventDefault(); g0 = bd.s; });
+    el.addEventListener('gesturechange', e => { e.preventDefault(); if (bd.pts.size) return; const r = el.getBoundingClientRect(); zoomAt(g0 * e.scale, e.clientX - r.left, e.clientY - r.top); });
+    el.addEventListener('focusin', e => { const it = e.target.closest('.bd-file, .bd-sticky'); if (it) showItem(it); });
+    w.querySelectorAll('[data-fly]').forEach(b => b.addEventListener('click', () => flyTo(b.dataset.fly, true)));
+    w.querySelectorAll('[data-zoom]').forEach(b => b.addEventListener('click', () => {
+      if (b.dataset.zoom === 'fit') return flyTo(bd.area, true);
+      const k = b.dataset.zoom === '1' ? 1.4 : 1 / 1.4, vw = el.clientWidth / 2, vh = el.clientHeight / 2;
+      const s = clamp(bd.s * k, bd.min, 1.6);
+      animateTo({ s, tx: vw - (vw - bd.tx) * s / bd.s, ty: vh - (vh - bd.ty) * s / bd.s });
+    }));
+  }
+  function closeBoard() {
+    if (!bd) return;
+    cancelAnimationFrame(bd.anim); cancelAnimationFrame(bd.glide);
+    bd = null;
+    document.documentElement.classList.remove('board-open');
+  }
+
+  // lay out the open area: its folders flow into rows, one under the other
+  function layoutBoard() {
+    const phone = isPhone(), gx = phone ? 20 : 28, gy = phone ? 28 : 34, gap = phone ? 150 : 220;
+    const width = phone ? { research: 356, ai: 372, production: 372 } : { research: 560, ai: 788, production: 992 };
+    const world = bd.world;
+    const put = (html, x, y) => { world.insertAdjacentHTML('beforeend', html); const el = world.lastElementChild; el.style.left = x + 'px'; el.style.top = y + 'px'; return el; };
+    world.innerHTML = '';
+    bd.phone = phone;
+    bd.regions = {};
+    let rx = 0, H = 0;
+    for (const [area, a] of Object.entries(AREAS).filter(([k]) => k === bd.area)) {
+      const W = width[area];
+      const head = put(`<div class="bd-head" style="--c:${a.c};width:${W}px"><div class="tag">${esc(a.tag)}</div><h2>${esc(a.name)}</h2><p>${esc(a.line)}</p></div>`, rx, 0);
+      let y = head.offsetHeight + (phone ? 36 : 48);
+      for (const g of boardGroups(area)) {
+        if (g.head) y += put(g.head, rx, y).offsetHeight + 18;
+        let x = 0, rowH = 0;
+        for (const [kind, html] of g.items) {
+          const [w, h] = SIZE[kind];
+          if (x && x + w > W) { x = 0; y += rowH + gy; rowH = 0; }
+          put(html, rx + x, y);
+          x += w + gx; rowH = Math.max(rowH, h);
+        }
+        y += rowH + (phone ? 56 : 72);
+      }
+      bd.regions[area] = { x: rx, y: 0, w: W, h: y };
+      H = Math.max(H, y);
+      rx += W + gap;
+    }
+    bd.W = rx - gap; bd.H = H;
+    bd.min = Math.min(.3, viewFor(bd.area).s * .6);
+    bd.w.querySelector('.dt-title').textContent = boardName(bd.area);
+    bd.w.querySelectorAll('[data-fly]').forEach(b => b.classList.toggle('on', b.dataset.fly === bd.area));
+  }
+
+  // the view that frames an area (or everything): fits its width, and its height too when that
+  // still leaves the files readable; otherwise it lines up the top and you drag down
+  function viewFor(area) {
+    const vw = bd.el.clientWidth, vh = bd.el.clientHeight, phone = bd.phone;
+    const top = phone ? 76 : 84, bottom = phone ? 130 : 84, side = phone ? 14 : 56, availH = vh - top - bottom;
+    const r = bd.regions[area];
+    const fitW = (vw - side * 2) / r.w, fitH = availH / r.h;
+    const s = Math.max(Math.min(1, fitW, fitH), Math.min(1, fitW) * (phone ? 1 : .72));
+    return { s, tx: (vw - r.w * s) / 2 - r.x * s, ty: (r.h * s <= availH ? top + (availH - r.h * s) / 2 : top) - r.y * s };
+  }
+  function setView(s, tx, ty) {
+    const vw = bd.el.clientWidth, vh = bd.el.clientHeight;
+    s = clamp(s, bd.min, 1.6);
+    tx = clamp(tx, vw * .35 - bd.W * s, vw * .65);   // some of the board always stays on screen
+    ty = clamp(ty, vh * .35 - bd.H * s, vh * .65);
+    bd.s = s; bd.tx = tx; bd.ty = ty;
+    bd.world.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+    let gs = 28 * s;
+    while (gs < 14) gs *= 2;
+    bd.el.style.setProperty('--gs', gs + 'px');
+    bd.el.style.setProperty('--gx', tx + 'px');
+    bd.el.style.setProperty('--gy', ty + 'px');
+  }
+  function stopMotion() { cancelAnimationFrame(bd.anim); cancelAnimationFrame(bd.glide); bd.anim = bd.glide = 0; }
+  function animateTo(v, ms = 650) {
+    stopMotion();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return setView(v.s, v.tx, v.ty);
+    const a = { s: bd.s, tx: bd.tx, ty: bd.ty }, t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+      setView(a.s + (v.s - a.s) * e, a.tx + (v.tx - a.tx) * e, a.ty + (v.ty - a.ty) * e);
+      bd.anim = k < 1 ? requestAnimationFrame(step) : 0;
+    };
+    bd.anim = requestAnimationFrame(step);
+  }
+  // frame the area; another area swaps the board for that area's, with a quick fade
+  function flyTo(area, animate) {
+    if (!bd || !AREAS[area]) return;
+    if (area !== bd.area || !bd.regions) {
+      stopMotion();
+      bd.area = area;
+      layoutBoard();
+      const v = viewFor(area);
+      setView(v.s, v.tx, v.ty);
+      if (animate) bd.world.animate([{ opacity: 0, transform: bd.world.style.transform + ' translateY(16px)' }, { opacity: 1, transform: bd.world.style.transform }], { duration: 320, easing: 'cubic-bezier(.16,1,.3,1)' });
+      return;
+    }
+    const v = viewFor(area);
+    animate ? animateTo(v) : setView(v.s, v.tx, v.ty);
+  }
+  function zoomAt(s, px, py) {
+    s = clamp(s, bd.min, 1.6);
+    setView(s, px - (px - bd.tx) * s / bd.s, py - (py - bd.ty) * s / bd.s);
+  }
+  function showItem(it) {   // keyboard focus pans to an item that's off screen
+    const r = it.getBoundingClientRect(), b = bd.el.getBoundingClientRect();
+    if (r.left >= b.left + 40 && r.right <= b.right - 40 && r.top >= b.top + 70 && r.bottom <= b.bottom - 90) return;
+    animateTo({ s: bd.s, tx: bd.tx + (b.left + b.width / 2) - (r.left + r.width / 2), ty: bd.ty + (b.top + b.height / 2) - (r.top + r.height / 2) }, 400);
+  }
+
+  // one finger or the mouse pans, with a little glide after a flick; two fingers pinch
+  function bdDown(e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    stopMotion();
+    bd.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (bd.pts.size === 1) bd.drag = { id: e.pointerId, x: e.clientX, y: e.clientY, tx: bd.tx, ty: bd.ty, moved: false, hist: [[performance.now(), e.clientX, e.clientY]] };
+    else if (bd.pts.size === 2) {
+      const [a, b] = [...bd.pts.values()];
+      bd.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, s: bd.s, tx: bd.tx, ty: bd.ty };
+      bd.drag = null;
+      for (const id of bd.pts.keys()) try { bd.el.setPointerCapture(id); } catch {}
+    }
+  }
+  function bdMove(e) {
+    const p = bd.pts.get(e.pointerId);
+    if (!p) return;
+    p.x = e.clientX; p.y = e.clientY;
+    const r = bd.el.getBoundingClientRect();
+    if (bd.pinch && bd.pts.size >= 2) {
+      const [a, b] = [...bd.pts.values()], P = bd.pinch;
+      const s = clamp(P.s * Math.hypot(a.x - b.x, a.y - b.y) / P.d, bd.min, 1.6);
+      const wx = (P.mx - r.left - P.tx) / P.s, wy = (P.my - r.top - P.ty) / P.s;   // the point that started under the fingers stays under them
+      setView(s, (a.x + b.x) / 2 - r.left - wx * s, (a.y + b.y) / 2 - r.top - wy * s);
+      bd.quiet = performance.now() + 400;
+      return;
+    }
+    const D = bd.drag;
+    if (!D || D.id !== e.pointerId) return;
+    const dx = e.clientX - D.x, dy = e.clientY - D.y;
+    if (!D.moved) {
+      if (Math.hypot(dx, dy) < 5) return;
+      D.moved = true;
+      bd.el.classList.add('panning');
+      try { bd.el.setPointerCapture(e.pointerId); } catch {}   // only now, so a plain tap still lands on the file
+    }
+    setView(bd.s, D.tx + dx, D.ty + dy);
+    D.hist.push([performance.now(), e.clientX, e.clientY]);
+    if (D.hist.length > 6) D.hist.shift();
+  }
+  function bdUp(e) {
+    if (!bd.pts.delete(e.pointerId)) return;
+    if (bd.pinch) {
+      if (bd.pts.size < 2) {   // one finger left: carry on panning with it
+        bd.pinch = null;
+        const [id, q] = [...bd.pts.entries()][0] || [];
+        bd.drag = id === undefined ? null : { id, x: q.x, y: q.y, tx: bd.tx, ty: bd.ty, moved: true, hist: [] };
+      }
+      bd.quiet = performance.now() + 400;
+      return;
+    }
+    const D = bd.drag;
+    bd.drag = null;
+    bd.el.classList.remove('panning');
+    if (!D || !D.moved) return;
+    bd.quiet = performance.now() + 350;
+    const h = D.hist, a = h[0], b = h[h.length - 1];
+    if (h.length > 1 && b[0] > a[0] && performance.now() - b[0] < 90) {
+      let vx = clamp((b[1] - a[1]) / (b[0] - a[0]), -3, 3), vy = clamp((b[2] - a[2]) / (b[0] - a[0]), -3, 3), last = performance.now();
+      const step = now => {
+        const dt = Math.min(32, now - last), f = Math.pow(.92, dt / 16);
+        last = now; vx *= f; vy *= f;
+        setView(bd.s, bd.tx + vx * dt, bd.ty + vy * dt);
+        bd.glide = Math.hypot(vx, vy) > .02 ? requestAnimationFrame(step) : 0;
+      };
+      bd.glide = requestAnimationFrame(step);
+    }
+  }
+  function bdWheel(e) {
+    e.preventDefault();
+    stopMotion();
+    const k = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? bd.el.clientHeight : 1, r = bd.el.getBoundingClientRect();
+    if (e.ctrlKey || e.metaKey) zoomAt(bd.s * Math.exp(-e.deltaY * k * .01), e.clientX - r.left, e.clientY - r.top);   // trackpad pinch arrives as ctrl + wheel
+    else setView(bd.s, bd.tx - e.deltaX * k, bd.ty - e.deltaY * k);
+  }
+  function boardKey(e) {
+    if (!bd || e.metaKey || e.ctrlKey || e.altKey) return;
+    const step = 140, vw = bd.el.clientWidth / 2, vh = bd.el.clientHeight / 2;
+    const pan = { ArrowLeft: [step, 0], ArrowRight: [-step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] }[e.key];
+    if (pan) { e.preventDefault(); return animateTo({ s: bd.s, tx: bd.tx + pan[0], ty: bd.ty + pan[1] }, 250); }
+    const k = e.key === '+' || e.key === '=' ? 1.4 : e.key === '-' ? 1 / 1.4 : 0;
+    if (k) { const s = clamp(bd.s * k, bd.min, 1.6); animateTo({ s, tx: vw - (vw - bd.tx) * s / bd.s, ty: vh - (vh - bd.ty) * s / bd.s }, 300); }
+    else if (e.key === '0') flyTo(bd.area, true);
+  }
+  addEventListener('resize', () => {
+    if (!bd) return;
+    if (isPhone() !== bd.phone) { layoutBoard(); flyTo(bd.area, false); }
+    else setView(bd.s, bd.tx, bd.ty);
+  });
 
   function openNote(key, opener) {
     const tpl = document.getElementById('note-' + key);
     if (tpl) openWindow('note-' + key, tpl.dataset.title, tpl.innerHTML, opener, 'note');
   }
 
-  // ----- openers: the hero CTA, the nav, Systems chips, Approach notes -----
-  const OPENERS = { finder: el => openFinder('all', el) };
+  // ----- openers: the nav, the note card links -----
+  const OPENERS = { board: el => openBoard('production', el) };
   document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
     if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
@@ -1053,6 +1441,12 @@
   }));
   document.querySelectorAll('.watch-chip, .shot').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
   document.querySelectorAll('[data-note]').forEach(el => el.addEventListener('click', () => openNote(el.dataset.note, el)));
+
+  // waveform dots under each skill window: fixed heights, so every visit looks the same
+  document.querySelectorAll('.wave').forEach((wv, n) => {
+    wv.innerHTML = Array.from({ length: 34 }, (_, i) =>
+      `<i style="--h:${6 + Math.round(30 * Math.abs(Math.sin(i * .9 + n * 2) * Math.cos(i * .31 + n)))};--d:${(i * 7 % 10) / 10}"></i>`).join('');
+  });
 
   // scroll bleed: --p runs 0 to 1 across the hero's height
   let bleedQueued = false;

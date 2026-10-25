@@ -18,6 +18,37 @@ then mirror them into the HTML. **Status** says where each section stands in the
 - **Windows (from the heyclicky pass):** every framed piece of media sits in a white Mac window
   with traffic lights and a filename in the title bar, like the work windows.
 
+## Live copy v5 (2026-10-25, later): three skills and the boards
+Ethan: "where is the hey clicky style? ... lets emphasize 3 skill for them to read", and the
+Finder "just not fit ... maybe an infinity board like our old desktop", "infinity as for each of
+them, not sum them all in 1".
+- **Skills section (`what-i-do.md`), "Three skills, one owner." Rates on request.** It replaces
+  the three service cards. One heyclicky block per area of the map: the skill, a Mac window with a
+  filename, waveform dots, the ask in a blue bubble and my answer in an orange one, and a button
+  that opens that area's board.
+  1. **01 · Research, "Shape the idea".** "What the work is for, before anything gets made. Then
+     the right tool, tested head to head." Window `tool-tests.log`, the seven tests in one line
+     each (from the Tool tests note). Ask: "Which AI tool should we use for this?" Answer: "First,
+     what is this video actually for?" Button: See the tool tests.
+  2. **02 · Video production, "Make the work".** "Script to final master: edit, motion, sound and
+     color. One owner, no handoffs." Window `joe-schaeffer.mov` (plays in place). Ask: "We have the
+     footage. Can you make it a film?" Answer: "On it. First, which story the footage holds."
+     Button: See the videos.
+  3. **03 · AI work, "Build the system".** "When the work repeats, a workflow that holds the
+     standard: briefs, tools and QC. I know the stack under it." Chips: Claude Code, GitHub,
+     Vercel, Supabase. Window `founder-intro.mov`. Ask: "The AI drafts never land close to
+     final." Answer: "So every job starts from a structured brief. Now the first pass lands
+     close." (the verified "what changed" line). Button: See the systems.
+  The asks are framings of what a visitor might ask, not quotes from clients.
+- **Boards replace Finder.** Each area has its own endless desktop on the Ember wallpaper
+  (`research.board`, `ai-work.board`, `production.board`): drag to move, scroll or pinch to zoom,
+  Fit to reframe, and the three-part control on the board switches area. Videos are files with
+  their names under them; production keeps its four folders. Research holds `tool-tests.md`,
+  `how-i-think.md` and the seven tests as sticky notes. The map, the hero control, the skill
+  buttons and the nav (Work opens production) all open a board.
+- **Page order:** map hero → proof strip → three skills → about note → contact. Nav: Work ·
+  Skills · About · Contact.
+
 ## Live copy v4 (2026-10-25): short, heyclicky style
 Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is in `profile.md`.
 - **Hero:**
