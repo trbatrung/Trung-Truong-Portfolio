@@ -27,13 +27,16 @@ around every video, filenames as captions, a sky panel, a pixel wordmark footer.
 never their assets. His calls on 2026-10-25:
 - **Theme:** keep the dark Ember look. Only heyclicky's components come in.
 - **Voice:** sentence case and the current voice. No lowercase texting tone.
-- **Hero:** the live 3D loop-street scene (`studio/index.html`, built from `studio-3d-prompt.md`
-  in a separate session) in a Mac window, under the headline. The desktop and every video move
-  to the next section down (`#work`), inside a big Mac window frame.
+- **Hero (revised the same day):** still one desktop screen. The headline sits small at the top
+  left, a live 3D dashboard window sits under it, and the files and folders stay on the right.
+  The dashboard shows his three areas (AI work, video production, research) in the style of the
+  Edge8 Four Offices dashboard, with real data only. It is its own page (`studio/index.html`),
+  built in a separate session. The first try (a loop-street scene above a separate Work section)
+  was rejected: "its kinda bad".
 - **What I Do:** on a sky panel, with "rates on request". No public prices.
 - **Left out:** testimonial wall, project counter, FAQ, signed founder note.
 
-Order of work, one section at a time with Ethan's sign-off: hero + desktop section, Systems (video
+Order of work, one section at a time with Ethan's sign-off: hero with the dashboard window, Systems (video
 windows, waveform dots, problem and fix bubbles), What I Do sky panel, footer (desktop icons and a
 pixel wordmark).
 

@@ -41,13 +41,11 @@ and has the systems to show for it.
   a gap. Failure stories in particular come from Ethan, never from the writer.
 
 ## Page structure
-**Hero (live 3D scene) → Work (desktop) → Systems → How I Choose Tools → What I Do + About → Contact.**
-- **Hero is the headline over the live 3D loop-street scene** (research, AI work, video
-  production), in a Mac window on the Ember background. Changed on 2026-10-25; see
+**Hero (desktop) → Systems → How I Choose Tools → What I Do + About → Contact.**
+- **Hero is the desktop.** One fixed screen (1440x900, 390x1210 on phones) scaled to fit, on a
+  color or ombre background (no photos). The H1 is read first, then the live dashboard window
+  under it (AI work, video production, research), then the icons. Dashboard added 2026-10-25; see
   `revamp-plan.md`.
-- **The desktop is the Work section, right below the hero.** One fixed screen (1440x900, 390x560
-  on phones) in a Mac window frame, scaled to its width, on a color or ombre background (no
-  photos).
 - **All work lives on the desktop:** loose files, six folders, and Finder. No video grid on the
   page.
 - **Depth lives on the desktop too.** The page carries one line per idea, about 480 words below

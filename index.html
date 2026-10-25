@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<noscript><style>.reveal{opacity:1!important;transform:none!important}.desk-win{display:none}</style></noscript>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}.hero{height:auto}.stage{position:relative;left:auto;top:auto;transform:none;width:auto;height:auto;padding:8rem 1.5rem 3rem}.stage-text{position:static;width:auto;max-width:880px}.hero-cta{position:static;margin-top:1.5rem}.dt-icons,.dt-dock{display:none}</style></noscript>
 <style>
   :root {
     --bg: #0a0b0d;
@@ -74,26 +74,25 @@
   .nav-tc::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 2s infinite; }
 
   /* ---------- HERO ----------
-     Headline centered on the Ember background, then the live 3D scene in a Mac window. The scene
-     is its own page (studio/index.html); until that file exists the window shows a flat map. */
-  .hero { position: relative; overflow: hidden; padding: 132px 0 clamp(3.5rem, 7vw, 5.5rem); text-align: center; }
+     The hero is a desktop: one fixed screen (1440x900, or 390x1210 on phones) scaled to fit
+     with --s, on a full-bleed color / ombre background. The headline sits at the top left with
+     the dashboard window under it; files, folders and a dock fill the right side. Windows open in
+     a fixed layer above the page. --p (0 to 1, set on scroll) bleeds the desktop into the page. */
+  .hero { --p: 0; --s: 1; position: relative; height: 100vh; height: 100svh; overflow: hidden; }
   .hero::after { /* vignette */
     content: ''; position: absolute; inset: 0; pointer-events: none;
     box-shadow: inset 0 0 200px 30px rgba(0,0,0,0.45);
   }
-  .hero-text { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; padding: 0 16px; display: flex; flex-direction: column; align-items: center; }
-  .hero-eyebrow { color: var(--teal); font-size: 12.5px; margin-bottom: 26px; display: flex; align-items: center; justify-content: center; gap: .8rem; flex-wrap: wrap; }
+  .hero-eyebrow { color: var(--teal); font-size: 12px; margin-bottom: 14px; display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
   .hero-eyebrow .bar { width: 26px; height: 1px; background: var(--teal); display: inline-block; }
   .hero h1 {
     font-family: var(--serif); font-weight: 400;
-    font-size: clamp(38px, 6.2vw, 86px); line-height: 1.02; letter-spacing: -0.025em;
-    margin-bottom: 26px;
+    font-size: 50px; line-height: 1.05; letter-spacing: -0.022em;
   }
-  .hero h1 .l2 { display: block; font-family: var(--sans); font-size: clamp(18px, 2.2vw, 30px); font-style: normal; font-weight: 500; color: var(--ink-dim); letter-spacing: -0.01em; margin: 20px auto 0; line-height: 1.3; max-width: 30ch; }
+  .hero h1 .l2 { display: block; font-family: var(--sans); font-size: 20px; font-style: normal; font-weight: 500; color: rgba(241,237,230,.8); letter-spacing: -0.01em; margin-top: 10px; line-height: 1.3; }
   .hero h1 .ai { color: var(--teal); font-weight: 600; }
   .hero h1 .craft { color: var(--amber); font-weight: 600; }
-  .hero-sub { font-size: clamp(15px, 1.4vw, 18px); color: var(--ink-dim); max-width: 52ch; margin-bottom: 32px; }
-  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: center; }
+  .hero-cta { position: absolute; left: 80px; bottom: 34px; display: flex; gap: 12px; align-items: center; }
   .btn { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: .95rem 1.6rem; border-radius: 2px; display: inline-flex; align-items: center; gap: .6rem; transition: all .28s ease; border: 1px solid transparent; }
   .btn svg { width: 15px; height: 15px; }
   button.btn { cursor: pointer; }
@@ -102,64 +101,64 @@
   .btn-ghost { background: transparent; border-color: var(--line); color: var(--ink-dim); }
   .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
 
-  .hero-status { font-size: 12px; margin-top: 28px; color: rgba(241,237,230,.78); text-align: center; text-wrap: balance; }
+  .hero-status { font-size: 11px; margin-top: 12px; color: rgba(241,237,230,.78); }
   .hero-status .live { display: inline-block; vertical-align: .1em; margin-right: .6rem; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: pulse 2s infinite; }
-  .hero h1 .l2, .hero-sub { color: rgba(241,237,230,.8); }
   .hero .btn-ghost { color: rgba(241,237,230,.85); border-color: rgba(241,237,230,.28); }
 
-  /* Mac windows on the page: white, traffic lights, a filename in the title bar */
-  .mac { background: #fff; color: #111; border-radius: 12px; overflow: hidden; text-align: left; box-shadow: 0 30px 80px -12px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.25); }
-  .mac-bar { display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 14px; border-bottom: 1px solid #efefef; }
-  .mac-lights { display: flex; gap: 8px; }
-  .mac-lights i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
-  .mac-lights i:nth-child(2) { background: #febc2e; } .mac-lights i:nth-child(3) { background: #28c840; }
-  .mac-title { font: 500 12.5px var(--mono); letter-spacing: .02em; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .hero-win { position: relative; z-index: 2; width: min(1120px, calc(100% - 32px)); margin: clamp(2.5rem, 5vw, 3.75rem) auto 0; }
-  .studio-view { position: relative; aspect-ratio: 16 / 10; background: #f1ede6; }
-  .studio-map { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .6s; }
-  .studio-view iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; opacity: 0; transition: opacity .6s; }
-  .studio-view.live iframe { opacity: 1; }
-  .studio-view.live .studio-map { opacity: 0; }
-  .hero-cap { position: relative; z-index: 2; margin-top: 16px; font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; color: rgba(241,237,230,.62); padding: 0 16px; }
-
-  /* ---------- WORK: THE DESKTOP ----------
-     One fixed screen (1440x900, or 390x560 on phones) inside a Mac window, scaled with --s to the
-     window's width, on a color / ombre background. Icons, folders and a dock live on the screen;
-     windows open in a fixed layer above the page. */
-  .desk-win { width: min(1400px, calc(100% - 2 * clamp(1.25rem, 4vw, 3rem))); margin: 0 auto; }
-  .desk { --s: 1; position: relative; overflow: hidden; height: 900px; }
-  .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-  .hero .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to bottom, transparent, var(--bg)); }
-  /* background: set data-bg on .hero and .desk. ember is live; teal, amber and dusk are kept as options */
-  [data-bg="ember"] .desk-bg { background:
+  /* ---------- DESKTOP ---------- */
+  .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; transform: translateY(calc(var(--p) * 22%)); }
+  .desk-bg::before { content: ''; position: absolute; inset: 0; background: var(--bg); opacity: calc(var(--p) * .85); }
+  .desk-bg::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to bottom, transparent, var(--bg)); }
+  /* background: set data-bg on .hero. ember is live; teal, amber and dusk are kept as options */
+  .hero[data-bg="ember"] .desk-bg { background:
       radial-gradient(55% 55% at 82% 72%, rgba(230,161,91,.55), transparent 70%),
       radial-gradient(50% 55% at 10% 15%, rgba(87,203,187,.30), transparent 70%),
       linear-gradient(155deg, #0f2a2c 0%, #142229 48%, #2b1c15 100%); }
-  [data-bg="teal"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #156560, transparent 75%), #0e4542; }
+  .hero[data-bg="teal"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #156560, transparent 75%), #0e4542; }
   .hero[data-bg="teal"] h1 .ai, .hero[data-bg="teal"] .hero-eyebrow { color: #a6efe4; }
   .hero[data-bg="teal"] .hero-eyebrow .bar { background: #a6efe4; }
-  [data-bg="amber"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #a65a26, transparent 75%), #8a471c; }
+  .hero[data-bg="amber"] .desk-bg { background: radial-gradient(80% 70% at 70% 30%, #a65a26, transparent 75%), #8a471c; }
   .hero[data-bg="amber"] h1 .craft { color: #ffd6a6; }
   .hero[data-bg="amber"] h1 .ai, .hero[data-bg="amber"] .hero-eyebrow { color: #c6fff6; }
   .hero[data-bg="amber"] .hero-eyebrow .bar { background: #c6fff6; }
   .hero[data-bg="amber"] .btn-primary { background: var(--paper); }
-  [data-bg="dusk"] .desk-bg { background:
+  .hero[data-bg="dusk"] .desk-bg { background:
       radial-gradient(45% 50% at 18% 22%, #3e2b5e, transparent 70%),
       radial-gradient(48% 55% at 88% 28%, #1f5a55, transparent 70%),
       radial-gradient(55% 50% at 68% 88%, #b4642e, transparent 70%),
       #17141d; }
 
   /* the screen */
-  .stage { position: absolute; left: 0; top: 0; z-index: 2; width: 1440px; height: 900px; transform: scale(var(--s)); transform-origin: top left; }
+  .stage { position: absolute; left: 50%; top: 0; z-index: 2; width: 1440px; height: 900px; transform: translateX(-50%) scale(var(--s)); transform-origin: top center; }
+  .stage-text { position: absolute; left: 80px; top: 96px; width: 880px; }
 
-  /* a sticky note on the empty side of the desktop */
-  .dt-sticky { position: absolute; left: 170px; top: 150px; width: 300px; padding: 46px 28px 32px; background: #fdf1a6; color: #3a3110; font: 500 23px/1.4 var(--sans); letter-spacing: -.01em; transform: rotate(-2.5deg); box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 16px 34px rgba(0,0,0,.32); }
-  .dt-sticky::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 22px; background: #f7e27a; }
-  .dt-sticky b { font-weight: 700; }
+  /* Mac windows on the page: white, traffic lights, a filename in the title bar */
+  .mac { background: #fff; color: #111; border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -12px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.25); }
+  .mac-bar { display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 14px; border-bottom: 1px solid #efefef; }
+  .mac-lights { display: flex; gap: 8px; }
+  .mac-lights i, .mac-lights button { display: block; width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; background: #ff5f57; }
+  .mac-lights i:nth-child(2) { background: #febc2e; }
+  .mac-lights button { position: relative; background: #28c840; color: rgba(0,0,0,.55); font: 700 9px/12px system-ui; }
+  .mac-lights button:not(:disabled) { cursor: pointer; }
+  .mac-lights button:not(:disabled):hover::after { content: "+"; position: absolute; inset: 0; text-align: center; }
+  .mac-title { font: 500 12.5px var(--mono); letter-spacing: .02em; color: #8a8a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* the dashboard window: the live 3D dashboard (studio/index.html, built separately) loads here
+     once that file exists; until then three plain cards stand in for it */
+  .dash-win { margin-top: 22px; }
+  .dash-view { position: relative; height: 490px; background: #f1ede6; }
+  .dash-view iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .6s; }
+  .dash-view.live iframe { opacity: 1; }
+  .dash-empty { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-content: center; padding: 0 36px; transition: opacity .6s; }
+  .dash-view.live .dash-empty { opacity: 0; }
+  .dash-card { background: #fff; border-radius: 12px; padding: 18px 18px 20px; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(42,39,36,.08); }
+  .dash-card span { display: flex; align-items: center; gap: 8px; font: 600 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #2a2724; }
+  .dash-card span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  .dash-card b { display: block; margin-top: 14px; font: 400 40px/1 var(--serif); letter-spacing: -.02em; color: #1a1a1a; }
+  .dash-card em { display: block; margin-top: 8px; font: 400 13.5px/1.45 var(--sans); font-style: normal; color: #6f6a64; }
 
   /* icons and folders: right side, like a Mac desktop; draggable */
-  .dt-icons { position: absolute; inset: 0; pointer-events: none; }
+  .dt-icons { position: absolute; inset: 0; pointer-events: none; opacity: calc(1 - var(--p) * 1.8); transform: translateY(calc(var(--p) * -50px)); }
   .dt-icon { position: absolute; transform: translate(-50%,-50%); pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 128px; background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: default; touch-action: none; outline: none; user-select: none; -webkit-user-select: none; }
   .dt-thumb { padding: 4px; border-radius: 7px; border: 1px solid transparent; transition: background .1s; }
   .dt-icon img { width: 80px; height: 52px; object-fit: cover; border-radius: 4px; background: #333; box-shadow: 0 2px 10px rgba(0,0,0,.3); pointer-events: none; -webkit-user-drag: none; }
@@ -183,7 +182,7 @@
   .dt-icon:focus-visible .dt-thumb { outline: 2px solid #0a5cd6; outline-offset: 1px; }
 
   /* dock */
-  .dt-dock { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
+  .dt-dock { position: absolute; left: 50%; bottom: 26px; transform: translate(-50%, calc(var(--p) * 40px)); opacity: calc(1 - var(--p) * 2); display: flex; align-items: flex-end; gap: 12px; padding: 9px 12px;
     border-radius: 22px; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.26);
     -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
   .dt-sep { width: 1px; align-self: stretch; margin: 4px 2px; background: rgba(255,255,255,.4); }
@@ -197,27 +196,35 @@
   .dt-avatar { background: var(--paper); color: #111; font: 500 19px var(--serif); font-style: italic; }
   .dt-notes { background: linear-gradient(#f5c842,#f5c842) top/100% 27% no-repeat, repeating-linear-gradient(to bottom, transparent 0 9px, #e4dfd2 9px 10px) 0 100%/100% 68% no-repeat, #fcfbf7; }
 
-  /* phone hero: smaller type, a portrait window for the 3D scene */
-  @media (max-width: 759px) {
-    .hero { padding-top: 104px; }
-    .hero-eyebrow { font-size: 9.5px; letter-spacing: .18em; margin-bottom: 16px; }
-    .hero h1 { margin-bottom: 16px; }
-    .hero h1 .l2 { margin-top: 14px; }
-    .hero-sub { line-height: 1.6; margin-bottom: 22px; }
-    .hero-status { font-size: 9.5px; margin-top: 18px; }
-    .studio-view { aspect-ratio: 4 / 5; }
-  }
+  /* phone screen (390x1210): headline, the dashboard window, a home-screen grid, the dock */
+  .hero.is-phone .stage { width: 390px; height: 1210px; }
+  .hero.is-phone .stage-text { position: static; width: auto; padding: 92px 16px 0; }
+  .hero.is-phone .hero-eyebrow { font-size: 9.5px; letter-spacing: .18em; margin: 0 8px 12px; }
+  .hero.is-phone h1 { font-size: 36px; margin: 0 8px; }
+  .hero.is-phone h1 .l2 { font-size: 17px; }
+  .hero.is-phone .hero-status { font-size: 9.5px; margin: 12px 8px 0; }
+  .hero.is-phone .dash-win { margin-top: 20px; }
+  .hero.is-phone .dash-view { height: 380px; }
+  .hero.is-phone .dash-view iframe { pointer-events: none; }
+  .hero.is-phone .dash-empty { grid-template-columns: 1fr; gap: 10px; padding: 0 18px; }
+  .hero.is-phone .dash-card { padding: 14px 16px; }
+  .hero.is-phone .dash-card b { font-size: 30px; margin-top: 8px; }
+  .hero.is-phone .dash-card em { font-size: 12.5px; margin-top: 4px; }
+  .hero.is-phone .hero-cta { display: none; }
+  .hero.is-phone .dt-icons { position: static; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 4px; padding: 24px 14px 0; pointer-events: auto; }
+  .hero.is-phone .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
+  .hero.is-phone .dt-thumb { padding: 2px; }
+  .hero.is-phone .dt-icon img, .hero.is-phone .dt-icon.vertical img { width: 60px; height: 60px; border-radius: 14px; }
+  .hero.is-phone .dt-folder svg, .hero.is-phone .dt-doc svg { width: 60px; height: 60px; }
+  .hero.is-phone .dt-label { font-size: 11px; max-width: 86px; }
+  .hero.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; opacity: 1; transform: translateX(-50%); }
+  .hero.is-phone .dt-icons { opacity: 1; transform: none; }
+  .hero.is-phone .desk-bg::before { opacity: calc(var(--p) * .6); }
 
-  /* phone screen (390x560): a home-screen grid with the dock at the bottom */
-  .desk.is-phone .stage { width: 390px; height: 560px; }
-  .desk.is-phone .dt-sticky { display: none; }
-  .desk.is-phone .dt-icons { position: static; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 4px; padding: 28px 14px 0; pointer-events: auto; }
-  .desk.is-phone .dt-icon { position: static; transform: none; width: auto; touch-action: manipulation; }
-  .desk.is-phone .dt-thumb { padding: 2px; }
-  .desk.is-phone .dt-icon img, .desk.is-phone .dt-icon.vertical img { width: 60px; height: 60px; border-radius: 14px; }
-  .desk.is-phone .dt-folder svg, .desk.is-phone .dt-doc svg { width: 60px; height: 60px; }
-  .desk.is-phone .dt-label { font-size: 11px; max-width: 86px; }
-  .desk.is-phone .dt-dock { bottom: 20px; gap: 10px; padding: 8px 10px; }
+  /* the dashboard, opened full size in a desktop window */
+  .dt-win.studio { height: calc(100% - 32px); }
+  .dt-win.studio .dt-body { padding: 0; flex: 1; min-height: 0; overflow: hidden; }
+  .dt-win.studio iframe { display: block; width: 100%; height: 100%; border: 0; }
 
   /* windows: a fixed layer, so they open at real size from anywhere on the page */
   .dt-wins { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
@@ -335,6 +342,8 @@
     .fd-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) {
+    .desk-bg, .dt-icons { transform: none; }
+    .dt-dock { transform: translateX(-50%); }
     .dt-folder[data-cat="ai"] svg { animation: none; filter: drop-shadow(0 0 12px rgba(232,87,63,.6)); }
     .dt-win, .dt-win.closing { animation-duration: 1ms; }
     .dt-tile { transition: none; }
@@ -536,7 +545,7 @@
   <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
+      <li><a href="#top" data-open="finder">Work</a></li>
       <li><a href="#systems">Systems</a></li>
       <li><a href="#approach">Approach</a></li>
       <li><a href="#about">About</a></li>
@@ -549,13 +558,25 @@
 <!-- ---------- HERO ---------- -->
 <header class="hero" id="top" data-bg="ember">
   <div class="desk-bg" aria-hidden="true"></div>
-  <div class="hero-text">
-    <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
-    <h1 class="reveal">
-      Where does <span class="ai">AI</span> belong in your video?
-      <span class="l2">AI has a defined place in it. The <span class="craft">standard</span> doesn't move.</span>
-    </h1>
-    <p class="hero-sub reveal">Script to final master, end to end.</p>
+  <div class="stage" id="stage">
+    <div class="stage-text">
+      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction &amp; Production Systems</div>
+      <h1 class="reveal">
+        Where does <span class="ai">AI</span> belong in your video?
+        <span class="l2">AI has a defined place in it. The <span class="craft">standard</span> doesn't move.</span>
+      </h1>
+      <div class="hero-status mono reveal"><span class="live"></span>Ho Chi Minh City · Open to senior roles and select projects</div>
+      <figure class="mac dash-win">
+        <div class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><button type="button" class="mac-zoom" tabindex="-1" title="Open full size" disabled></button></span><span class="mac-title">dashboard.live</span></div>
+        <div class="dash-view" id="studio">
+          <div class="dash-empty">
+            <div class="dash-card" style="--c:#57cbbb"><span>AI work</span><b>3</b><em>AI systems, directed end to end</em></div>
+            <div class="dash-card" style="--c:#e6a15b"><span>Video production</span><b>8+</b><em>Years in production</em></div>
+            <div class="dash-card" style="--c:#4f9fe6"><span>Research</span><b>Tool tests</b><em>Same brief, head to head</em></div>
+          </div>
+        </div>
+      </figure>
+    </div>
     <div class="hero-cta reveal">
       <button type="button" class="btn btn-primary" data-open="finder">
         Browse the work
@@ -563,73 +584,6 @@
       </button>
       <a href="#contact" class="btn btn-ghost">Get in touch</a>
     </div>
-    <div class="hero-status mono reveal"><span class="live"></span>Ho Chi Minh City · Open to senior roles and select projects</div>
-  </div>
-  <figure class="mac hero-win reveal">
-    <div class="mac-bar" aria-hidden="true"><span class="mac-lights"><i></i><i></i><i></i></span><span class="mac-title">pipeline.live</span></div>
-    <div class="studio-view" id="studio">
-      <!-- a flat map of the loop street, shown until the live 3D scene in studio/ loads -->
-      <svg class="studio-map" viewBox="110 40 780 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of the loop street: research, AI work and video production along one road">
-        <defs>
-          <pattern id="mapWin" width="18" height="18" patternUnits="userSpaceOnUse"><rect x="4" y="4" width="9" height="9" rx="1.5" fill="#f4efe7"/></pattern>
-          <filter id="mapPill" x="-20%" y="-40%" width="140%" height="180%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity=".16"/></filter>
-        </defs>
-        <rect x="150" y="106" width="700" height="620" rx="52" fill="#d3cbbf"/>
-        <rect x="150" y="88" width="700" height="620" rx="52" fill="#e7e1d8"/>
-        <g fill="#d2cabd"><rect x="168" y="104" width="76" height="80" rx="8"/><rect x="756" y="104" width="76" height="80" rx="8"/></g>
-        <g fill="url(#mapWin)"><rect x="175" y="111" width="62" height="66"/><rect x="763" y="111" width="62" height="66"/></g>
-        <rect x="168" y="200" width="76" height="400" rx="10" fill="#4f9fe6"/>
-        <g fill="#d6e8fb"><rect x="178" y="214" width="56" height="112" rx="5"/><rect x="178" y="340" width="56" height="112" rx="5"/><rect x="178" y="466" width="56" height="120" rx="5"/></g>
-        <g fill="#2f4a66"><rect x="186" y="226" width="12" height="9" rx="2"/><rect x="202" y="226" width="12" height="9" rx="2"/><rect x="218" y="226" width="12" height="9" rx="2"/><rect x="186" y="478" width="40" height="6" rx="2"/><rect x="186" y="490" width="40" height="6" rx="2"/></g>
-        <rect x="260" y="104" width="480" height="82" rx="10" fill="#57cbbb"/>
-        <g fill="#cdf0ea"><rect x="272" y="116" width="144" height="58" rx="5"/><rect x="428" y="116" width="144" height="58" rx="5"/><rect x="584" y="116" width="144" height="58" rx="5"/></g>
-        <g fill="#1f4f49"><rect x="284" y="126" width="22" height="15" rx="2"/><rect x="312" y="126" width="22" height="15" rx="2"/><circle cx="500" cy="146" r="9"/><rect x="600" y="126" width="40" height="22" rx="2"/></g>
-        <g fill="#e8573f"><circle cx="390" cy="160" r="3"/><circle cx="400" cy="160" r="3"/><circle cx="410" cy="160" r="3"/></g>
-        <rect x="756" y="200" width="76" height="400" rx="10" fill="#e6a15b"/>
-        <g fill="#f7dfc3"><rect x="766" y="214" width="56" height="200" rx="5"/><rect x="766" y="428" width="56" height="158" rx="5"/></g>
-        <g fill="#5a3a1c"><rect x="778" y="240" width="32" height="5" rx="2"/><rect x="788" y="300" width="12" height="18" rx="2"/><rect x="776" y="452" width="16" height="11" rx="2"/><rect x="796" y="452" width="16" height="11" rx="2"/><rect x="776" y="476" width="36" height="4" rx="2"/></g>
-        <circle cx="810" cy="226" r="4" fill="#e8573f"/>
-        <rect x="352" y="292" width="296" height="226" rx="30" fill="#d7ddc6"/>
-        <path d="M352 405H648M500 292V518" stroke="#e9e4d6" stroke-width="10"/>
-        <g fill="#b0bf98"><circle cx="402" cy="340" r="18"/><circle cx="598" cy="340" r="18"/><circle cx="402" cy="470" r="18"/><circle cx="598" cy="470" r="18"/><circle cx="452" cy="452" r="13"/><circle cx="552" cy="362" r="13"/></g>
-        <rect x="300" y="240" width="400" height="330" rx="70" fill="none" stroke="#d8d1c6" stroke-width="86"/>
-        <rect x="300" y="240" width="400" height="330" rx="70" fill="none" stroke="#47423e" stroke-width="56"/>
-        <rect x="300" y="240" width="400" height="330" rx="70" fill="none" stroke="#efe9df" stroke-width="3" stroke-dasharray="16 18"/>
-        <g fill="#efe9df"><rect x="276" y="392" width="5" height="26"/><rect x="286" y="392" width="5" height="26"/><rect x="296" y="392" width="5" height="26"/><rect x="306" y="392" width="5" height="26"/><rect x="316" y="392" width="5" height="26"/><rect x="676" y="392" width="5" height="26"/><rect x="686" y="392" width="5" height="26"/><rect x="696" y="392" width="5" height="26"/><rect x="706" y="392" width="5" height="26"/><rect x="716" y="392" width="5" height="26"/><rect x="487" y="216" width="26" height="5"/><rect x="487" y="226" width="26" height="5"/><rect x="487" y="236" width="26" height="5"/><rect x="487" y="246" width="26" height="5"/><rect x="487" y="256" width="26" height="5"/></g>
-        <g fill="none" stroke="#efe9df" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M292 342l8-10 8 10"/><path d="M584 232l10 8-10 8"/><path d="M692 466l8 10 8-10"/><path d="M420 562l-10 8 10 8"/></g>
-        <g><rect x="292" y="455" width="16" height="30" rx="5" fill="#f1ede6"/><rect x="350" y="232" width="30" height="16" rx="5" fill="#57cbbb"/><rect x="692" y="290" width="16" height="30" rx="5" fill="#e6a15b"/><rect x="560" y="562" width="30" height="16" rx="5" fill="#4f9fe6"/></g>
-        <g fill="#e8573f"><circle cx="300" cy="380" r="7"/><circle cx="470" cy="240" r="7"/><circle cx="700" cy="440" r="7"/><circle cx="640" cy="570" r="7"/></g>
-        <g fill="#b0bf98"><circle cx="205" cy="662" r="15"/><circle cx="280" cy="668" r="15"/><circle cx="355" cy="662" r="15"/><circle cx="645" cy="662" r="15"/><circle cx="720" cy="668" r="15"/><circle cx="795" cy="662" r="15"/></g>
-        <rect x="466" y="648" width="68" height="26" rx="5" fill="#d2cabd"/><rect x="460" y="642" width="80" height="8" rx="3" fill="#a59c90"/>
-        <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="18" font-weight="600" letter-spacing="2" fill="#2a2724">
-          <g filter="url(#mapPill)"><rect x="131" y="379" width="150" height="42" rx="21" fill="#fff"/><rect x="430" y="124" width="140" height="42" rx="21" fill="#fff"/><rect x="706" y="379" width="174" height="42" rx="21" fill="#fff"/></g>
-          <circle cx="153" cy="400" r="6" fill="#4f9fe6"/><text x="167" y="406">RESEARCH</text>
-          <circle cx="452" cy="145" r="6" fill="#57cbbb"/><text x="466" y="151">AI WORK</text>
-          <circle cx="728" cy="400" r="6" fill="#e6a15b"/><text x="742" y="406">PRODUCTION</text>
-        </g>
-      </svg>
-    </div>
-  </figure>
-  <p class="hero-cap">One loop: research, AI work, video production.</p>
-</header>
-
-<!-- ---------- WORK: THE DESKTOP ---------- -->
-<section class="work" id="work">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <div class="idx mono">00 — Work</div>
-        <h2>Every video lives on this desktop.</h2>
-      </div>
-      <div class="aside">Open a folder<br>AI Systems first</div>
-    </div>
-  </div>
-  <div class="mac desk-win reveal">
-    <div class="mac-bar" aria-hidden="true"><span class="mac-lights"><i></i><i></i><i></i></span><span class="mac-title">Desktop</span></div>
-    <div class="desk" id="desk" data-bg="ember">
-  <div class="desk-bg" aria-hidden="true"></div>
-  <div class="stage" id="stage">
-    <p class="dt-sticky">Every video is here, sorted into folders. Start with <b>AI Systems</b>.</p>
     <div class="dt-icons" role="group" aria-label="Work">
       <button class="dt-icon" type="button" data-project="jH6LaZDXNMs" style="left:1060px;top:195px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/jH6LaZDXNMs/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">Joe Schaeffer</span></button>
       <button class="dt-icon vertical" type="button" data-project="vwf4U1WzQ0s" style="left:1195px;top:270px"><span class="dt-thumb"><img src="https://img.youtube.com/vi/vwf4U1WzQ0s/mqdefault.jpg" alt="" loading="lazy"></span><span class="dt-label">No More Solo</span></button>
@@ -653,9 +607,7 @@
       <a class="dt-tile" style="background:#1d1d1f" href="mailto:trbatrung@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg><span class="dt-tip">Email</span></a>
     </div>
   </div>
-    </div>
-  </div>
-</section>
+</header>
 <div class="dt-wins" id="dtWins"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="lg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='90' viewBox='0 0 400 90'><defs><linearGradient id='r' x1='0' x2='1'><stop offset='0' stop-color='%23000'/><stop offset='1' stop-color='%23f00'/></linearGradient><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23000'/><stop offset='1' stop-color='%230f0'/></linearGradient><filter id='b'><feGaussianBlur stdDeviation='9'/></filter></defs><rect width='400' height='90' fill='url(%23r)'/><rect width='400' height='90' fill='url(%23g)' style='mix-blend-mode:screen'/><rect x='18' y='16' width='364' height='58' rx='20' fill='rgb(128,128,0)' filter='url(%23b)'/></svg>" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <noscript>
@@ -958,33 +910,50 @@
     // note: the mailto navigation still fires for anyone with a mail client set up
   });
 
-  // ----- hero: the live 3D scene -----
-  // The scene is its own page in studio/, built separately. It loads into the hero window only
-  // once that file exists; until then the window keeps its flat map of the same loop street.
+  // ----- the dashboard window -----
+  // The live 3D dashboard is its own page in studio/, built separately. It loads into the window
+  // on the desktop only once that file exists; until then three plain cards stand in for it. The
+  // green light opens the full version in a desktop window, and a click on an area in the dashboard
+  // opens that area's work.
   const studio = document.getElementById('studio');
+  const studioZoom = document.querySelector('.mac-zoom');
   const STUDIO_SRC = 'studio/index.html';
+  const STUDIO_TITLE = 'Live 3D dashboard: AI work, video production and research';
   let studioMode = '';
   function mountStudio() {
-    const mode = innerWidth < 760 ? 'phone' : 'wide';
+    const mode = isPhone() ? 'phone' : 'wide';
     if (mode === studioMode) return;
     studioMode = mode;
     let f = studio.querySelector('iframe');
     if (!f) {
       f = document.createElement('iframe');
-      f.title = 'Live 3D scene: research, AI work and video production on one loop street';
-      f.tabIndex = -1;
-      f.setAttribute('aria-hidden', 'true');
+      f.title = STUDIO_TITLE;
       f.addEventListener('load', () => studio.classList.add('live'));
       studio.appendChild(f);
     }
-    f.src = STUDIO_SRC + (mode === 'phone' ? '?embed=1&quality=low&w=1080&h=1350' : '?embed=1&w=1440&h=900');
+    f.src = STUDIO_SRC + (mode === 'phone' ? '?embed=1&quality=low' : '?embed=1');
   }
   fetch(STUDIO_SRC, { method: 'HEAD' })
-    .then(r => { if (r.ok) { mountStudio(); addEventListener('resize', mountStudio); } })
+    .then(r => {
+      if (!r.ok) return;
+      mountStudio();
+      addEventListener('resize', mountStudio);
+      studioZoom.disabled = false;
+      studioZoom.tabIndex = 0;
+      studioZoom.parentElement.removeAttribute('aria-hidden');
+      studioZoom.setAttribute('aria-label', 'Open the dashboard full size');
+    })
     .catch(() => {});
+  studioZoom.addEventListener('click', () => openWindow('studio', 'dashboard.live', `<iframe src="${STUDIO_SRC}" title="${STUDIO_TITLE}"></iframe>`, studioZoom, 'studio max'));
+  addEventListener('message', e => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'studio:area') return;
+    if (e.data.area === 'ai') openFinder('ai');
+    else if (e.data.area === 'production') openFinder('all');
+    else if (e.data.area === 'research') openNote('tests');
+  });
 
-  // ----- work: the desktop -----
-  // One fixed screen, 1440x900 (390x560 on phones), scaled with --s to its window's width.
+  // ----- desktop hero -----
+  // The hero is one fixed screen, 1440x900 (390x1210 on phones), scaled with --s to fit.
   // Every video lives here: loose files on the desktop, the rest in folders, all in Finder.
   // AI-system details are read from the Systems section, so that copy has one source.
   const CATS = {
@@ -1032,7 +1001,7 @@
     { id: '8EKCg3SiSPI', title: 'AI Language Lesson', type: 'Proof of Concept', cat: 'ai', sys: 'sys-03', len: '1:11', desc: 'A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens\' office.' },
   ];
 
-  const desk = document.getElementById('desk');
+  const hero = document.getElementById('top');
   const winsEl = document.getElementById('dtWins');
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const txt = el => el ? el.textContent.trim() : '';
@@ -1040,20 +1009,21 @@
   const thumb = (id, q = 'mqdefault') => `https://img.youtube.com/vi/${id}/${q}.jpg`;
   const watchUrl = p => p.short ? `https://youtube.com/shorts/${p.id}` : `https://youtu.be/${p.id}`;
   const sheet = () => matchMedia('(max-width:700px)').matches;      // windows become full-screen sheets
-  const isPhone = () => desk.classList.contains('is-phone');
-  const FOLDER_SVG = desk.querySelector('.dt-folder svg').outerHTML;   // AI Systems is recoloured in CSS via [data-cat="ai"]
+  const isPhone = () => hero.classList.contains('is-phone');
+  const FOLDER_SVG = hero.querySelector('.dt-folder svg').outerHTML;   // AI Systems is recoloured in CSS via [data-cat="ai"]
   // only Chromium renders SVG filters inside backdrop-filter; everyone else keeps the plain glass
   if (navigator.userAgentData && navigator.userAgentData.brands.some(b => b.brand === 'Chromium')) document.documentElement.classList.add('refract');
 
-  // fit the fixed screen to its window's width; the window is exactly as tall as the scaled screen
+  // fit the fixed screen to the viewport: as large as fits, never cropped, and the hero is
+  // exactly as tall as the scaled screen (any spare width shows the background)
   let scale = 1;
   function fit() {
     const phone = innerWidth < 760 || innerWidth / innerHeight < 0.8;
-    const [w, h] = phone ? [390, 560] : [1440, 900];
-    desk.classList.toggle('is-phone', phone);
-    scale = desk.clientWidth / w;
-    desk.style.height = Math.round(h * scale) + 'px';
-    desk.style.setProperty('--s', scale.toFixed(4));
+    const [w, h] = phone ? [390, 1210] : [1440, 900];
+    hero.classList.toggle('is-phone', phone);
+    scale = phone ? Math.min(innerWidth / w, 1.4) : Math.min(innerWidth / w, innerHeight / h);
+    hero.style.height = Math.round(h * scale) + 'px';
+    hero.style.setProperty('--s', scale.toFixed(4));
   }
   addEventListener('resize', fit);
   fit();
@@ -1068,11 +1038,10 @@
   let skipPop = 0;
   function updateBars() {
     const wins = stack();
-    const r = desk.getBoundingClientRect();
-    const onDesk = r.top < innerHeight * .6 && r.bottom > innerHeight * .4;
+    const onHero = scrollY < hero.offsetHeight / 2;
     wins.forEach((w, i) => {
       const prev = wins[i - 1];
-      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onDesk ? '← Back to desktop' : '← Close';
+      const back = prev ? `← ${esc(prev.getAttribute('aria-label'))}` : onHero ? '← Back to desktop' : '← Close';
       const video = w.classList.contains('project');
       w.querySelector('.dt-sheetbar').innerHTML = `<button type="button" data-act="back"${video ? ' class="ghost"' : ''}>${back}</button>`
         + (video ? '<button type="button" data-act="next">Next →</button>' : '');
@@ -1271,13 +1240,14 @@
   const OPENERS = { finder: el => openFinder('all', el), about: openAbout, contact: openContact };
   document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
+    if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
     OPENERS[el.dataset.open](el);
   }));
   document.querySelectorAll('.watch-chip').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
   document.querySelectorAll('[data-note]:not(.dt-icon)').forEach(el => el.addEventListener('click', () => openNote(el.dataset.note, el)));
 
   // ----- desktop icons and folders: click opens, drag moves (desktop screen only) -----
-  const icons = [...desk.querySelectorAll('.dt-icon')];
+  const icons = [...hero.querySelectorAll('.dt-icon')];
   const deselect = () => icons.forEach(i => i.classList.remove('selected'));
   const activate = icon => icon.dataset.project ? openProject(icon.dataset.project, icon)
     : icon.dataset.cat ? openFinder(icon.dataset.cat, icon) : openNote(icon.dataset.note, icon);
@@ -1294,7 +1264,7 @@
         if (!moved && Math.hypot(dx, dy) < 4) return;   // a small wobble still counts as a click
         moved = true; icon.classList.add('dragging');
         icon.style.left = clamp(sl + dx, 60, 1380) + 'px';
-        icon.style.top = clamp(st + dy, 60, 790) + 'px';
+        icon.style.top = clamp(st + dy, 100, 790) + 'px';
       };
       const up = ev => {
         icon.removeEventListener('pointermove', move); icon.removeEventListener('pointerup', up); icon.removeEventListener('pointercancel', up);
@@ -1308,7 +1278,20 @@
     // keyboard (detail 0) and phone taps open on click
     icon.addEventListener('click', e => { if (e.detail === 0 || isPhone()) activate(icon); });
   });
-  desk.addEventListener('pointerdown', e => { if (!e.target.closest('.dt-icon')) deselect(); });
+  hero.addEventListener('pointerdown', e => { if (!e.target.closest('.dt-icon')) deselect(); });
+
+  // scroll bleed: --p runs 0 to 1 across the hero's height
+  let bleedQueued = false;
+  // On phones the hero is taller than the screen and the icons sit low, so the bleed waits until
+  // the bottom of the hero is on screen and then runs over a full screen of scrolling.
+  function bleed() {
+    bleedQueued = false;
+    const h = hero.offsetHeight;
+    const [start, span] = isPhone() ? [Math.max(0, h - innerHeight), innerHeight] : [0, h];
+    hero.style.setProperty('--p', clamp((scrollY - start) / span, 0, 1).toFixed(3));
+  }
+  addEventListener('scroll', () => { if (!bleedQueued) { bleedQueued = true; requestAnimationFrame(bleed); } }, { passive: true });
+  bleed();
 
 </script>
 </body>
