@@ -29,8 +29,8 @@ Say each idea once. Before adding a line, check it isn't already said in another
 ## Hero `#top` · Status: heyclicky pass, needs sign-off
 A fixed 1440x900 desktop screen (390x1210 on phones), scaled to fit. See `positioning.md`.
 Top left: the headline, small. Under it, a Mac window titled `dashboard.live` with the live 3D
-dashboard (`studio/index.html?embed=1`, `?embed=1&quality=low` on phones). It loads only when that
-file exists; until then three cards stand in: "AI work · 3 · AI systems, directed end to end",
+dashboard (`studio/index.html?embed=1`, `?embed=1&quality=low` on phones, plus `w` and `h` at twice
+the window size so it fills the window). It loads only when that file exists; until then three cards stand in: "AI work · 3 · AI systems, directed end to end",
 "Video production · 8+ · Years in production", "Research · Tool tests · Same brief, head to head".
 The window's green light opens the full dashboard in a desktop window, and clicking an area in the
 dashboard opens its work (AI work: AI Systems, production: all work, research: Tool tests).

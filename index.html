@@ -931,7 +931,10 @@
       f.addEventListener('load', () => studio.classList.add('live'));
       studio.appendChild(f);
     }
-    f.src = STUDIO_SRC + (mode === 'phone' ? '?embed=1&quality=low' : '?embed=1');
+    // the dashboard draws at a fixed size and scales to fit, so ask for the window's own shape,
+    // at twice its layout size so it stays sharp
+    const size = `&w=${studio.clientWidth * 2}&h=${studio.clientHeight * 2}`;
+    f.src = STUDIO_SRC + (mode === 'phone' ? '?embed=1&quality=low' : '?embed=1') + size;
   }
   fetch(STUDIO_SRC, { method: 'HEAD' })
     .then(r => {
