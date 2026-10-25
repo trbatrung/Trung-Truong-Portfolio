@@ -29,6 +29,21 @@ From Ethan's CV, via `copy-rewrite-brief.md` (2026-08). These are the only facts
   subscribers, contributed to 1M in under a year. Built and managed a production team of 10.
   Produced course content for Udemy, Skillshare, Coursera.
 
+## From Ethan directly (2026-10-25)
+- **Code and stacks.** In his words: "i understand structure and can know the stacks". Backed by
+  the record above:
+  - the code-based animation pipeline in Claude Code;
+  - shipping web content through GitHub, Vercel and Supabase;
+  - the "Install the Stack on a Mac" walkthrough (Homebrew, Claude Desktop, GitHub, Supabase,
+    Vercel);
+  - this site, including its 3D map, built with Claude Code.
+
+  Safe to say: he understands how software is structured, and knows the stacks he ships on. Not
+  safe to say: software engineer, developer, or product engineer as a past title.
+- **Title he goes by now:** Creative Producer & Technologist. It describes his current work (AI
+  Video Producer at Edge8, plus the technical systems). It is not a past job title at an
+  employer.
+
 ## Do not claim
 - Working at or leading an international network agency.
 - Currently managing an in-house creative team. Ethan is a solo operator now. Team leadership is

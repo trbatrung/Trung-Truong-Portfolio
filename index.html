@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trung (Ethan) Truong. Creative Direction</title>
-<meta name="description" content="Trung (Ethan) Truong. Creative direction for video that starts with the problem: brand films, ads, long-form and the systems behind them, script to final master.">
+<title>Trung (Ethan) Truong. Creative Producer &amp; Technologist</title>
+<meta name="description" content="Trung (Ethan) Truong, Creative Producer &amp; Technologist. Film, motion and the systems behind them, from concept to delivery.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0b0d'/%3E%3Ctext x='50' y='55' font-family='Georgia,serif' font-size='56' font-style='italic' font-weight='600' fill='%23e6a15b' text-anchor='middle' dominant-baseline='central'%3ETT%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -390,6 +390,50 @@
 
   /* ---------- APPROACH (short point of view + one-line tool verdicts; full notes open on the desktop) ---------- */
   .approach { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  /* section labels are filenames now (heyclicky); lowercase, no index numbers */
+  .idx.fname { font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--teal); }
+  .mac-lights i:nth-child(3) { background: #28c840; }
+
+  /* systems: a video in a Mac window, waveform dots, the problem in blue and the fix in orange */
+  .cases { display: flex; flex-direction: column; gap: clamp(3.5rem, 8vw, 6rem); }
+  .case { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(1.6rem, 4vw, 3.6rem); align-items: center; }
+  .case:nth-child(even) .shot { order: 2; }
+  .shot { display: block; width: 100%; padding: 0; border: 0; text-align: left; font: inherit; cursor: pointer; }
+  .shot .mac-bar { display: flex; }
+  .shot-img { position: relative; display: block; aspect-ratio: 16 / 9; background: #111; overflow: hidden; }
+  .shot-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+  .shot:hover .shot-img img { transform: scale(1.03); }
+  .shot .play { position: absolute; left: 50%; top: 50%; width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 50%; background: rgba(255,255,255,.9); box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+  .shot .play::after { content: ''; position: absolute; left: 25px; top: 20px; border-left: 16px solid #111; border-top: 11px solid transparent; border-bottom: 11px solid transparent; }
+  .talk h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -.01em; margin-bottom: 1rem; }
+  .wave { display: flex; align-items: center; gap: 5px; height: 24px; margin-bottom: 1.3rem; overflow: hidden; }
+  .wave i { width: 5px; border-radius: 3px; background: rgba(241,237,230,.26); }
+  .bubble { width: fit-content; max-width: 30rem; padding: .85rem 1.1rem; border-radius: 1.25rem; font-size: 1rem; line-height: 1.45; margin-bottom: .7rem; }
+  .bubble span { display: block; font-family: var(--mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; opacity: .78; margin-bottom: .3rem; }
+  .bubble.ask { background: linear-gradient(180deg, #8bb8ef, #5f95dc); color: #fff; border-bottom-left-radius: .3rem; }
+  .bubble.fix { margin-left: auto; background: linear-gradient(180deg, #f3bd85, #e6a15b); color: #1d150b; border-bottom-right-radius: .3rem; }
+  .tools-line { margin-top: 1.1rem; font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+  /* how I work: two short lines */
+  .ap-short { max-width: 42rem; }
+  .ap-short p { font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.5; color: var(--ink); }
+  .ap-short p.dim { margin: .9rem 0 1.8rem; font-size: 1rem; color: var(--ink-dim); }
+
+  /* about: a short note card, one line in highlighter */
+  .note-card { max-width: 34rem; margin: clamp(3.5rem, 7vw, 5rem) auto 0; padding: 2.1rem 2.3rem 1.7rem; background: #fbf8f2; color: #1a1a1a; border-radius: 14px; box-shadow: 0 30px 70px -20px rgba(0,0,0,.6); transform: rotate(-.6deg); }
+  .note-card .fname-top { font-family: var(--mono); font-size: .68rem; color: #9a948c; margin-bottom: 1rem; }
+  .note-card p { font-size: 1.05rem; line-height: 1.6; color: #2a2724; }
+  .note-card p + p { margin-top: .6rem; }
+  .note-card mark { background: linear-gradient(transparent 52%, #f6d36b 52%); color: inherit; padding: 0 .1em; }
+  .note-card .sig { display: flex; align-items: center; gap: .7rem; margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px dashed #ddd5c8; font-size: .88rem; color: #6f6a64; }
+  .note-card .av { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #1f1d1b; color: #fbf8f2; font-family: var(--serif); font-style: italic; }
+  @media (max-width: 760px) {
+    .case { grid-template-columns: 1fr; }
+    .case:nth-child(even) .shot { order: 0; }
+    .bubble { font-size: .95rem; }
+    .note-card { padding: 1.6rem 1.5rem 1.3rem; transform: none; }
+  }
+
   .ap-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; }
   .ap-pov p { font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--ink-dim); line-height: 1.75; }
   .ap-pov p b { color: var(--ink); font-weight: 500; }
@@ -478,7 +522,7 @@
     <ul class="nav-links">
       <li><a href="#top" data-open="finder">Work</a></li>
       <li><a href="#systems">Systems</a></li>
-      <li><a href="#approach">Approach</a></li>
+      <li><a href="#approach">How I work</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -491,10 +535,10 @@
   <div class="desk-bg" aria-hidden="true"></div>
   <div class="hero-copy">
     <div class="lead">
-      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Direction · Ho Chi Minh City</div>
+      <div class="hero-eyebrow mono reveal"><span class="bar"></span> Trung (Ethan) Truong · Creative Producer &amp; Technologist</div>
       <h1 class="reveal">
-        What is this video <span class="craft">actually for</span>?
-        <span class="l2">Start with the problem. The people, the tools and the cut follow from it.</span>
+        I build the work, <span class="craft">and the systems behind it</span>.
+        <span class="l2">Film, motion and creative technology. Eight years, concept to delivery.</span>
       </h1>
     </div>
     <div class="hero-cta reveal">
@@ -505,7 +549,7 @@
         </button>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
       </div>
-      <div class="hero-status mono"><span class="live"></span>Open to senior creative roles and select projects</div>
+      <div class="hero-status mono"><span class="live"></span>Ho Chi Minh City · Open to senior creative roles</div>
     </div>
   </div>
   <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
@@ -563,10 +607,10 @@
 <!-- ---------- STATS ---------- -->
 <div class="stats">
   <div class="wrap">
-    <div class="stat"><div class="n">8+</div><div class="l">Years in production</div></div>
-    <div class="stat"><div class="n">10+</div><div class="l">Team built &amp; directed</div></div>
-    <div class="stat"><div class="n">Full</div><div class="l">Pipeline ownership</div></div>
-    <div class="stat"><div class="n">Both</div><div class="l">AI &amp; real production</div></div>
+    <div class="stat"><div class="n">8+</div><div class="l">Years making the work</div></div>
+    <div class="stat"><div class="n">10+</div><div class="l">People in the team I built</div></div>
+    <div class="stat"><div class="n">300K → 1M</div><div class="l">Mike Dee's channel, the year I helped</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">Systems I built</div></div>
   </div>
 </div>
 
@@ -575,39 +619,51 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
-        <div class="idx mono">01 — Systems · Directed end to end</div>
-        <h2>Three systems, and the problem each one solves.</h2>
+        <div class="idx fname">systems.md</div>
+        <h2>Systems I built. Each one fixed a problem.</h2>
       </div>
       <div class="aside">Every video is<br>on the map above</div>
     </div>
-    <div class="sys-grid reveal">
-      <div class="sys" id="sys-01">
-        <div class="feat-cap">System 01 — Code-Based Animation</div>
-        <h4 class="feat-title">Code-based animation pipeline</h4>
-        <p class="feat-desc">Motion written as code, finished in Final Cut Pro. For UI walkthroughs, data viz and brand motion.</p>
-        <div class="feat-out">Motion delivered solo, from brief to final master.</div>
-        <div class="feat-fix"><span>What changed</span>Without a proper brief, AI first passes land far from final. Jobs now start from a structured context package, so the first pass lands close.</div>
-        <div class="tools"><span class="tool">Claude Code</span><span class="tool">Final Cut Pro</span><span class="tool">Context Packages</span><span class="tool">Inline QC</span></div>
-        <div class="watch"><button class="watch-chip" type="button" data-project="pR03yYZbI8E">Founder Intro</button><button class="watch-chip" type="button" data-project="PQWu7NOOTFc">Install the Stack</button></div>
-      </div>
-      <div class="sys" id="sys-02">
-        <div class="feat-cap">System 02 — Avatar Video</div>
-        <h4 class="feat-title">Avatar video at volume</h4>
-        <p class="feat-desc">One approved face and voice, consistent across markets, with no weekly shoot.</p>
-        <div class="feat-out">One founder, every market, without a shoot schedule.</div>
-        <div class="feat-fix"><span>What changed</span>At volume, AI artifacts slip through. QC now runs inline at every stage, with no separate review team.</div>
-        <div class="tools"><span class="tool">HeyGen</span><span class="tool">ElevenLabs</span><span class="tool">Avatar</span><span class="tool">Multi-market</span></div>
-        <div class="watch"><button class="watch-chip" type="button" data-project="WlB4_OJTftM">Executive Scale</button><button class="watch-chip" type="button" data-project="3stIKPZL_00">Brand Presence</button></div>
-      </div>
-      <div class="sys" id="sys-03">
-        <div class="feat-cap">System 03 — Full AI Pipeline</div>
-        <h4 class="feat-title">End-to-end AI lesson</h4>
-        <p class="feat-desc">A full language lesson built with an AI presenter and AI b-roll.</p>
-        <div class="feat-out">A full lesson, no studio, no on-camera teacher.</div>
-        <div class="feat-fix"><span>What changed</span>A wrong line in a lesson teaches the wrong thing. Every line is now proofed against a teaching-accuracy bar before it ships.</div>
-        <div class="tools"><span class="tool">HeyGen</span><span class="tool">Veo3</span><span class="tool">Script Accuracy</span><span class="tool">Final Cut Pro</span></div>
-        <div class="watch"><button class="watch-chip" type="button" data-project="8EKCg3SiSPI">AI Language Lesson</button></div>
-      </div>
+    <div class="cases">
+      <article class="case reveal" id="sys-01">
+        <button class="mac shot" type="button" data-project="pR03yYZbI8E" aria-label="Play Founder Intro">
+          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">founder-intro.mov</span></span>
+          <span class="shot-img"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
+        </button>
+        <div class="talk">
+          <h3 class="feat-title">Code-based animation</h3>
+          <div class="wave" aria-hidden="true"><i style="height:12px"></i><i style="height:14px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:8px"></i><i style="height:10px"></i><i style="height:17px"></i><i style="height:22px"></i><i style="height:21px"></i><i style="height:15px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:18px"></i><i style="height:18px"></i><i style="height:15px"></i><i style="height:10px"></i><i style="height:6px"></i><i style="height:12px"></i><i style="height:17px"></i><i style="height:19px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:9px"></i><i style="height:17px"></i><i style="height:21px"></i><i style="height:21px"></i></div>
+          <p class="bubble ask"><span>The problem</span>Without a real brief, AI first passes landed far from final.</p>
+          <p class="bubble fix"><span>The fix</span>Every job starts from a context package now. The first pass lands close.</p>
+          <p class="tools-line">Claude Code · Final Cut Pro</p>
+        </div>
+      </article>
+      <article class="case reveal" id="sys-02">
+        <button class="mac shot" type="button" data-project="WlB4_OJTftM" aria-label="Play Executive Scale">
+          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">executive-scale.mp4</span></span>
+          <span class="shot-img"><img src="https://img.youtube.com/vi/WlB4_OJTftM/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
+        </button>
+        <div class="talk">
+          <h3 class="feat-title">Avatar video at volume</h3>
+          <div class="wave" aria-hidden="true"><i style="height:21px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:16px"></i><i style="height:14px"></i><i style="height:12px"></i><i style="height:7px"></i><i style="height:10px"></i><i style="height:17px"></i><i style="height:21px"></i><i style="height:20px"></i><i style="height:14px"></i><i style="height:5px"></i><i style="height:14px"></i><i style="height:19px"></i><i style="height:20px"></i><i style="height:16px"></i><i style="height:10px"></i><i style="height:7px"></i><i style="height:11px"></i><i style="height:15px"></i><i style="height:17px"></i><i style="height:15px"></i><i style="height:9px"></i></div>
+          <p class="bubble ask"><span>The problem</span>At volume, AI artifacts slipped through.</p>
+          <p class="bubble fix"><span>The fix</span>QC runs inline at every stage. No separate review team.</p>
+          <p class="tools-line">HeyGen · ElevenLabs</p>
+        </div>
+      </article>
+      <article class="case reveal" id="sys-03">
+        <button class="mac shot" type="button" data-project="8EKCg3SiSPI" aria-label="Play AI Language Lesson">
+          <span class="mac-bar"><span class="mac-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title">ai-language-lesson.mov</span></span>
+          <span class="shot-img"><img src="https://img.youtube.com/vi/8EKCg3SiSPI/maxresdefault.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')"><span class="play"></span></span>
+        </button>
+        <div class="talk">
+          <h3 class="feat-title">A full lesson, no studio</h3>
+          <div class="wave" aria-hidden="true"><i style="height:11px"></i><i style="height:7px"></i><i style="height:15px"></i><i style="height:21px"></i><i style="height:22px"></i><i style="height:17px"></i><i style="height:9px"></i><i style="height:9px"></i><i style="height:16px"></i><i style="height:18px"></i><i style="height:16px"></i><i style="height:11px"></i><i style="height:6px"></i><i style="height:10px"></i><i style="height:16px"></i><i style="height:19px"></i><i style="height:18px"></i><i style="height:13px"></i><i style="height:6px"></i><i style="height:15px"></i><i style="height:20px"></i><i style="height:21px"></i><i style="height:17px"></i><i style="height:10px"></i><i style="height:8px"></i><i style="height:13px"></i></div>
+          <p class="bubble ask"><span>The problem</span>One wrong line in a lesson teaches the wrong thing.</p>
+          <p class="bubble fix"><span>The fix</span>Every line is proofed against a teaching-accuracy bar before it ships.</p>
+          <p class="tools-line">HeyGen · Veo 3</p>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -617,49 +673,17 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
-        <div class="idx mono">02 — How I Choose Tools</div>
-        <h2>Slop or salvation. Both are wrong.</h2>
+        <div class="idx fname">how-i-work.md</div>
+        <h2>What is this video actually for?</h2>
       </div>
-      <div class="aside">Judgment,<br>not button-pushing</div>
+      <div class="aside">The tools<br>come after</div>
     </div>
-    <div class="ap-grid reveal">
-      <div class="ap-pov">
-        <p>I don't start with a tool. I start with a question: <b>what is this video for?</b> Then I test the tools head to head, same brief, and log where each one breaks.</p>
-        <p class="pull">AI gets you to 80% fast. Knowing when 80% is the finish line is the difference between shipping and spinning.</p>
-        <div class="ap-links">
-          <button class="btn btn-ghost" type="button" data-note="pov">The full point of view</button>
-          <button class="btn btn-ghost" type="button" data-note="tests">The test notes</button>
-        </div>
-      </div>
-      <div class="vet-table">
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">01</span><span class="ut">Product → ad creatives</span></div>
-          <p class="vet-call">Full auto is hit or miss. The steerable mode ships.</p>
-        </div>
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">02</span><span class="ut">UGC actor ads</span></div>
-          <p class="vet-call">Works end to end. Logos garble on cheap tiers.</p>
-        </div>
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">03</span><span class="ut">A/B &amp; localization</span></div>
-          <p class="vet-call">Where AI wins: test actors in parallel, localize cheap.</p>
-        </div>
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">04</span><span class="ut">Long-form → shorts</span></div>
-          <p class="vet-call">A repurposing accelerator, not an ad generator.</p>
-        </div>
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">05</span><span class="ut">Relighting &amp; look-dev</span></div>
-          <p class="vet-call">Great for mood. Breaks on glass, liquid, hair and fast moves.</p>
-        </div>
-        <div class="vet-row">
-          <div class="vet-use"><span class="rn">06</span><span class="ut">Agent builders</span></div>
-          <p class="vet-call">They pick lazy defaults quietly. Output is only as good as the brief.</p>
-        </div>
-        <div class="vet-row no-ai">
-          <div class="vet-use"><span class="rn">07</span><span class="ut">When not to use AI</span></div>
-          <p class="vet-call">The hero film that has to be perfect.</p>
-        </div>
+    <div class="ap-short reveal">
+      <p>I start there. The people, the tools and the cut follow.</p>
+      <p class="dim">New tools get the same test every time: same brief, head to head. I log where they break.</p>
+      <div class="ap-links">
+        <button class="btn btn-ghost" type="button" data-note="pov">How I think</button>
+        <button class="btn btn-ghost" type="button" data-note="tests">The test notes</button>
       </div>
     </div>
   </div>
@@ -700,37 +724,23 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div>
-        <div class="idx mono">03 — What I Do</div>
-        <h2>Define, own, deliver.</h2>
+        <div class="idx fname">what-i-do.md</div>
+        <h2>Three ways to work together.</h2>
       </div>
-      <div class="aside">From the call<br>to the final master</div>
+      <div class="aside">Rates<br>on request</div>
     </div>
     <div class="svc-grid reveal">
-      <div class="svc">
-        <div class="step">STRATEGY <span class="ph">Phase 01</span></div>
-        <h3>Tool &amp; use-case strategy</h3>
-        <p>What the video is for, then the tools. Sometimes the answer is no AI.</p>
-      </div>
-      <div class="svc">
-        <div class="step">PRODUCTION <span class="ph">Phase 02</span></div>
-        <h3>Full-pipeline production</h3>
-        <p>Script to final master. One owner, no handoff gaps.</p>
-      </div>
-      <div class="svc">
-        <div class="step">POST <span class="ph">Phase 03</span></div>
-        <h3>Editing &amp; post</h3>
-        <p>Short-form, long-form, brand film, motion. Cut to land, on time.</p>
-      </div>
+      <div class="svc"><div class="step">01</div><h3>Shape the idea</h3><p>What the work is for, before anything gets made.</p></div>
+      <div class="svc"><div class="step">02</div><h3>Make the work</h3><p>Script to final master. One owner, no handoffs.</p></div>
+      <div class="svc"><div class="step">03</div><h3>Build the system</h3><p>When the work repeats, a workflow that keeps the standard.</p></div>
     </div>
-    <div class="about-grid reveal">
-      <div class="about-side">
-        <div class="mono">About</div>
-        <div class="about-portrait">Trung Truong</div>
-      </div>
-      <div class="about-body">
-        <p>I'm Trung, and most people call me <b>Ethan</b>. Eight years in production. I founded and ran a <b>10+ person multimedia agency</b>, and today I own a full production pipeline end to end.</p>
-        <p>Based in <b>Ho Chi Minh City</b>, working globally.</p>
-      </div>
+    <div class="note-card reveal">
+      <div class="fname-top">about-me.txt</div>
+      <p>I started in the edit.</p>
+      <p>Then I built a team of 10+, and the workflows it ran on.</p>
+      <p>Now I own a pipeline end to end, and I know the stack under it: Claude Code, GitHub, Vercel, Supabase.</p>
+      <p><mark>I care about what we build, why we build it, and how we bring it to life.</mark></p>
+      <div class="sig"><span class="av">E</span><span>Trung (Ethan) Truong · Ho Chi Minh City</span></div>
     </div>
   </div>
 </section>
@@ -738,9 +748,9 @@
 <!-- ---------- CONTACT ---------- -->
 <section class="contact" id="contact">
   <div class="wrap reveal">
-    <div class="idx mono">04 — Contact</div>
+    <div class="idx fname">contact.md</div>
     <h2>Tell me what you're <em>making</em>.</h2>
-    <p>A senior role, a full production, or a straight edit. Start here.</p>
+    <p>A senior role, a production or an edit. Start here.</p>
     <div class="contact-links">
       <a class="btn btn-primary" href="mailto:trbatrung@gmail.com">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
@@ -1112,7 +1122,7 @@
     if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
     OPENERS[el.dataset.open](el);
   }));
-  document.querySelectorAll('.watch-chip').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
+  document.querySelectorAll('.watch-chip, .shot').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
   document.querySelectorAll('[data-note]').forEach(el => el.addEventListener('click', () => openNote(el.dataset.note, el)));
 
   // scroll bleed: --p runs 0 to 1 across the hero's height

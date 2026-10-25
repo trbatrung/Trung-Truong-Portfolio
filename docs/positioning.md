@@ -15,7 +15,13 @@ banned any leadership claim. The August brief (`copy-rewrite-brief.md`) moved th
 creative leadership roles. This doc reconciles the two.
 
 ## The core position
-**Revised 2026-10-25: a senior creative who starts with the problem.** In Ethan's words: "i dont
+**Live since 2026-10-25 (copy v4): Creative Producer & Technologist. "I build the work, and the
+systems behind it."** Craft first, then leadership, then systems. Product is where he's heading,
+said as a goal. AI is a capability, not the identity. Copy is short and in the heyclicky style:
+filenames as labels, a problem and a fix as bubbles, a note card for About. Full draft with
+sources: `copy-v3.md` (superseded by the shorter live copy recorded in `content.md`).
+
+_Earlier the same day: a senior creative who starts with the problem._ In Ethan's words: "i dont
 want using AI as a usp of me ... i want my direction as a ... senior creative? like we solve
 peolpe issues". The site no longer sells AI.
 

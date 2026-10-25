@@ -18,6 +18,39 @@ then mirror them into the HTML. **Status** says where each section stands in the
 - **Windows (from the heyclicky pass):** every framed piece of media sits in a white Mac window
   with traffic lights and a filename in the title bar, like the work windows.
 
+## Live copy v4 (2026-10-25): short, heyclicky style
+Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is in `profile.md`.
+- **Hero:**
+  - eyebrow "Trung (Ethan) Truong · Creative Producer & Technologist";
+  - H1 "I build the work, **and the systems behind it**.";
+  - line "Film, motion and creative technology. Eight years, concept to delivery.";
+  - status "Ho Chi Minh City · Open to senior creative roles".
+- **Proof strip:** 8+ Years making the work · 10+ People in the team I built · 300K → 1M Mike Dee's
+  channel, the year I helped · 3 Systems I built.
+- **`systems.md`, "Systems I built. Each one fixed a problem."** Three blocks: a video window with
+  a filename, waveform dots, the problem (blue) and the fix (orange), and the tools in small type.
+  - `founder-intro.mov` Code-based animation: "Without a real brief, AI first passes landed far
+    from final." / "Every job starts from a context package now. The first pass lands close."
+  - `executive-scale.mp4` Avatar video at volume: "At volume, AI artifacts slipped through." /
+    "QC runs inline at every stage. No separate review team."
+  - `ai-language-lesson.mov` A full lesson, no studio: "One wrong line in a lesson teaches the
+    wrong thing." / "Every line is proofed against a teaching-accuracy bar before it ships."
+- **`how-i-work.md`, "What is this video actually for?"** "I start there. The people, the tools
+  and the cut follow." + "New tools get the same test every time: same brief, head to head. I log
+  where they break." + How I think / The test notes. The seven verdicts live in the test notes.
+- **`what-i-do.md`, "Three ways to work together."** Shape the idea · Make the work · Build the
+  system. Rates on request.
+- **`about-me.txt` note card:**
+  - "I started in the edit."
+  - "Then I built a team of 10+, and the workflows it ran on."
+  - "Now I own a pipeline end to end, and I know the stack under it: Claude Code, GitHub, Vercel,
+    Supabase."
+  - Highlighted: "I care about what we build, why we build it, and how we bring it to life."
+- **`contact.md`:** "Tell me what you're making." "A senior role, a production or an edit. Start
+  here."
+
+The sections below record earlier versions.
+
 ## Nav (fixed)
 Logo "Ethan." · Work (opens Finder) · Systems · Approach · About · Contact · live timecode (teal).
 
