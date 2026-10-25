@@ -146,6 +146,11 @@
   .stack .open { margin-top: auto; align-self: flex-start; border: 0; border-radius: 99rem; padding: .65rem 1.1rem; background: #1f1d1b; color: #fff; font-size: 1rem; cursor: pointer; }
   .stack .open:hover { background: #000; }
 </style>
+<script>
+  // before anything paints: in the site's hero the page is see-through from the first frame, not after three.js loads
+  { const q = new URLSearchParams(location.search), c = document.documentElement.classList;
+    if (q.get('bg') === 'none') c.add('clear'); if (q.get('embed') === '1') c.add('embed'); }
+</script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
@@ -1419,6 +1424,21 @@ function viewChanged(snap) {
   if (refs.zoomIn) { refs.zoomIn.disabled = view.tz >= ZMAX - 1e-3; refs.zoomOut.disabled = view.tz <= 1.001; }
   if (zoomed && refs.zoomHint) refs.zoomHint.hidden = true;
   if (snap || paused) { applyView(true); if (paused) draw(lastT); }
+  armHome();
+}
+// the map always finds its way back to the default view: 6s after the last touch on a phone, a moment after
+// the mouse leaves on desktop (not while it hovers), and at once when the map scrolls out of sight
+let homeTimer = 0, hovering = false;
+const isHome = () => view.tz <= 1.001 && !turned();
+function goHome(snap) {
+  if (isHome()) return;
+  view.tz = 1; view.tr = Math.round(view.tr / TAU) * TAU; clampView(); viewChanged(snap);
+}
+function armHome(ms) {
+  clearTimeout(homeTimer);
+  if (!ZOOM_ON || isHome()) return;
+  homeTimer = setTimeout(() => (document.documentElement.classList.contains('panning') ? armHome(1500) : goHome(false)),
+    ms ?? (TOUCH ? 6000 : hovering ? 15000 : 2500));
 }
 function zoomAt(sx, sy, factor, snap) {                                     // the point under (sx, sy) stays put
   const px = (sx + view.tx) / view.tz, py = (sy + view.ty) / view.tz;
@@ -1490,6 +1510,9 @@ if (ZOOM_ON) {
   el('tap-hint', `<i></i>${TOUCH ? 'Tap a place to see its work' : 'Click a place to see its work · drag to turn'}`);
   refs.zoomReset.hidden = true;                                             // only once zoomed in
   refs.zoomReset.onclick = () => { view.tz = 1; view.tr = Math.round(view.tr / TAU) * TAU; clampView(); viewChanged(false); };   // straighten by the short way
+  document.documentElement.addEventListener('mouseenter', () => { hovering = true; armHome(); });
+  document.documentElement.addEventListener('mouseleave', () => { hovering = false; armHome(); });
+  new IntersectionObserver(([e]) => { if (!e.isIntersecting) goHome(true); }).observe(document.getElementById('frame'));
   // ⌘ / Ctrl + scroll and a Chrome or Firefox trackpad pinch zoom toward the pointer; a plain scroll keeps scrolling the page
   canvas.addEventListener('wheel', e => { if (!(e.ctrlKey || e.metaKey)) return; e.preventDefault(); zoomAt(e.offsetX, e.offsetY, Math.exp(-clamp(e.deltaY, -60, 60) * 0.012), true); }, { passive: false });
   if (!TOUCH) {   // Safari's trackpad pinch arrives as gesture events
