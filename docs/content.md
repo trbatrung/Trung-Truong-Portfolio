@@ -24,7 +24,8 @@ Finder "just not fit ... maybe an infinity board like our old desktop", "infinit
 them, not sum them all in 1".
 - **Skills section (`what-i-do.md`), "Three skills, one owner." Rates on request.** It replaces
   the three service cards. One heyclicky block per area of the map: the skill, a Mac window with a
-  filename, waveform dots, the ask in a blue bubble and my answer in an orange one, and a button
+  filename, waveform dots, the ask in a blue bubble on the left and my answer in an orange one on
+  the right (like a messages app, Ethan's call), and a button
   that opens that area's board.
   1. **01 · Research, "Shape the idea".** "What the work is for, before anything gets made. Then
      the right tool, tested head to head." Window `tool-tests.log`, the seven tests in one line
@@ -44,7 +45,8 @@ them, not sum them all in 1".
   (`research.board`, `ai-work.board`, `production.board`): drag to move, scroll or pinch to zoom,
   Fit to reframe, and the three-part control on the board switches area. Videos are files with
   their names under them; production keeps its four folders. Research holds `tool-tests.md`,
-  `how-i-think.md` and the seven tests as sticky notes. The map, the hero control, the skill
+  `how-i-think.md` and the seven tests as sticky notes. AI work also holds `how-i-think.md` and a sticky with
+  "Slop or salvation. Both are wrong." (Ethan: "put it in ai system too"). The map, the hero control, the skill
   buttons and the nav (Work opens production) all open a board.
 - **Page order:** map hero → proof strip → three skills → about note → contact. Nav: Work ·
   Skills · About · Contact.

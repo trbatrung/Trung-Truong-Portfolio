@@ -511,13 +511,13 @@
   /* waveform dots */
   .wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 46px; margin: 22px 0 16px; overflow: hidden; }
   .wave i { flex: none; width: 6px; height: calc(var(--h) * 1px); border-radius: 3px; background: rgba(241,237,230,.28); }
-  /* the chat: the ask in blue on the right, my answer in orange on the left */
+  /* the chat, like a messages app: the ask in blue on the left, my answer in orange on the right */
   .chat { display: flex; flex-direction: column; gap: 10px; }
   .bub { margin: 0; max-width: 82%; padding: .72rem 1.05rem; border-radius: 20px; font-size: 1rem; line-height: 1.4; }
-  .bub.ask { align-self: flex-end; color: #fff; background: linear-gradient(180deg, #8ab6ef, #5b93e0); border-bottom-right-radius: 6px; transform-origin: 100% 100%; }
-  .chat .re { display: flex; align-items: flex-end; gap: 8px; }
+  .bub.ask { align-self: flex-start; color: #fff; background: linear-gradient(180deg, #8ab6ef, #5b93e0); border-bottom-left-radius: 6px; transform-origin: 0 100%; }
+  .chat .re { align-self: flex-end; max-width: 88%; display: flex; flex-direction: row-reverse; align-items: flex-end; gap: 8px; }
   .chat .av { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #f1ede6; color: #1a1a1a; font: italic 500 14px var(--serif); }
-  .re .bub { color: #24160a; background: linear-gradient(180deg, #f3bb80, #e6a15b); border-bottom-left-radius: 6px; transform-origin: 0 100%; }
+  .re .bub { max-width: none; color: #24160a; background: linear-gradient(180deg, #f3bb80, #e6a15b); border-bottom-right-radius: 6px; transform-origin: 100% 100%; }
   @media (prefers-reduced-motion: no-preference) {
     .skill.visible .wave i { animation: wave 1.4s ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1s); }
     .skill.visible .bub { animation: pop .5s var(--spring) both .45s; }
@@ -1192,11 +1192,13 @@
                 ['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`]] },
       { items: TESTS.map(([t, v], i) => ['sticky', `<button type="button" class="bd-sticky${i === TESTS.length - 1 ? ' no' : ''}" data-note="tests" style="--r:${TILT[i % TILT.length]}deg"><span class="n">${pad(i + 1)}</span><b>${esc(t)}</b><span>${esc(v)}</span></button>`]) },
     ];
-    return (area === 'ai' ? ['ai'] : PRODUCTION).map(k => {
+    const pov = area === 'ai' ? [{ items: [['doc', `<button type="button" class="bd-file doc" data-note="pov"><span class="th">${DOC_SVG}</span><span class="lb">how-i-think.md</span></button>`],
+      ['sticky', `<button type="button" class="bd-sticky no" data-note="pov" style="--r:-1.5deg"><span class="n">How I think</span><b>Slop or salvation. Both are wrong.</b><span>AI gets you to 80% fast. Know when that's the finish line.</span></button>`]] }] : [];
+    return [...pov, ...(area === 'ai' ? ['ai'] : PRODUCTION).map(k => {
       const list = WORK.filter(p => p.cat === k);
       return { head: area === 'ai' ? '' : `<div class="bd-folder" data-cat="${k}">${FOLDER_SVG}${esc(CATS[k].name)} <em>${list.length}</em></div>`,
         items: list.map(p => [p.short ? 'v' : 'file', fileHTML(p)]) };
-    });
+    })];
   }
 
   let bd = null;   // the open board: its elements, the view (s, tx, ty) and gesture state
