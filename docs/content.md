@@ -75,7 +75,8 @@ Ethan: "too try hard to be someone", "i dont want a wall of text". Every line is
     replaced "Browse the work" and "Get in touch"; the nav's Work and Contact still reach those.
   - eyebrow "Trung (Ethan) Truong · Creative Producer & Technologist";
   - H1 "I build the work, **and the systems behind it**.";
-  - line "Film, motion and creative technology. Eight years, concept to delivery.";
+  - line "Research, film, motion and creative technology. Eight years, concept to delivery." (research
+    added 2026-10-26, Ethan: "this is lacking research"; it follows the order of the three-part control);
   - status "Ho Chi Minh City · Open to senior creative roles".
 - **Proof strip:** 8+ Years making the work · 10+ People in the team I built · Idea → real life Tools I
   build and ship myself · Fast AI built into the workflow. (2026-10-25, Ethan: no channel stat
