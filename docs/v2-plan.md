@@ -91,8 +91,8 @@ What it is:
 - It never crosses the content (Ethan: "it kinda everywhere? ... make it less messy"). On wide screens it
   slips under the stats band to the left margin, rides the side margins, and changes sides only in the
   empty gaps between sections, along the dividers, with rounded turns. Stops sit in the margins.
-- Narrower than 1100px the margins are too thin for a line: the street leaves the map and the line ends
-  under the stats band. The places sit beside each section label on their own.
+- Narrower than 1100px the margins are too thin: the street leaves the map and the line ends under the
+  stats band. No places or pins there, only the glows ("not working on mobile", 2026-10-26).
 - Existing sections are untouched (add, don't change); the route sits under them.
 
 ### Phase 4 · Clarity pass (P1 · small)

@@ -1690,8 +1690,8 @@
   // studio:corner), slips under the stats band to the left margin, and rides the side margins down the
   // page. It changes sides only in the empty gaps between sections, along the dividers, with rounded
   // turns, and ends beside the contact label. Each stop is its place from the map, in the margin
-  // above that section's label. On narrower screens the margins are too thin for a line: the route
-  // fades out under the stats band, and the places sit beside the section labels on their own.
+  // above that section's label. On narrower screens the margins are too thin: the route ends under
+  // the stats band, and only the glows carry on (Ethan: the places crowded the labels on a phone).
   const route = document.getElementById('route'), routeHead = document.getElementById('routeHead');
   const PLACES = { benthanh: [220, 202], studio: [220, 206], bitexco: [109, 220], palace: [220, 178], cafe: [118, 220] };   // img/route/ at 1x
   const CAR = '<rect x="-11" y="-6.5" width="22" height="13" rx="4" fill="#e6a15b"/><rect x="2" y="-5" width="5.5" height="10" rx="1.5" fill="#2a2420"/><rect x="-8.5" y="-4.5" width="3.5" height="9" rx="1" fill="#2a2420" opacity=".6"/><circle cx="11" cy="-3.6" r="1.5" fill="#fff6d8"/><circle cx="11" cy="3.6" r="1.5" fill="#fff6d8"/>';
@@ -1739,13 +1739,14 @@
       }
       d += ` L${contactX},${stops[4].y}`;
     }
+    // narrow screens: no room beside the labels, so no places or pins, only the glows
     const line = `<path class="glow-line" d="${d}"/><path class="dash" d="${d}"/><path class="trail" d="${d}"/>`;
     const h = document.documentElement.scrollHeight, big = compact ? (W <= 760 ? 84 : 110) : Math.min(150 * (W > 1500 ? 1.15 : 1), margin * 2 - 24);
     route.setAttribute('viewBox', `0 0 ${W} ${h}`); route.style.height = h + 'px';
     route.innerHTML = '<defs>' + stops.map((st, i) => `<radialGradient id="rg${i}"><stop offset="0" stop-color="${st.c}" stop-opacity=".16"/><stop offset="1" stop-color="${st.c}" stop-opacity="0"/></radialGradient>`).join('') + '</defs>'
       + stops.map((st, i) => `<circle cx="${compact ? W * .7 : st.x < W / 2 ? W * .18 : st.x > W / 2 ? W * .82 : W / 2}" cy="${st.y + 120}" r="${Math.min(620, W * .42)}" fill="url(#rg${i})"/>`).join('')   // the Ember carries on: a glow per place
       + line
-      + stops.map(st => { const [w, ih] = PLACES[st.key], k = big / Math.max(w, ih);
+      + (compact ? [] : stops).map(st => { const [w, ih] = PLACES[st.key], k = big / Math.max(w, ih);
         return `<g class="place" style="--c:${st.c}"><image href="img/route/${st.key}.webp" x="${clamp(st.x - w * k / 2, 8, W - 8 - w * k)}" y="${st.y - 14 - ih * k}" width="${w * k}" height="${ih * k}"/></g>`
           + `<g style="--c:${st.c}"><circle class="pin-ring" cx="${st.x}" cy="${st.y}" r="7"/><circle class="pin" cx="${st.x}" cy="${st.y}" r="4.5"/></g>`; }).join('')
       + `<g class="car">${CAR}</g>`;
