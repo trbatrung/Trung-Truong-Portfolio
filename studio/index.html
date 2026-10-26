@@ -1620,7 +1620,7 @@ function placeCamera(yaw, dist) {
 function freeRect() {
   const r = parseFloat(getComputedStyle(document.documentElement).fontSize);
   if (!COMPACT) return { x0: 2.4 * r, x1: W - 46 * r, y0: 8 * r, y1: H - 2 * r };
-  const top = (under() ? window.__inset.top + 4 : 0) + kp.offsetTop + kp.offsetHeight + 0.4 * r, right = refs.side ? refs.side.offsetLeft - 0.6 * r : W - 0.8 * r;
+  const top = (under() ? window.__inset.top + 4 : 0) + kp.offsetTop + kp.offsetHeight + 0.4 * r, right = refs.side ? W - r - refs.side.offsetWidth - 0.6 * r : W - 0.8 * r;   // the stack's resting place (right: 1rem), wherever it's been moved to
   return { x0: 0.8 * r, x1: right, y0: top, y1: H - 0.6 * r };
 }
 function frameCamera() {
@@ -1642,7 +1642,17 @@ function frameCamera() {
   const b = bounds(DIST);
   _v.copy(TGT).project(camera);                                              // the scene's centre, before any offset
   view.cx = (_v.x + 1) / 2 * W; view.cy = (1 - _v.y) / 2 * H;
-  view.bx = (b.x0 + b.x1) / 2 - (free.x0 + free.x1) / 2; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
+  // the block and its stack of cards travel together: on a wide screen, rather than the block in the middle of what's
+  // left and the cards pinned to the far edge, the pair sits centered, the cards a short way off the block's right edge
+  let cx = (free.x0 + free.x1) / 2;
+  if (refs.side && refs.cards) {
+    const r = parseFloat(getComputedStyle(document.documentElement).fontSize), bw = b.x1 - b.x0, sw = refs.side.offsetWidth, gap = 3 * r;
+    const left = Math.max(free.x0, (W - (bw + gap + sw)) / 2);
+    cx = Math.min(cx, left + bw / 2);
+    refs.side.style.right = 'auto';
+    refs.side.style.left = Math.min(W - r - sw, cx + bw / 2 + gap) + 'px';
+  }
+  view.bx = (b.x0 + b.x1) / 2 - cx; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
   view.tz = 1; view.tx = view.bx; view.ty = view.by;
   applyView(true);
   if (EMBED && parent !== window) {   // where the exit street leaves the block, so the site's route carries on from there
