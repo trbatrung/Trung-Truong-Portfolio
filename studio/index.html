@@ -977,7 +977,7 @@ const awning = new Inst(rbox(1, 0.05, 0.36, 0.01), mat('#ffffff', 0.7), 44, fals
   for (let k = 0; k < 6; k++) add(banner, W / 2 + 0.04, 1.6 + k * 1.45, f - 0.5 - (k % 2) * 0.9, { sy: rr(0.9, 1.3), color: pick(NEON) });
   for (const [lx, lz] of [[-1.4, -0.4], [0.2, 0.3], [1.5, -0.2]]) add(TH.tank, lx, H + 0.44, lz, { color: '#d4dadd' }); }
 // near side and promenade: tamarind trees, street-food carts with plastic stools
-for (const [x, z, s] of [[-13.6, 17.6, 0.95], [-12.4, 23.4, 0.8], [-1.4, 23.6, 0.8], [9.0, 17.1, 1.0], [12.8, 23.6, 0.85], [14.9, 17.6, 0.9], [-8.6, -24.3, 0.6], [-3.2, -24.3, 0.6], [3.2, -24.3, 0.6], [8.6, -24.3, 0.6]]) tree('base', x, z, s);
+for (const [x, z, s] of [[-13.6, 17.6, 0.95], [-12.4, 23.4, 0.8], [-1.4, 23.6, 0.8], [9.0, 17.1, 1.0], [14.6, 23.4, 0.85], [14.9, 17.6, 0.9], [-8.6, -24.3, 0.6], [-3.2, -24.3, 0.6], [3.2, -24.3, 0.6], [8.6, -24.3, 0.6]]) tree('base', x, z, s);
 const stools = new Inst(cylGeo(0.13, 0.15, 0.3, 12), mat('#ffffff', 0.6), 24);
 function cart(x, z, ry, n) {
   const g = grp('base', x, z, 0.2, { ry });
@@ -991,7 +991,20 @@ function cart(x, z, ry, n) {
     if (i % 2 === 0) person('base', sx, sz, { seated: true, lift: 0.3, floor: 0.2, ry: Math.atan2(x - sx, z - sz) });
   }
 }
-cart(-0.8, 16.0, 0, 4); cart(11.4, 16.2, 0.4, 3); cart(-13.6, -9.6, -Math.PI / 2, 3);
+cart(-0.8, 16.0, 0, 4); cart(5.8, 16.4, 0.4, 3); cart(-13.6, -9.6, -Math.PI / 2, 3);
+
+// the way out: in the site's hero, a street leaves the loop's near corner between the Post Office and the Opera
+// House and runs off the front of the block, wrapping down over its rounded edges. The site's route carries on from
+// where it ends (studio:corner)
+const EXIT = { x: 12, w: 2.8 };
+if (EMBED) {
+  const g = grp('base', EXIT.x, 0);
+  box(g, EXIT.w, 0.21, 2.4, N.road, 0, 0, 12.1, 0.02);                      // across the loop's sidewalk
+  box(g, EXIT.w, 0.06, 10.6, N.road, 0, 0, 18.5, 0.02);                     // to the edge
+  const wrap = (r, y, z) => { const m = mesh(new THREE.CylinderGeometry(r, r, EXIT.w, 28, 1, true, -Math.PI / 2, Math.PI).rotateZ(-Math.PI / 2), mat(N.road, 0.92), 0, y, z, g); m.material.side = THREE.DoubleSide; };
+  wrap(1.225, -1.2, 23.8); wrap(0.625, -2.6, 23.5);                          // over the slab's bullnose, then the step under it
+  for (let z = 14.4; z < 23.4; z += 2.1) dashes.add('base', EXIT.x, 0.075, z, { ry: Math.PI / 2 });
+}
 
 // ================= the hub: "One standard" =================
 const HUB = new THREE.Vector3(0, 2.0, 0);
@@ -1462,16 +1475,6 @@ for (const k of ORDER) {
       const s = Math.max(1e-3, Math.sin(Math.PI * u)); S.sx = S.sy = S.sz = s; } });
   }
 }
-// the way out to the site: an amber arc from the hub over to the block's front corner and down its edge, where the
-// site's route takes over (studio:corner); its packets only flow outward. Only in the site's hero
-if (EMBED) {
-  const curve = new THREE.CatmullRomCurve3([HUB.clone(), new THREE.Vector3(8, 9.5, 9), new THREE.Vector3(19.5, 7.5, 19.5), new THREE.Vector3(25.2, 1.2, 24.6), new THREE.Vector3(25.6, -3.2, 25)], false, 'centripetal');
-  const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 96, 0.14, 10), new THREE.MeshBasicMaterial({ color: '#f0b26e', transparent: true, opacity: 1, depthWrite: false }));
-  m.userData.noAO = true; m.renderOrder = 3; piece(m, 'hub', { start: GROUPS.production.start + 0.5 });
-  for (let i = 0; i < 6; i++) packets.add('hub', 25.6, -3.2, 25, { color: '#ffd9a6', start: GROUPS.production.start + 0.5, anim: (S, t) => {
-    const u = fract(2 * t / D + i / 6), p = curve.getPoint(u); S.x = p.x; S.y = p.y; S.z = p.z;
-    const s = Math.max(1e-3, Math.sin(Math.PI * u)); S.sx = S.sy = S.sz = s; } });
-}
 // hover bots: dock at the hub, fly out, work inside their area, fly back; one round trip per loop
 const botBody = new Inst(rbox(0.56, 0.3, 0.56, 0.14), mat('#ffffff', 0.4), 12), botLight = new Inst(cylGeo(0.12, 0.14, 0.08, 14), glowMat('#ffffff', 1.3), 12, false), botUnder = new Inst(disc(0.22, 0.02).rotateX(-Math.PI / 2), glowMat('#ffffff', 1.2), 12, false);
 const BOT_SPOTS = { research: [[-17.0, -1.4], [-16.4, 6.0]], ai: [[-4.2, -17.0], [3.0, -16.9], [11.2, -17.1]], production: [[16.4, -1.0], [16.6, -13.4]] };
@@ -1642,8 +1645,8 @@ function frameCamera() {
   view.bx = (b.x0 + b.x1) / 2 - (free.x0 + free.x1) / 2; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
   view.tz = 1; view.tx = view.bx; view.ty = view.by;
   applyView(true);
-  if (EMBED && parent !== window) {   // where the block's front corner sits, so the site's route can start from under it
-    _v.set(25.6, -3.2, 25).project(camera);
+  if (EMBED && parent !== window) {   // where the exit street leaves the block, so the site's route carries on from there
+    _v.set(EXIT.x, -3.22, 23.5).project(camera);
     parent.postMessage({ type: 'studio:corner', x: (_v.x + 1) / 2 * W, y: (1 - _v.y) / 2 * H }, location.origin);
   }
 }
