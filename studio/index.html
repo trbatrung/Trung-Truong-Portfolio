@@ -1632,6 +1632,10 @@ function frameCamera() {
   view.bx = (b.x0 + b.x1) / 2 - (free.x0 + free.x1) / 2; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
   view.tz = 1; view.tx = view.bx; view.ty = view.by;
   applyView(true);
+  if (EMBED && parent !== window) {   // where the block's front corner sits, so the site's route can start from under it
+    _v.set(25.6, -3.2, 25).project(camera);
+    parent.postMessage({ type: 'studio:corner', x: (_v.x + 1) / 2 * W, y: (1 - _v.y) / 2 * H }, location.origin);
+  }
 }
 // under the site's headline (?top=): the iframe fills the hero, and the map is framed in the space below the headline
 const under = () => EMBED && window.__inset.top > 0;

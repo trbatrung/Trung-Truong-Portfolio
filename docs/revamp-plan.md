@@ -110,6 +110,8 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
   - Phones are unchanged.
 - **Below the hero:** the proof strip, the three skills (heyclicky blocks), the Diagnosis section,
   the about note and contact.
+- **The route** (2026-10-26): a soft line from the map down the page to contact, with the map's own
+  places at its stops, rendered from the 3D map. See `v2-plan.md`, Phase 3b.
 - **The work:** each map area opens its own board.
 - **The map:** Ben Thanh as Research, Nguyen Hue with 42 Nguyen Hue, Notre-Dame, the Post Office,
   the Opera House, the Independence Palace, the Ba Son bridge and towers, the zoo across the river,
@@ -151,6 +153,17 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
     Firefox get the same glass without the bend.
   - Headless Chrome screenshots go stale after a click on the map, the live site included. Check zoom states in a
     real browser.
+- **The route's landmark images** (`img/route/`) are renders of the 3D map. To redo one after the map
+  changes: copy `studio/index.html` to a scratch folder, and in the copy zero-scale instances and hide
+  pieces outside a box of map coordinates. Then render with `?embed=1&bg=none&intro=0`, using the map's
+  yaw and pitch, and crop to the alpha. The boxes (x0, x1, z0, z1):
+  - Ben Thanh −23.8, −14, −12.4, 13.4
+  - studio lot 14.4, 23.6, −24.4, −12.6
+  - Bitexco −23.2, −16, −23, −16.3
+  - Palace −25.2, −15.6, 17.4, 24.6
+  - 42 Nguyen Hue −29.6, −23.9, −19.6, −15.4
+
+  The map posts `studio:corner` (its block's front corner, in its own pixels) so the route starts under it.
 - **The map** (`studio/index.html`) loads three.js r0.169.0 (minified) from jsDelivr. Phones
   (`quality=low`) skip post-processing entirely. It posts `studio:ready` (the site swaps its
   loading label for the map) and `studio:area` (open that area's board) to the parent.

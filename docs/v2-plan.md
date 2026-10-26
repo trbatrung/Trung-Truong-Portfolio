@@ -71,11 +71,22 @@ Claude Code), Diagnosis (site + publication), the code-animation pipeline, conte
 the Install-the-Stack walkthrough. Each: what it is, why, the stack, a link.
 
 ### Phase 3b · The map runs through the page (Ethan, 2026-10-26: "map elements go through the web, make it more unify")
-A route leaves the map's near corner and winds down the page, drawn in as you scroll (an SVG path,
-cheap, no WebGL). Each stop is one of the map's areas, in its color, where that area's section sits:
-Research at "Shape the idea", Video production at the work, AI work at the systems. Small stills of
-the map's own pieces (Ben Thanh, the studio lot's crane, the hologram), rendered from the 3D scene,
-sit at each stop. Phones get the same line, simpler. Reduced motion: drawn in full, no animation.
+_Built 2026-10-26, after three mocks:_
+- _v1, a straight asphalt road in the margins: "i dont like its a straight line ... more, soft"; also "the map
+  locations can reappear as 2D" and "full black is kinda not close"._
+- _v2, a soft dotted line with line-drawn landmarks and area glows: "i want our style map apply straight
+  to the line, not redraw it in lines"._
+- _v3 (built): the landmarks are rendered from the 3D map itself. "Yes, this is it."_
+
+What it is:
+- A soft dotted route leaves the map from under the block's front corner and meanders down the page,
+  under the content, to contact. A car from the map drives it as you scroll and lights the route behind it.
+- Stops: Ben Thanh Market (Research), the riverside studio lot (Video production), Bitexco (AI work), the
+  Independence Palace (Diagnosis), 42 Nguyen Hue (contact). Each is a cut-out rendered from the 3D map
+  (`img/route/*.webp`, ~120KB in all) with a pin in its area color and a faint glow of that color, so
+  the page isn't flat black below the hero.
+- Wide screens: stops in the side margins, alternating sides. Narrower: just past each section's label.
+- Existing sections are untouched (add, don't change); the route sits under them.
 
 ### Phase 4 · Clarity pass (P1 · small)
 Proof strip swap, hero sub-line check, Diagnosis context ("why an editor writes economic
