@@ -44,6 +44,9 @@ Minh City or remote. Freelance projects welcome." · GitHub link not yet._
   The repo rule is never to publish PDFs, so a PDF download needs Ethan's explicit OK.
 
 ### Phase 2 · Selected work (P0 · medium)
+_Picked by Ethan (2026-10-26): **code-animation pipeline · Mike Dee channel · Joe Schaeffer · this
+website · Diagnosis**. Avatar video, Arrowhead/Nailzy and the AI Language Lesson stay on the boards.
+This website and Diagnosis are featured here, so Phase 3 covers the rest of what he's built._
 A "Selected work" section right after the hero: 4–6 Mac-window cards, each with
 **role · what I decided · outcome**, opening the same video window as the boards. Shortlist to confirm:
 1. **Code-based animation pipeline** (Edge8, full direction): Founder Intro, Install the Stack.
