@@ -153,7 +153,11 @@
   .stack .open:hover { background: #000; }
   /* under the site's headline: at rest the map sits below the headline as it always has, its cards at the top right
      of that space. Zoomed in, it spills up under the headline, and the site frosts the headline then */
-  html.under .stack { top: var(--stack-top, 1rem); }
+  html.under .stack { top: var(--stack-top, 1rem); right: var(--m); }
+  /* in the site's hero everything sits on the page's own side margins: the hint under the headline's left edge,
+     the cards and the zoom buttons on the nav's right edge */
+  html.under .tap-hint { left: var(--m); }
+  html.under .zoom { right: var(--m); }
 </style>
 <script>
   // before anything paints: in the site's hero the page is see-through from the first frame, not after three.js loads
@@ -1620,8 +1624,10 @@ function placeCamera(yaw, dist) {
 function freeRect() {
   const r = parseFloat(getComputedStyle(document.documentElement).fontSize);
   if (!COMPACT) return { x0: 2.4 * r, x1: W - 46 * r, y0: 8 * r, y1: H - 2 * r };
-  const top = (under() ? window.__inset.top + 4 : 0) + kp.offsetTop + kp.offsetHeight + 0.4 * r, right = refs.side ? W - r - refs.side.offsetWidth - 0.6 * r : W - 0.8 * r;   // the stack's resting place (right: 1rem), wherever it's been moved to
-  return { x0: 0.8 * r, x1: right, y0: top, y1: H - 0.6 * r };
+  const m = under() ? SITE_M : r;                                           // the side margin: the site's own in its hero
+  const top = (under() ? window.__inset.top + 4 : 0) + kp.offsetTop + kp.offsetHeight + 0.4 * r, right = refs.side ? W - m - refs.side.offsetWidth - 2 * r : W - m;
+  // the block centers in the space between the left margin and the cards, so the space on its left matches the space on its right
+  return { x0: m, x1: right, y0: top, y1: H - 0.6 * r };
 }
 function frameCamera() {
   camera.aspect = W / H;
@@ -1642,17 +1648,7 @@ function frameCamera() {
   const b = bounds(DIST);
   _v.copy(TGT).project(camera);                                              // the scene's centre, before any offset
   view.cx = (_v.x + 1) / 2 * W; view.cy = (1 - _v.y) / 2 * H;
-  // the block and its stack of cards travel together: on a wide screen, rather than the block in the middle of what's
-  // left and the cards pinned to the far edge, the pair sits centered, the cards a short way off the block's right edge
-  let cx = (free.x0 + free.x1) / 2;
-  if (refs.side && refs.cards) {
-    const r = parseFloat(getComputedStyle(document.documentElement).fontSize), bw = b.x1 - b.x0, sw = refs.side.offsetWidth;
-    const gap = clamp(W * 0.035, 3.5 * r, 8 * r);                                // the space between them grows with the screen
-    const left = Math.max(free.x0, (W - (bw + gap + sw)) / 2);
-    cx = Math.min(cx, left + bw / 2);
-    refs.side.style.right = 'auto';
-    refs.side.style.left = Math.min(W - r - sw, cx + bw / 2 + gap) + 'px';
-  }
+  const cx = (free.x0 + free.x1) / 2;
   view.bx = (b.x0 + b.x1) / 2 - cx; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
   view.tz = 1; view.tx = view.bx; view.ty = view.by;
   applyView(true);
@@ -1667,7 +1663,9 @@ function applyInset() {
   const r = parseFloat(getComputedStyle(document.documentElement).fontSize);
   document.documentElement.classList.toggle('under', under());
   document.documentElement.style.setProperty('--stack-top', window.__inset.top + 32 + 'px');   // clear of the glass's bottom edge
+  document.documentElement.style.setProperty('--m', SITE_M + 'px');
 }
+const SITE_M = 48;                                                          // the site's side margin on wide screens (its headline and nav)
 function poseCamera(T, t) {
   const ph = SWING ? TAU * t / D : 0;
   view.r = paused || Math.abs(view.tr - view.r) < 1e-3 ? view.tr : view.r + (view.tr - view.r) * 0.22;   // the visitor's turn
