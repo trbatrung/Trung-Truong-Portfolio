@@ -458,33 +458,6 @@
     .dt-sheetbar button { background: #111; -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
 
-  /* ---------- SELECTED WORK ---------- */
-  .sel { padding: clamp(4rem, 8vw, 6.5rem) 0 1rem; }
-  .sw-lead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; padding: clamp(2.5rem, 5vw, 4rem) 0; }
-  .sw-lead h3, .sw-card h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.025em; line-height: 1.02; }
-  .sw-lead h3 { font-size: clamp(2.2rem, 4.2vw, 3.4rem); margin: 1rem 0 1.1rem; }
-  .five-d { list-style: none; margin-top: 1.8rem; display: grid; gap: 2px; counter-reset: d; }
-  .five-d li { position: relative; display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: .7rem 0 .7rem 1.6rem; border-bottom: 1px solid var(--line-soft); }
-  .five-d li::before { content: ''; position: absolute; left: 0; top: 1.15rem; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
-  .five-d li:not(:last-child)::after { content: ''; position: absolute; left: 3.5px; top: 1.7rem; bottom: -1.05rem; width: 1px; background: linear-gradient(var(--c), transparent); opacity: .5; }
-  .five-d b { font: 500 .74rem/1.9 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
-  .five-d span { color: var(--ink-dim); }
-  .sw-media { position: relative; padding-bottom: 3.5rem; }
-  .sw-media .sw-also { position: absolute; right: -1.2rem; bottom: 0; width: 46%; transform: rotate(2deg); }
-  .sw-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); padding: clamp(2.5rem, 5vw, 4rem) 0; border-top: 1px solid var(--line); }
-  .sw-card .mac { display: block; transition: transform .35s var(--spring); }
-  .sw-card a.mac:hover { transform: translateY(-4px); }
-  .sw-card .sk-tag { margin-top: 1.4rem; }
-  .sw-card h3 { font-size: clamp(1.9rem, 2.6vw, 2.4rem); margin: .8rem 0 .7rem; }
-  .sw-card p { color: var(--ink-dim); line-height: 1.6; }
-  .sw-link { display: inline-block; margin-top: .9rem; font: 500 .72rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--c); padding-bottom: 2px; }
-  @media (max-width: 900px) {
-    .sw-lead { grid-template-columns: 1fr; }
-    .sw-row { grid-template-columns: 1fr; gap: 3rem; }
-    .sw-media .sw-also { right: -.4rem; width: 52%; }
-  }
-  @media (max-width: 520px) { .five-d li { grid-template-columns: 1fr; gap: .1rem; } }
-
   /* ---------- STAT STRIP ---------- */
   .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-2); }
   .stats .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -698,7 +671,7 @@
   <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
   <div class="nav-right">
     <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
+      <li><a href="#top" data-open="board">Work</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li class="keep"><a href="cv.html">CV</a></li>
@@ -791,81 +764,6 @@
     <div class="stat"><div class="n">Fast</div><div class="l">AI built into the workflow</div></div>
   </div>
 </div>
-
-<!-- ---------- SELECTED WORK ----------
-     Right under the map, so the work is on the first scroll: Ethan's picks, in his order
-     (docs/v2-plan.md). Role, what he decided, no invented outcomes. The rest lives on the map. -->
-<section id="work" class="sel">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div>
-        <div class="idx fname">selected-work.md</div>
-        <h2>Selected work.</h2>
-      </div>
-      <div class="aside">Everything else<br>lives on the map ↑</div>
-    </div>
-
-    <article class="sw-lead reveal" style="--c:#57cbbb">
-      <div class="sw-copy">
-        <div class="sk-tag mono"><i></i>01 · Edge8 · Direction, end to end</div>
-        <h3>Code-based animation pipeline</h3>
-        <p class="sk-line">UI walkthroughs, data visualizations and brand motion, built in code. Every job runs the same five steps.</p>
-        <ol class="five-d">
-          <li><b>Discover</b><span>What the video is for, before any tool.</span></li>
-          <li><b>Define</b><span>A structured brief the AI works from.</span></li>
-          <li><b>Design</b><span>Inside the Edge8 visual system.</span></li>
-          <li><b>Develop</b><span>Animated in code with Claude Code, finished in Final Cut Pro.</span></li>
-          <li><b>Deliver</b><span>QC inline, and knowing when 80% is the finish line.</span></li>
-        </ol>
-      </div>
-      <div class="sw-media">
-        <div class="mac">
-          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">founder-intro.mov</span><span class="mac-len">1:07</span></div>
-          <div class="sk-media"><button class="dt-poster" data-yt="pR03yYZbI8E" aria-label="Play Founder Intro"><img src="https://img.youtube.com/vi/pR03yYZbI8E/maxresdefault.jpg" alt="" loading="lazy"><span class="dt-play"></span></button></div>
-        </div>
-        <div class="mac sw-also">
-          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">install-the-stack.mov</span><span class="mac-len">10:21</span></div>
-          <div class="sk-media"><button class="dt-poster" data-yt="PQWu7NOOTFc" aria-label="Play Install the Stack on a Mac"><img src="https://img.youtube.com/vi/PQWu7NOOTFc/maxresdefault.jpg" alt="" loading="lazy"><span class="dt-play"></span></button></div>
-        </div>
-      </div>
-    </article>
-
-    <div class="sw-row">
-      <article class="sw-card reveal" style="--c:#e6a15b">
-        <div class="mac">
-          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">joe-schaeffer.mov</span><span class="mac-len">5:59</span></div>
-          <div class="sk-media"><button class="dt-poster" data-yt="jH6LaZDXNMs" aria-label="Play Joe Schaeffer"><img class="crop" src="https://img.youtube.com/vi/jH6LaZDXNMs/maxresdefault.jpg" alt="" loading="lazy"><span class="dt-play"></span></button></div>
-        </div>
-        <div class="sk-tag mono"><i></i>02 · Artist film · Edit &amp; story</div>
-        <h3>Joe Schaeffer</h3>
-        <p>Story first. Which story the footage holds, then the cut that tells it: the artist, his paintings and the gallery they hang in.</p>
-      </article>
-
-      <article class="sw-card reveal" style="--c:#c0392b">
-        <a class="mac" href="https://diagnosis-omega.vercel.app/" target="_blank" rel="noopener" aria-label="Read Diagnosis (opens a new tab)">
-          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">diagnosis-omega.vercel.app</span></div>
-          <div class="sk-media"><img src="https://diagnosis-omega.vercel.app/thumbnails/growth-quota.png" alt="" loading="lazy"></div>
-        </a>
-        <div class="sk-tag mono"><i></i>03 · Independent · A to Z</div>
-        <h3>Diagnosis</h3>
-        <p>My analysis of Vietnam's economy, A to Z: the research, the data, the writing, the site and the videos.</p>
-        <a class="sw-link" href="#diagnosis">More below ↓</a>
-      </article>
-
-      <article class="sw-card reveal" style="--c:#4f9fe6">
-        <a class="mac" href="#top" aria-label="Back to the map">
-          <div class="mac-bar"><div class="mac-lights"><i></i><i></i><i></i></div><span class="mac-title">ethantrungtruong.com</span></div>
-          <div class="sk-media"><img src="img/map-still.jpg" alt="The 3D map of Saigon from this site's hero: Ben Thanh Market, Notre-Dame, the river and Landmark 81" loading="lazy"></div>
-        </a>
-        <div class="sk-tag mono"><i></i>04 · Built · A to Z</div>
-        <h3>This website</h3>
-        <p>Concept, design and code, A to Z, built with Claude Code. The map of Saigon is real 3D, drawn live in your browser.</p>
-        <a class="sw-link" href="#top">Turn the map ↑</a>
-      </article>
-    </div>
-  </div>
-</section>
-
 
 
 

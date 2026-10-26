@@ -44,22 +44,17 @@ Minh City or remote. Freelance projects welcome." · GitHub link not yet._
   The repo rule is never to publish PDFs, so a PDF download needs Ethan's explicit OK.
 
 ### Phase 2 · Selected work (P0 · medium)
-_Final picks and order (Ethan, 2026-10-26): Mike Dee is out; "push this website way down"._
-1. **Code-based animation pipeline** (Edge8, direction end to end). Framed as his 5D process,
-   "research, deciding, know what is done": Discover · Define · Design · Develop · Deliver.
-   Each step's line comes from the verified record (the POV question, context packages, the Edge8
-   visual system, Claude Code + Final Cut Pro, inline QC and "80% is the finish line").
-2. **Joe Schaeffer** (edit & planning): "video editing, story line composition".
-3. **Diagnosis** (independent): "full pipeline, a to z".
-4. **This website**: "full a-z".
-No outcome numbers on the cards: none were given, so none are claimed.
-
-Copy on the site:
-- *Code pipeline:* "UI walkthroughs, data visualizations and brand motion, built in code. Every job runs the same five steps." Discover: what the video is for, before any tool. Define: a structured brief the AI works from. Design: inside the Edge8 visual system. Develop: animated in code with Claude Code, finished in Final Cut Pro. Deliver: QC inline, and knowing when 80% is the finish line.
-- *Joe Schaeffer:* "Story first. Which story the footage holds, then the cut that tells it: the artist, his paintings and the gallery they hang in."
-- *Diagnosis:* "My analysis of Vietnam's economy, A to Z: the research, the data, the writing, the site and the videos."
-- *This website:* "Concept, design and code, A to Z, built with Claude Code. The map of Saigon is real 3D, drawn live in your browser."
-- The nav's Work link now goes to this section (it used to open the production board).
+_Picked by Ethan (2026-10-26): **code-animation pipeline · Mike Dee channel · Joe Schaeffer · this
+website · Diagnosis**. Avatar video, Arrowhead/Nailzy and the AI Language Lesson stay on the boards.
+This website and Diagnosis are featured here, so Phase 3 covers the rest of what he's built._
+A "Selected work" section right after the hero: 4–6 Mac-window cards, each with
+**role · what I decided · outcome**, opening the same video window as the boards. Shortlist to confirm:
+1. **Code-based animation pipeline** (Edge8, full direction): Founder Intro, Install the Stack.
+2. **Avatar video at volume** (Edge8, full direction): Executive Scale, Brand Presence.
+3. **Mike Dee channel** (PM / video editor, team of 10): 300K → 1M subscribers in under a year.
+4. **Arrowhead** (founder, 10+ team, 50+ projects): the Nailzy launch content rule set + ad.
+5. **A brand film** (edit & planning): Joe Schaeffer or Feedflo, told through the edit's decisions.
+6. **This website** (or it goes in phase 3).
 
 ### Phase 3 · Things I've built (P0 · medium)
 A "Built" section, separate from client work: this site (3D map, three.js, glass, built with
