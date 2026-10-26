@@ -88,7 +88,11 @@ What it is:
   Independence Palace (Diagnosis), 42 Nguyen Hue (contact). Each is a cut-out rendered from the 3D map
   (`img/route/*.webp`, ~120KB in all) with a pin in its area color and a faint glow of that color, so
   the page isn't flat black below the hero.
-- Wide screens: stops in the side margins, alternating sides. Narrower: just past each section's label.
+- It never crosses the content (Ethan: "it kinda everywhere? ... make it less messy"). On wide screens it
+  slips under the stats band to the left margin, rides the side margins, and changes sides only in the
+  empty gaps between sections, along the dividers, with rounded turns. Stops sit in the margins.
+- Narrower than 1100px the margins are too thin for a line: the street leaves the map and the line ends
+  under the stats band. The places sit beside each section label on their own.
 - Existing sections are untouched (add, don't change); the route sits under them.
 
 ### Phase 4 · Clarity pass (P1 · small)

@@ -483,7 +483,6 @@
   .route .dash, .route-head .dash { fill: none; stroke: rgba(241,237,230,.3); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 2 11; }
   .route .trail, .route-head .trail { fill: none; stroke: var(--amber); stroke-width: 2.2; stroke-linecap: round; opacity: .85; filter: drop-shadow(0 0 5px rgba(230,161,91,.7)); }
   .route .place image { filter: drop-shadow(0 14px 16px rgba(0,0,0,.55)); }
-  .route .place text { fill: var(--c); font: 500 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
   .route .pin { fill: var(--c); stroke: none; }
   .route .pin-ring { fill: none; stroke: var(--c); stroke-width: 1.4; animation: route-ping 2.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
   @keyframes route-ping { 0% { transform: scale(.7); opacity: .9; } 100% { transform: scale(2.2); opacity: 0; } }
@@ -1687,62 +1686,78 @@
   });
 
   // ----- the route: a soft line from the map down to contact -----
-  // It starts under the block's front corner (the map says where, studio:corner). On wide screens the
-  // stops sit in the side margins beside each section, alternating sides; on narrower screens they all
-  // sit on the right, smaller, beside the section labels. Between stops the line sweeps loosely across
-  // the page, under the content. A Catmull-Rom curve keeps it soft. The car sits where the line
-  // crosses 60% down the screen; it rides in the hero's own layer until the line leaves the hero.
+  // It never crosses the content. It leaves the map along its exit street (the map says where it ends,
+  // studio:corner), slips under the stats band to the left margin, and rides the side margins down the
+  // page. It changes sides only in the empty gaps between sections, along the dividers, with rounded
+  // turns, and ends beside the contact label. Each stop is its place from the map, in the margin
+  // above that section's label. On narrower screens the margins are too thin for a line: the route
+  // fades out under the stats band, and the places sit beside the section labels on their own.
   const route = document.getElementById('route'), routeHead = document.getElementById('routeHead');
   const PLACES = { benthanh: [220, 202], studio: [220, 206], bitexco: [109, 220], palace: [220, 178], cafe: [118, 220] };   // img/route/ at 1x
   const CAR = '<rect x="-11" y="-6.5" width="22" height="13" rx="4" fill="#e6a15b"/><rect x="2" y="-5" width="5.5" height="10" rx="1.5" fill="#2a2420"/><rect x="-8.5" y="-4.5" width="3.5" height="9" rx="1" fill="#2a2420" opacity=".6"/><circle cx="11" cy="-3.6" r="1.5" fill="#fff6d8"/><circle cx="11" cy="3.6" r="1.5" fill="#fff6d8"/>';
-  let corner = null, routePath = null, routeLen = 0, heroH = 0, cars = [], trails = [];
+  let corner = null, routePath = null, routeLen = 0, heroH = 0, routeEnd = 0, cars = [], trails = [];
   const docTop = el => { let y = 0; for (let e = el; e; e = e.offsetParent) y += e.offsetTop; return y; };   // offsets: the reveal's slide doesn't count
+  const docLeft = el => { let x = 0; for (let e = el; e; e = e.offsetParent) x += e.offsetLeft; return x + parseFloat(getComputedStyle(el).paddingLeft); };
+  const textEnd = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right + scrollX; };
+  function content(el) {                                                             // the top and bottom of what's actually in a block
+    const kids = [...(el.querySelector(':scope > .wrap') || el).children].filter(k => k.offsetHeight && getComputedStyle(k).position !== 'absolute');
+    return [Math.min(...kids.map(docTop)), Math.max(...kids.map(k => docTop(k) + k.offsetHeight))];
+  }
   function drawRoute() {
     const W = document.documentElement.clientWidth, compact = W <= 1100;
     const skills = [...document.querySelectorAll('#skills .skill')];
     if (!skills.length) return;
-    const wrapL = docLeft(document.querySelector('#skills .wrap')), L = Math.max(46, wrapL / 2 + 4), R = W - L;
-    // wide: in the side margins; narrower: just past the end of the section's label, where there's always room
-    const textEnd = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect().right + scrollX; };
-    const spot = (el, s) => compact ? Math.min(W - 44, textEnd(el) + (W <= 760 ? 56 : 72)) : s < 0 ? L : s > 0 ? R : textEnd(el) + 110;
-    const anchors = [skills[0].querySelector('.sk-tag'), skills[1].querySelector('.sk-tag'), skills[2].querySelector('.sk-tag'), document.querySelector('#diagnosis h2'), document.querySelector('#contact .idx')];
-    const stops = [['benthanh', '#4f9fe6', 'Ben Thanh', -1], ['studio', '#e6a15b', 'Studio lot', 1], ['bitexco', '#57cbbb', 'Bitexco', -1], ['palace', '#e0614f', 'The Palace', 1], ['cafe', '#e6a15b', '42 Nguyen Hue', 0]]
-      .map(([key, c, name, s], i) => ({ key, c, name, x: spot(anchors[i], s), y: docTop(anchors[i]) - (i === 4 ? 6 : 0) }));   // contact: beside its label, not on it
-    heroH = hero.offsetHeight;
-    const map = studio.getBoundingClientRect(), start = corner ? [map.left + corner.x, docTop(studio) + corner.y] : [W * .5, heroH - 30];
-    const stats = document.querySelector('.stats'), sweep = i => W * (compact ? .14 : i % 2 ? .62 : .38);
-    const pts = [start, [start[0] + (compact ? -W * .3 : -W * .12), Math.min(heroH - 4, start[1] + 90)], [compact ? W * .2 : W * .26, docTop(stats) + stats.offsetHeight + 50]];
-    if (!compact) pts.push([W * .74, docTop(document.querySelector('#skills h2'))]);
-    const pinY = compact ? 9 : 36, imgY = compact ? -2 : 22;                          // narrower: the pin sits level with the label, not on the heading under it
-    stops.forEach((st, i) => {
-      if (i) pts.push([sweep(i), (stops[i - 1].y + st.y) / 2]);                     // a loose sweep across, between stops
-      pts.push([st.x, st.y + pinY]);
+    const margin = docLeft(document.querySelector('#skills .wrap')), L = margin / 2, R = W - margin / 2;
+    const blocks = [skills[0], skills[1], skills[2], document.getElementById('diagnosis'), document.getElementById('about'), document.getElementById('contact')];
+    const labels = [skills[0].querySelector('.sk-tag'), skills[1].querySelector('.sk-tag'), skills[2].querySelector('.sk-tag'), document.querySelector('#diagnosis .idx'), null, document.querySelector('#contact .idx')];
+    const lanes = [L, R, L, R, L];
+    const contactX = W / 2 + 230;
+    const STOPS = [[0, 'benthanh', '#4f9fe6', 'Ben Thanh'], [1, 'studio', '#e6a15b', 'Studio lot'], [2, 'bitexco', '#57cbbb', 'Bitexco'], [3, 'palace', '#e0614f', 'The Palace'], [5, 'cafe', '#e6a15b', '42 Nguyen Hue']];
+    const stops = STOPS.map(([b, key, c, name]) => {
+      const y = docTop(labels[b]) + 9;
+      const x = compact ? Math.min(W - 44, textEnd(labels[b]) + (W <= 760 ? 56 : 72)) : b === 5 ? contactX : lanes[b];
+      return { key, c, name, x, y };
     });
-    let d = `M${pts[0][0]},${pts[0][1]}`;
-    for (let i = 0; i < pts.length - 1; i++) {
-      const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)], t = 1 / 6;
-      d += ` C${p1[0] + (p2[0] - p0[0]) * t},${p1[1] + (p2[1] - p0[1]) * t} ${p2[0] - (p3[0] - p1[0]) * t},${p2[1] - (p3[1] - p1[1]) * t} ${p2[0]},${p2[1]}`;
+    heroH = hero.offsetHeight;
+    const map = studio.getBoundingClientRect(), stats = document.querySelector('.stats');
+    const sx = corner ? map.left + corner.x : W * .5, sy = corner ? docTop(studio) + corner.y : heroH - 30;
+    const statsTop = docTop(stats), statsBot = statsTop + stats.offsetHeight;
+    let d = `M${sx},${sy}`;
+    if (compact) {                                                                   // out of the map, and away under the stats band
+      d += ` C${sx},${sy + 60} ${sx - 40},${statsTop - 30} ${sx - 60},${statsTop + 20}`;
+    } else {
+      const y0 = statsBot + 40;                                                      // the crossing to the left margin happens under the band
+      d += ` C${sx},${(sy + statsTop) / 2} ${L},${statsBot - 60} ${L},${y0}`;
+      const r = 46;
+      let x = L;
+      for (let i = 0; i < blocks.length - 1; i++) {
+        const nx = i + 1 < lanes.length ? lanes[i + 1] : contactX;
+        if (nx === x) continue;
+        const gy = (content(blocks[i])[1] + content(blocks[i + 1])[0]) / 2, dir = Math.sign(nx - x);   // the middle of the empty gap
+        d += ` L${x},${gy - r} Q${x},${gy} ${x + dir * r},${gy} L${nx - dir * r},${gy} Q${nx},${gy} ${nx},${gy + r}`;
+        x = nx;
+      }
+      d += ` L${contactX},${stops[4].y}`;
     }
     const line = `<path class="glow-line" d="${d}"/><path class="dash" d="${d}"/><path class="trail" d="${d}"/>`;
-    const h = document.documentElement.scrollHeight, big = compact ? (W <= 760 ? 84 : 110) : 150 * (W > 1500 ? 1.15 : 1);
+    const h = document.documentElement.scrollHeight, big = compact ? (W <= 760 ? 84 : 110) : Math.min(150 * (W > 1500 ? 1.15 : 1), margin * 2 - 24);
     route.setAttribute('viewBox', `0 0 ${W} ${h}`); route.style.height = h + 'px';
     route.innerHTML = '<defs>' + stops.map((st, i) => `<radialGradient id="rg${i}"><stop offset="0" stop-color="${st.c}" stop-opacity=".16"/><stop offset="1" stop-color="${st.c}" stop-opacity="0"/></radialGradient>`).join('') + '</defs>'
       + stops.map((st, i) => `<circle cx="${compact ? W * .7 : st.x < W / 2 ? W * .18 : st.x > W / 2 ? W * .82 : W / 2}" cy="${st.y + 120}" r="${Math.min(620, W * .42)}" fill="url(#rg${i})"/>`).join('')   // the Ember carries on: a glow per place
       + line
       + stops.map(st => { const [w, ih] = PLACES[st.key], k = big / Math.max(w, ih);
-        return `<g class="place" style="--c:${st.c}"><image href="img/route/${st.key}.webp" x="${clamp(st.x - w * k / 2, 8, W - 8 - w * k)}" y="${st.y + imgY - ih * k}" width="${w * k}" height="${ih * k}"/>`
-          + (compact ? '' : `<text x="${st.x}" y="${st.y + 60}" text-anchor="middle">${esc(st.name)}</text>`) + '</g>'
-          + `<g style="--c:${st.c}"><circle class="pin-ring" cx="${st.x}" cy="${st.y + pinY}" r="7"/><circle class="pin" cx="${st.x}" cy="${st.y + pinY}" r="4.5"/></g>`; }).join('')
+        return `<g class="place" style="--c:${st.c}"><image href="img/route/${st.key}.webp" x="${clamp(st.x - w * k / 2, 8, W - 8 - w * k)}" y="${st.y - 14 - ih * k}" width="${w * k}" height="${ih * k}"/></g>`
+          + `<g style="--c:${st.c}"><circle class="pin-ring" cx="${st.x}" cy="${st.y}" r="7"/><circle class="pin" cx="${st.x}" cy="${st.y}" r="4.5"/></g>`; }).join('')
       + `<g class="car">${CAR}</g>`;
     routeHead.setAttribute('viewBox', `0 0 ${W} ${heroH}`);
     routeHead.innerHTML = line + `<g class="car">${CAR}</g>`;
     routePath = route.querySelector('.dash'); routeLen = routePath.getTotalLength();
+    routeEnd = routePath.getPointAtLength(routeLen).y;
     trails = [route.querySelector('.trail'), routeHead.querySelector('.trail')];
     cars = [route.querySelector('.car'), routeHead.querySelector('.car')];
     trails.forEach(tr => { tr.style.strokeDasharray = `${routeLen} ${routeLen}`; });
     moveCar();
   }
-  const docLeft = el => { let x = 0; for (let e = el; e; e = e.offsetParent) x += e.offsetLeft; return x + parseFloat(getComputedStyle(el).paddingLeft); };
   function moveCar() {
     if (!routePath) return;
     const y = scrollY + innerHeight * .6;
@@ -1750,7 +1765,8 @@
     for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2; if (routePath.getPointAtLength(m).y < y) lo = m; else hi = m; }
     const p = routePath.getPointAtLength(lo), q = routePath.getPointAtLength(Math.min(routeLen, lo + 2));
     const tf = `translate(${p.x},${p.y}) rotate(${Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI})`, inHero = p.y < heroH - 12;
-    cars.forEach((c, i) => { c.setAttribute('transform', tf); c.style.display = (i === 1) === inHero ? '' : 'none'; });
+    const parked = y > routeEnd + 40 && routeEnd < hero.offsetHeight + 400;   // a short route (narrow screens): the car leaves with it
+    cars.forEach((c, i) => { c.setAttribute('transform', tf); c.style.display = !parked && (i === 1) === inHero ? '' : 'none'; });
     trails.forEach(tr => { tr.style.strokeDashoffset = routeLen - lo; });
   }
   let routeQueued = false;
