@@ -150,11 +150,25 @@
   .stack .kv .l { font-size: 1rem; color: var(--dim); }
   .stack .open { margin-top: auto; align-self: flex-start; border: 0; border-radius: 99rem; padding: .65rem 1.1rem; background: #1f1d1b; color: #fff; font-size: 1rem; cursor: pointer; }
   .stack .open:hover { background: #000; }
+  /* under the site's headline: the cards sit beside the headline's glass, or below it, or (no room for either) not at
+     all; the map fades out at the hero's bottom edge */
+  html.under .stack { top: var(--stack-top, 1rem); }
+  html.under.no-cards .stack { display: none; }
+  html.under canvas { -webkit-mask-image: linear-gradient(#000 84%, transparent); mask-image: linear-gradient(#000 84%, transparent); }
 </style>
 <script>
   // before anything paints: in the site's hero the page is see-through from the first frame, not after three.js loads
   { const q = new URLSearchParams(location.search), c = document.documentElement.classList;
-    if (q.get('bg') === 'none') c.add('clear'); if (q.get('embed') === '1') c.add('embed'); }
+    if (q.get('bg') === 'none') c.add('clear'); if (q.get('embed') === '1') c.add('embed');
+    // on wide screens the site runs the map under its headline glass and says where the glass is: ?head=, ?top= and ?right=
+    // (its top, bottom and right edges), then a message whenever its layout changes. Kept here so no message is missed
+    // while three.js loads
+    const read = o => ({ top: +o.top || 0, head: +o.head || 0, right: +o.right || 0 });
+    window.__inset = read({ top: q.get('top'), head: q.get('head'), right: q.get('right') });
+    addEventListener('message', e => {
+      if (e.origin !== location.origin || !e.data || e.data.type !== 'site:inset') return;
+      window.__inset = read(e.data); dispatchEvent(new Event('inset'));
+    }); }
 </script>
 <script type="importmap">
 { "imports": {
@@ -1589,6 +1603,7 @@ function freeRect() {
 }
 function frameCamera() {
   camera.aspect = W / H;
+  if (under() && frameUnder()) return;
   const free = freeRect();
   const pts = [];                                                            // the ground of the block and its river
   for (const x of [-29, 25.6]) for (const z of [-31, 25]) for (const y of [-3.2, 1.5]) pts.push(new THREE.Vector3(x, y, z));
@@ -1609,6 +1624,58 @@ function frameCamera() {
   view.bx = (b.x0 + b.x1) / 2 - (free.x0 + free.x1) / 2; view.by = (b.y0 + b.y1) / 2 - (free.y0 + free.y1) / 2;
   view.tz = 1; view.tx = view.bx; view.ty = view.by;
   applyView(true);
+}
+// under the site's headline: the map fills the hero and runs behind the glass, so the block can be much larger. It is
+// framed as large as it fits with every area label below the glass and the cards, the skyline on screen and clear of
+// the cards, the cathedral and the post office in, and only the near corner running off the bottom (the canvas fades there)
+const under = () => EMBED && window.__inset.top > 0;
+let cards = 'beside';                                                       // where the cards go: beside the glass, below it, or none
+function applyInset() {
+  const { top, head, right } = window.__inset, r = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  cards = W - 28.6 * r >= right ? 'beside' : H - top - 0.8 * r - 27 * r >= 12 * r ? 'below' : 'none';   // below: only with room left for the block
+  document.documentElement.classList.toggle('under', under());
+  document.documentElement.classList.toggle('no-cards', cards === 'none');
+  document.documentElement.style.setProperty('--stack-top', (cards === 'beside' ? head : top + 0.8 * r) + 'px');
+}
+function frameUnder() {
+  const r = parseFloat(getComputedStyle(document.documentElement).fontSize), m = 0.8 * r, OFF = 1e9, { top, head } = window.__inset;
+  // the labels, the skyline's right side and the block's right corner pass below the cards or left of them
+  const side = cards === 'none' ? null : refs.side, sideX = side ? side.offsetLeft - m : W - m, sideY = side ? side.offsetTop + side.offsetHeight + m : 0;
+  const right = W - m, labels = Math.max(top, sideY) + 3.4 * r, floor = H - 4.6 * r;   // the hint and buttons sit below floor
+  camera.clearViewOffset();
+  const cons = [], add = (x, y, z, x0, x1, y0, y1) => cons.push({ p: new THREE.Vector3(x, y, z), x0, x1, y0, y1 });
+  for (const y of [-3.2, 1.5]) {
+    add(-29, y, -31, m, right, -OFF, floor);                                 // the far corner may go under the glass
+    add(-29, y, 25, m, right, -OFF, floor);                                  // the left corner
+    add(25.6, y, -31, m, right, sideY, floor);                               // the right corner, below the cards
+    add(25.6, y, 25, m, right, -OFF, H * 1.12);                              // the near corner may run off the bottom
+  }
+  add(-7.5, 7.0, 20.2, m, right, -OFF, H - m); add(4.0, 3.6, 20.6, m, right, -OFF, H - m);
+  for (const [x, y, z] of [[13.5, 19.2, -33.6], [-19.6, 14.8, -19.7], [-6.4, 12.8, -31.6], [0.35, 12.4, -33.9], [-26.75, 10.4, -17.6]]) add(x, y, z, m, sideX, head - 2 * r, OFF);
+  for (const k of ORDER) add(ANCHOR[k].x, ANCHOR[k].y, ANCHOR[k].z, m + 7 * r, right - 7 * r, labels, floor);
+  const project = () => {
+    placeCamera(BASE_YAW, DIST); _v.copy(TGT).project(camera);
+    const cx = (_v.x + 1) / 2 * W, cy = (1 - _v.y) / 2 * H;
+    return { cx, cy, P: cons.map(c => { _v.copy(c.p).project(camera); return [(_v.x + 1) / 2 * W - cx, (1 - _v.y) / 2 * H - cy]; }) };
+  };
+  // the largest scale k that fits every point in its box: for each pair, the gap between their boxes over their spread
+  for (let i = 0; i < 8; i++) {
+    const { P } = project(); let k = Infinity;
+    for (const [ax, lo, hi] of [[0, 'x0', 'x1'], [1, 'y0', 'y1']])
+      for (let a = 0; a < cons.length; a++) for (let b = 0; b < cons.length; b++) {
+        const d = P[a][ax] - P[b][ax];
+        if (d > 1e-6) k = Math.min(k, (cons[a][hi] - cons[b][lo]) / d);
+      }
+    if (!(k > 0.05)) return false;                                           // too short a screen: the plain framing
+    DIST /= k;                                                               // the spread goes as 1 / distance, near enough at 24°
+  }
+  const { cx, cy, P } = project();
+  const mid = (ax, lo, hi) => (Math.max(...cons.map((c, i) => c[lo] - P[i][ax])) + Math.min(...cons.map((c, i) => c[hi] - P[i][ax]))) / 2;
+  view.cx = cx; view.cy = cy;
+  view.bx = cx - mid(0, 'x0', 'x1'); view.by = cy - mid(1, 'y0', 'y1');
+  view.tz = 1; view.tx = view.bx; view.ty = view.by;
+  applyView(true);
+  return true;
 }
 function poseCamera(T, t) {
   const ph = SWING ? TAU * t / D : 0;
@@ -1704,6 +1771,7 @@ function layout() {
   frame.style.width = W + 'px'; frame.style.height = H + 'px';
   const s = EMBED ? 1 : Math.min(innerWidth / W, innerHeight / H);
   frame.style.transform = EMBED ? 'none' : `translate(${(innerWidth - W * s) / 2}px, ${(innerHeight - H * s) / 2}px) scale(${s})`;
+  if (EMBED) applyInset();                                                  // the cards' place depends on the size
 }
 layout();
 renderSide();
@@ -1848,6 +1916,8 @@ canvas.addEventListener('click', e => {
   ray.setFromCamera(ndc, camera);
   for (const h of ray.intersectObjects(scene.children, true)) { let o = h.object; while (o && !o.userData.area) o = o.parent; if (o) { select(o.userData.area); break; } }
 });
+
+addEventListener('inset', () => { applyInset(); frameCamera(); if (paused) draw(lastT); });
 
 window.CONFIG = CONFIG;
 window.TIMELINE = { introDuration: INTRO, duration: LOOP, beat: D, fps: FPS, introFrames: Math.round(INTRO * FPS), loopFrames: Math.round(LOOP * FPS) };
