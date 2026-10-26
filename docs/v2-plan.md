@@ -1,0 +1,112 @@
+# Portfolio V2: Audit and Plan (2026-10-26)
+
+Ethan's brief: improve clarity, credibility and hiring effectiveness, keep the identity. North star:
+**in 30 seconds, someone knows what he does, why he's valuable and what he's done, and remembers it.**
+Work one phase at a time with his sign-off, update docs first, never invent facts (`positioning.md`).
+
+## The 30-second test, today
+| Question | What a visitor gets in 30s | Verdict |
+|---|---|---|
+| What does he do? | Eyebrow + H1 + "Research, film, motion and creative technology" | ✅ Clear |
+| Why is he valuable? | "I build the work, and the systems behind it", the map | 🟡 Felt, not proven yet |
+| What has he done? | Nothing without a click. The work sits behind the map and the boards | ❌ The gap |
+| Can I hire him? | "Open to senior creative roles", but contact is at the very bottom, no CV, no freelance line | 🟡 Weak |
+
+The map is the memorable part and stays. What's missing is a **short, scannable proof layer right
+under it**: a few selected projects and the things he's built, each with role, decisions and outcome.
+
+## Retain
+- The map hero and glass-on-zoom, the boards, the Ember look, Mac windows, filenames as labels,
+  chat bubbles, note cards. Short copy, sentence case, no em dashes.
+- The credit rules: pre-AI work is edit & planning; the AI systems are full direction.
+- Diagnosis as its own section.
+
+## Improve
+- **Proof strip.** "Fast · AI built into the workflow" and "Idea → real life" are claims without
+  evidence. Swap for verified facts (e.g. "300K → 1M subscribers, Mike Dee, under a year").
+- **Hiring path.** Contact and CV reachable from the first screen and from the nav on phones.
+- **Role lines on the work.** Each featured project says role, what he decided, and the outcome.
+
+## Simplify
+- The skills block repeats what the featured work will show. Once featured work lands, it can shrink.
+- Three ways into the same boards (map, tri control, "See" links) are fine; the nav's "Work"
+  should go to the new featured section instead.
+
+## Plan (one phase at a time, each signed off)
+
+### Phase 1 · Hiring path (P0 · small)
+- Nav: a persistent **Contact** pill and a **CV** link; on phones, a compact menu (today the
+  phone nav has no links at all).
+- An availability line by the contact block: senior roles first, freelance welcome (wording from Ethan).
+- **CV as a page** (`cv.html`), built from `profile.md`'s verified record and printable to PDF.
+  The repo rule is never to publish PDFs, so a PDF download needs Ethan's explicit OK.
+
+### Phase 2 · Selected work (P0 · medium)
+A "Selected work" section right after the hero: 4–6 Mac-window cards, each with
+**role · what I decided · outcome**, opening the same video window as the boards. Shortlist to confirm:
+1. **Code-based animation pipeline** (Edge8, full direction): Founder Intro, Install the Stack.
+2. **Avatar video at volume** (Edge8, full direction): Executive Scale, Brand Presence.
+3. **Mike Dee channel** (PM / video editor, team of 10): 300K → 1M subscribers in under a year.
+4. **Arrowhead** (founder, 10+ team, 50+ projects): the Nailzy launch content rule set + ad.
+5. **A brand film** (edit & planning): Joe Schaeffer or Feedflo, told through the edit's decisions.
+6. **This website** (or it goes in phase 3).
+
+### Phase 3 · Things I've built (P0 · medium)
+A "Built" section, separate from client work: this site (3D map, three.js, glass, built with
+Claude Code), Diagnosis (site + publication), the code-animation pipeline, context packages,
+the Install-the-Stack walkthrough. Each: what it is, why, the stack, a link.
+
+### Phase 3b · The map runs through the page (Ethan, 2026-10-26: "map elements go through the web, make it more unify")
+A route leaves the map's near corner and winds down the page, drawn in as you scroll (an SVG path,
+cheap, no WebGL). Each stop is one of the map's areas, in its color, where that area's section sits:
+Research at "Shape the idea", Video production at the work, AI work at the systems. Small stills of
+the map's own pieces (Ben Thanh, the studio lot's crane, the hologram), rendered from the 3D scene,
+sit at each stop. Phones get the same line, simpler. Reduced motion: drawn in full, no animation.
+
+### Phase 4 · Clarity pass (P1 · small)
+Proof strip swap, hero sub-line check, Diagnosis context ("why an editor writes economic
+analysis": research is a skill), "Founder Intro" label fix (still open).
+
+### Phase 5 · Performance, accessibility, mobile (P1)
+From the technical audit below. Fixes that don't touch the look. The map pause (perf 1) and the
+phone nav (mobile 1) are small and high impact; they can jump the queue.
+
+### Phase 6 · Polish (P2)
+Microinteractions only where they help: hover states on the new cards, smoother board open/close,
+discovery (filters or "featured" pins on the boards).
+
+## Technical audit (measured in headless Chrome, 2026-10-26)
+**Performance**
+1. The map renders at 60fps forever, even scrolled away or under an open board: 43–60% of a CPU core
+   on desktop. Pause it off-screen and under boards; cap at 30fps (it's built for 30). **Biggest win.**
+2. Each frame is heavy: 2858×1800 canvas, MSAA + GTAO + soft shadows every frame,
+   `preserveDrawingBuffer` always on. Cap desktop pixel ratio ~1.5; export-only buffer.
+3. The map loads in two waves: 9 post-processing files aren't preloaded. Add them.
+4. Fonts: ~300KB, render-blocking, Space Grotesk downloaded twice (page + map), Newsreader only used
+   below the fold. Unify the font request; preload the headline font.
+5. The H1 waits on the reveal animation (LCP 968ms desktop). Drop `.reveal` from the hero.
+6. Video windows use 1280px `maxresdefault` thumbnails with no fallback; use smaller ones + fallback.
+7. The nav timecode restyles a blurred bar 24×/s; pause it when not visible.
+
+**Accessibility**
+1. Video windows don't trap focus (no `aria-modal`, page behind not `inert`).
+2. Focus is lost when a board opens from the map. No skip link, no `<main>`.
+3. Contrast: window titles and dates at 2.3–3.5:1 on white; darken the greys.
+4. Reduced motion: smooth scrolling, pulsing dots and the board fade aren't guarded.
+5. No fallback if WebGL or jsDelivr fails: "Loading the map" for 8s, then an empty hero. Show a still.
+
+**Mobile**
+1. No nav on phones at all (links hidden ≤900px, nothing replaces them).
+2. Labels at 7–9px (hero eyebrow, status, tri buttons, map pills). Floor at ~11px.
+3. Tap targets 15–35px (map turn buttons, pills, note links). Pad to 44px.
+4. The hero's 700px minimum height cuts the first screen on small phones.
+
+## Needs Ethan (no guessing)
+1. **Featured shortlist:** keep, swap or reorder the six above?
+2. **For each pick, in your words:** what you decided, and what happened after (a number, a reaction,
+   a result). Only what you can stand behind.
+3. **CV:** an HTML page is fine? Or do you want a PDF download (an exception to the no-PDF rule)?
+4. **Availability:** exact wording, e.g. "Open to senior creative roles · freelance from [month]".
+5. **Built:** did you build the Diagnosis site yourself? Anything else to show (tools, scripts, experiments)?
+6. **GitHub link** on the site: yes or no?
+7. **Founder Intro label:** name EO Melbourne / AI Officer Institute, or just Edge8?
