@@ -35,6 +35,8 @@ under it**: a few selected projects and the things he's built, each with role, d
 ## Plan (one phase at a time, each signed off)
 
 ### Phase 1 · Hiring path (P0 · small)
+_Answers (2026-10-26): CV as a web page · availability "Open to senior creative roles, in Ho Chi
+Minh City or remote. Freelance projects welcome." · GitHub link not yet._
 - Nav: a persistent **Contact** pill and a **CV** link; on phones, a compact menu (today the
   phone nav has no links at all).
 - An availability line by the contact block: senior roles first, freelance welcome (wording from Ethan).

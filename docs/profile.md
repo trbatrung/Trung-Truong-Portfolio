@@ -2,8 +2,11 @@
 
 ## Identity
 - **Name:** Trung (Ethan) Truong. Goes by Ethan.
-- **Role line (title, eyebrow):** Creative Direction & Production Systems
-- **Location:** Ho Chi Minh City (UTC+7). Working globally on select projects and senior roles.
+- **Role line (title, eyebrow):** Creative Producer & Technologist (since 2026-10-25; was "Creative
+  Direction & Production Systems")
+- **Location:** Ho Chi Minh City (UTC+7).
+- **Availability (Ethan, 2026-10-26):** "Open to senior creative roles, in Ho Chi Minh City or remote.
+  Freelance projects welcome." Shown by the contact block and on the CV page.
 - **Education:** BBA Marketing Administration, Ton Duc Thang University.
 
 ## Verified experience
@@ -71,7 +74,9 @@ From Ethan's CV, via `copy-rewrite-brief.md` (2026-08). These are the only facts
 ## Contact
 - **Email (canonical):** trbatrung@gmail.com (confirmed 2026-07-21)
 - **LinkedIn:** https://www.linkedin.com/in/trungtrr1379/
-- No GitHub or phone on the site.
+- **CV:** a web page, `cv.html` (Ethan, 2026-10-26), built only from the verified record above and
+  printable to PDF. No PDF file is published.
+- No GitHub or phone on the site. GitHub: "not yet" (Ethan, 2026-10-26).
 
 ## Core tools
 Claude Code · Final Cut Pro · HeyGen · Veo 3 · Kling · ElevenLabs · Adobe Creative Cloud ·
