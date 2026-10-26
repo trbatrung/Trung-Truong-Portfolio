@@ -99,13 +99,15 @@ pixel wordmark).
 
 ## Where things stand (2026-10-26)
 Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io link 301s to it.
-- **Hero:** the 3D Saigon map in an iframe, with the headline and the Research | AI work | Video
-  production control. On screens wider than 760px (2026-10-26, Ethan: "more rectangle", "the map sit behind the
-  bars" with "a liquid glass effect"), the map fills the whole hero and runs under the nav and a liquid glass pane
-  that holds the headline. It is framed much larger: the area labels stay below the glass, the skyline rises behind
-  it, and the whole block stays on screen (Ethan, same day: the first try, with the near corner running off the
-  bottom, was "kinda too big"). The area cards sit beside the glass, or
-  below it, or are left out on short screens with no room for them. Phones keep the band above the map.
+- **Hero:** the 3D Saigon map in an iframe, with the headline band and the Research | AI work | Video
+  production control above it.
+  - **Liquid glass on zoom** (2026-10-26). At rest it looks as before. On screens wider than 760px, zooming in
+    lets the map run up under the headline, and the band and the nav fade into liquid glass. Zooming out or Reset
+    fades the glass away.
+  - Ethan's path there: he first asked for "more rectangle" with the map "behind the bars". The always-on glass,
+    with a much larger map, was "kinda too big". Then: "keep it like old style, but when the zoom in the liquid
+    glass appear".
+  - Phones are unchanged.
 - **Below the hero:** the proof strip, the three skills (heyclicky blocks), the Diagnosis section,
   the about note and contact.
 - **The work:** each map area opens its own board.
@@ -138,10 +140,14 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
 - **Caching:** GitHub serves files with `max-age=600`. The page asks for the map as
   `studio/index.html?...&v=<page publish time>`, so phones don't keep an old map after a deploy.
   Testing in the iOS Simulator still needs Safari's cache cleared.
-- **Map under the glass:** the site tells the map where its glass pane is (`&head=`, `&top=`, `&right=` on the
-  iframe URL, then a `site:inset` message whenever the layout changes). The map frames itself around those numbers
-  (`frameUnder()` in `studio/index.html`). The lens bend at the pane's edge is Chromium only (an SVG displacement map
-  in `backdrop-filter`); Safari and Firefox get the same glass without the bend.
+- **Map under the glass:**
+  - On wide screens the iframe fills the whole hero. The site tells the map where the headline ends: `&top=` on
+    the iframe URL, then a `site:inset` message when the layout changes. The map frames itself below that line.
+  - The map posts `studio:zoom` when it zooms in or out, and the site toggles `html.glassy`.
+  - The lens bend at the glass's edge is Chromium only (an SVG displacement map in `backdrop-filter`). Safari and
+    Firefox get the same glass without the bend.
+  - Headless Chrome screenshots go stale after a click on the map, the live site included. Check zoom states in a
+    real browser.
 - **The map** (`studio/index.html`) loads three.js r0.169.0 (minified) from jsDelivr. Phones
   (`quality=low`) skip post-processing entirely. It posts `studio:ready` (the site swaps its
   loading label for the map) and `studio:area` (open that area's board) to the parent.

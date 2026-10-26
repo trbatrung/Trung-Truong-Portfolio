@@ -87,8 +87,9 @@
 
   /* ---------- HERO ----------
      The hero is the live 3D map of the three areas: studio/index.html in an iframe with a
-     transparent background, so the Ember ombre shows through. On phones the headline sits in a
-     band above it; on wider screens the map fills the hero and runs under the headline's glass. Clicking an area on the map opens its work in a window. --p (0 to 1, set on
+     transparent background, so the Ember ombre shows through. The headline sits in a band above
+     it. On wider screens the iframe fills the whole hero: zoomed in, the map runs up under the
+     headline, and the headline's band turns to liquid glass. Clicking an area on the map opens its work in a window. --p (0 to 1, set on
      scroll) bleeds the background into the page. */
   .hero { --p: 0; position: relative; height: 100vh; height: 100svh; min-height: 680px; overflow: hidden; display: flex; flex-direction: column; }
   .hero::after { /* vignette */
@@ -161,22 +162,12 @@
   .map { position: relative; z-index: 1; flex: 1; min-height: 340px; margin-top: 4px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }   /* a long press on a phone shouldn't select the map */
   .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .8s; }
   .map.live iframe { opacity: 1; }
-  .hero-glass { display: contents; }   /* phones: no pane, the band stays as it was */
-  @media (min-width: 761px) {
+  .hero-glass { display: contents; }   /* phones: just the band */
+  @media (min-width: 761px) {   /* the band lays out as before; its pane reaches 30px past the copy, for the glass */
     .map { position: absolute; inset: 0; margin: 0; min-height: 0; }
-    .hero-copy { padding-top: 92px; }
-    .hero-glass { display: flex; flex-direction: column; gap: 22px; width: fit-content; max-width: 100%; padding: 30px 36px 26px; border-radius: 32px; pointer-events: auto; }
-    .hero-glass .lead { max-width: 780px; }   /* as narrow as the copy allows, so the map's cards fit beside it on a 1280 screen */
-    .hero-cta { align-items: flex-start; }
-  }
-  @media (min-width: 761px) and (max-height: 820px) {   /* short laptop screens: a slimmer pane leaves the map more room */
-    .hero-copy { padding-top: 84px; }
-    .hero-glass { gap: 16px; padding: 22px 30px 18px; border-radius: 28px; }
-    .hero h1 { font-size: 42px; }
-    .hero-glass .lead { max-width: 700px; }   /* so "behind it." still wraps as one */
-    .hero h1 .l2 { font-size: 18px; margin-top: 8px; }
-    .hero-eyebrow { margin-bottom: 10px; }
-    .hero-status { margin-top: 6px; }
+    .hero-copy { display: block; padding-top: 74px; }
+    .hero-glass { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px;
+      margin: 0 -30px -24px; padding: 30px 30px 24px; border-radius: 30px; }
   }
 
   /* Mac windows on the page: white, traffic lights, a filename in the title bar */
@@ -391,22 +382,26 @@
   .hero .btn-ghost:hover { background: rgba(255,255,255,.18); color: #fff; transform: translateY(-2px); }
   .hero .btn:active { transform: scale(.95); transition-duration: .12s; }
 
-  /* the headline's pane: dark glass over the map. A light tint and a strong blur keep the copy readable over the
-     pale city; the rim catches light at the top left and bottom right like the edge of a thick lens. Chromium also
-     bends the map at the pane's edge (html.refract, an SVG displacement map built to the pane's size) */
+  /* the headline's band turns to glass while the map is zoomed in and runs under it (html.glassy, set when the map
+     says so). Dark glass: a light tint and a strong blur keep the copy readable over the pale city; the rim catches
+     light at the top left and bottom right like the edge of a thick lens. Chromium also bends the map at the edge
+     (html.refract, an SVG displacement map built to the band's size). The glass is two layers that fade in and out */
   @media (min-width: 761px) {
-    .hero-glass { position: relative; isolation: isolate;
+    .hero-glass { position: relative; }
+    .hero-glass > * { position: relative; z-index: 1; }
+    .hero-glass::before, .hero-glass::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .6s ease; }
+    .hero-glass::after {
       background: linear-gradient(160deg, rgba(255,255,255,.13), rgba(255,255,255,.03) 34%, rgba(255,255,255,.015) 66%, rgba(255,255,255,.07)), rgba(9,17,19,.4);
       -webkit-backdrop-filter: blur(18px) saturate(1.7) brightness(.78); backdrop-filter: blur(18px) saturate(1.7) brightness(.78);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.34), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 34px rgba(255,255,255,.04), 0 34px 80px -34px rgba(0,0,0,.65);
-      animation: glass-in .9s cubic-bezier(.16,1,.3,1) both; }
-    html.refract .hero-glass { -webkit-backdrop-filter: url(#lg-refract) blur(18px) saturate(1.7) brightness(.78); backdrop-filter: url(#lg-refract) blur(18px) saturate(1.7) brightness(.78); }
-    .hero-glass::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1.2px; pointer-events: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.34), inset 0 -1px 0 rgba(255,255,255,.08), inset 0 0 34px rgba(255,255,255,.04), 0 34px 80px -34px rgba(0,0,0,.65); }
+    html.refract .hero-glass::after { -webkit-backdrop-filter: url(#lg-refract) blur(18px) saturate(1.7) brightness(.78); backdrop-filter: url(#lg-refract) blur(18px) saturate(1.7) brightness(.78); }
+    .hero-glass::before { z-index: 1; padding: 1.2px;
       background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.12) 26%, rgba(255,255,255,0) 50%, rgba(255,255,255,.06) 72%, rgba(255,255,255,.4));
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-    @keyframes glass-in { from { opacity: 0; transform: translateY(14px) scale(.985); } }
-    /* the nav is a thinner sheet of the same glass while the map is behind it */
-    nav:not(.scrolled) { background: linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.015)), rgba(9,15,17,.38);
+    html.glassy .hero-glass { pointer-events: auto; }   /* the map under the glass doesn't take clicks meant for the copy */
+    html.glassy .hero-glass::before, html.glassy .hero-glass::after { opacity: 1; }
+    /* the nav turns to a thinner sheet of the same glass */
+    html.glassy nav:not(.scrolled) { background: linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.015)), rgba(9,15,17,.38);
       -webkit-backdrop-filter: blur(16px) saturate(1.7); backdrop-filter: blur(16px) saturate(1.7);
       box-shadow: inset 0 -1px 0 rgba(255,255,255,.1); }
   }
@@ -445,14 +440,14 @@
 
   /* solid fallbacks: no blur support, or the visitor asked for less transparency */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .hero-glass { background-color: rgba(12,18,20,.86) !important; }
+    .hero-glass::after { background: rgba(12,18,20,.86); }
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.88); }
     .dt-title, .dt-ctx, .dt-done, .dt-sheetbar button.ghost { background: #f0f0f2; }
     .dt-sheetbar button { background: #111; }
   }
   @media (prefers-reduced-transparency: reduce) {
-    .hero-glass { background: rgba(12,18,20,.92) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    .hero-glass::after { background: rgba(12,18,20,.92); -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
     .hero .btn-primary { background: var(--amber); }
     .hero .btn-ghost { background: rgba(24,28,32,.92); }
     .dt-title, .dt-ctx, .dt-done, .dt-sheetbar button.ghost { background: #f0f0f2; -webkit-backdrop-filter: none; backdrop-filter: none; }
@@ -1032,24 +1027,24 @@
     }
     // the version follows this page's publish time, so a phone never keeps an old map from its cache
     const v = (Date.parse(document.lastModified) || 0).toString(36), ins = heroInset();
-    lastInset = ins.top + ',' + ins.head + ',' + ins.right;
-    f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '') + (ins.top ? '&head=' + ins.head + '&top=' + ins.top + '&right=' + ins.right : '') + '&v=' + v;
+    lastInset = ins.top;
+    document.documentElement.classList.remove('glassy');
+    f.src = STUDIO_SRC + '?embed=1&bg=none' + (mode === 'phone' ? '&quality=low' : '') + (ins.top ? '&top=' + ins.top : '') + '&v=' + v;
   }
-  // on wide screens the map fills the hero and runs under the headline's glass, so it needs to know where the glass
-  // starts and ends (in the hero's own pixels, which are the map's): its labels stay below it, its cards beside it
-  // when there's room, else below it
+  // on wide screens the iframe fills the hero, so the map needs to know where the headline ends (in the hero's own
+  // pixels, which are the map's): it frames itself below that, and runs up under it only when zoomed in
   const glass = document.querySelector('.hero-glass');
-  let lastInset = '';
+  let lastInset = 0;
   function heroInset() {
-    if (isPhone()) return { top: 0, head: 0, right: 0 };
-    let x = 0, y = 0;
-    for (let e = glass; e && e !== hero; e = e.offsetParent) { x += e.offsetLeft; y += e.offsetTop; }   // offsets, so the reveal's slide doesn't count
-    return { top: Math.round(y + glass.offsetHeight), head: Math.round(y), right: Math.round(x + glass.offsetWidth) };
+    if (isPhone()) return { top: 0 };
+    let y = 0;
+    for (let e = glass; e && e !== hero; e = e.offsetParent) y += e.offsetTop;   // offsets, so the reveal's slide doesn't count
+    return { top: Math.round(y + glass.offsetHeight - parseFloat(getComputedStyle(glass).paddingBottom)) };
   }
   function sendInset(force) {
-    const ins = heroInset(), key = ins.top + ',' + ins.head + ',' + ins.right;
-    if (key === lastInset && !force) return;
-    lastInset = key;
+    const ins = heroInset();
+    if (ins.top === lastInset && !force) return;
+    lastInset = ins.top;
     studio.querySelector('iframe')?.contentWindow?.postMessage({ type: 'site:inset', ...ins }, location.origin);
   }
   // Chromium also bends the map at the pane's edge, like light through the rim of a lens: a displacement map the size
@@ -1058,7 +1053,7 @@
   function buildRefraction() {
     const w = glass.offsetWidth, h = glass.offsetHeight;
     if (!refract || isPhone() || !w || !h) return;
-    const k = 0.5, cw = Math.ceil(w * k), ch = Math.ceil(h * k), R = 32 * k, B = 26 * k;   // half size: corner radius and rim width
+    const k = 0.5, cw = Math.ceil(w * k), ch = Math.ceil(h * k), R = 30 * k, B = 26 * k;   // half size: corner radius and rim width
     const c = document.createElement('canvas'); c.width = cw; c.height = ch;
     const ctx = c.getContext('2d'), im = ctx.createImageData(cw, ch), d = im.data;
     for (let y = 0; y < ch; y++) for (let x = 0; x < cw; x++) {
@@ -1081,6 +1076,7 @@
   addEventListener('message', e => {
     if (e.origin !== location.origin || !e.data) return;
     if (e.data.type === 'studio:ready') { studio.classList.add('live'); sendInset(true); }
+    if (e.data.type === 'studio:zoom') document.documentElement.classList.toggle('glassy', !!e.data.zoomed && !isPhone());   // zoomed in: the map runs under the glass
     if (e.data.type === 'studio:area') openArea(e.data.area);
   });
   document.querySelectorAll('.tri [data-area]').forEach(b => b.addEventListener('click', () => {
