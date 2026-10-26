@@ -79,7 +79,9 @@ _Built 2026-10-26, after three mocks:_
 - _v3 (built): the landmarks are rendered from the 3D map itself. "Yes, this is it."_
 
 What it is:
-- A soft dotted route leaves the map from under the block's front corner and meanders down the page,
+- It starts inside the map (Ethan: "the start need to be from the map, not a line start like that"): an amber
+  arc with packets flows from the hub over the street and drops off the block's front corner. There a soft
+  dotted route takes over. It leaves the map from under the block's front corner and meanders down the page,
   under the content, to contact. A car from the map drives it as you scroll and lights the route behind it.
 - Stops: Ben Thanh Market (Research), the riverside studio lot (Video production), Bitexco (AI work), the
   Independence Palace (Diagnosis), 42 Nguyen Hue (contact). Each is a cut-out rendered from the 3D map
