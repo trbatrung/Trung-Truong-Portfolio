@@ -110,6 +110,10 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
   - Phones are unchanged.
 - **Below the hero:** the proof strip, the three skills (heyclicky blocks), the Diagnosis section,
   the about note and contact.
+- **Hero alignment** (2026-10-26, Ethan: the spacing "doesnt match the eyes"): the map's hint chip, card stack and
+  zoom buttons sit on the site's 48px side margins, like the headline and nav, and the block centers between
+  the left margin and the cards (`SITE_M` and `freeRect()` in `studio/index.html`). Fixed gaps were tried
+  first and read wrong.
 - **The route** (2026-10-26): a soft line from the map down the page to contact, with the map's own
   places at its stops, rendered from the 3D map. See `v2-plan.md`, Phase 3b.
 - **The work:** each map area opens its own board.
