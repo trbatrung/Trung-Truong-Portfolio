@@ -154,7 +154,7 @@
      all; the map fades out at the hero's bottom edge */
   html.under .stack { top: var(--stack-top, 1rem); }
   html.under.no-cards .stack { display: none; }
-  html.under canvas { -webkit-mask-image: linear-gradient(#000 84%, transparent); mask-image: linear-gradient(#000 84%, transparent); }
+  html.under canvas { -webkit-mask-image: linear-gradient(#000 93%, transparent); mask-image: linear-gradient(#000 93%, transparent); }
 </style>
 <script>
   // before anything paints: in the site's hero the page is see-through from the first frame, not after three.js loads
@@ -1627,7 +1627,7 @@ function frameCamera() {
 }
 // under the site's headline: the map fills the hero and runs behind the glass, so the block can be much larger. It is
 // framed as large as it fits with every area label below the glass and the cards, the skyline on screen and clear of
-// the cards, the cathedral and the post office in, and only the near corner running off the bottom (the canvas fades there)
+// the cards, and the whole block, near corner included, on screen
 const under = () => EMBED && window.__inset.top > 0;
 let cards = 'beside';                                                       // where the cards go: beside the glass, below it, or none
 function applyInset() {
@@ -1648,7 +1648,7 @@ function frameUnder() {
     add(-29, y, -31, m, right, -OFF, floor);                                 // the far corner may go under the glass
     add(-29, y, 25, m, right, -OFF, floor);                                  // the left corner
     add(25.6, y, -31, m, right, sideY, floor);                               // the right corner, below the cards
-    add(25.6, y, 25, m, right, -OFF, H * 1.12);                              // the near corner may run off the bottom
+    add(25.6, y, 25, m, right, -OFF, H - 1.2 * r);                           // the near corner too: the whole block shows
   }
   add(-7.5, 7.0, 20.2, m, right, -OFF, H - m); add(4.0, 3.6, 20.6, m, right, -OFF, H - m);
   for (const [x, y, z] of [[13.5, 19.2, -33.6], [-19.6, 14.8, -19.7], [-6.4, 12.8, -31.6], [0.35, 12.4, -33.9], [-26.75, 10.4, -17.6]]) add(x, y, z, m, sideX, head - 2 * r, OFF);

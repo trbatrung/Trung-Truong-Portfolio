@@ -103,7 +103,8 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
   production control. On screens wider than 760px (2026-10-26, Ethan: "more rectangle", "the map sit behind the
   bars" with "a liquid glass effect"), the map fills the whole hero and runs under the nav and a liquid glass pane
   that holds the headline. It is framed much larger: the area labels stay below the glass, the skyline rises behind
-  it, and the near corner may run off the bottom, where the map fades out. The area cards sit beside the glass, or
+  it, and the whole block stays on screen (Ethan, same day: the first try, with the near corner running off the
+  bottom, was "kinda too big"). The area cards sit beside the glass, or
   below it, or are left out on short screens with no room for them. Phones keep the band above the map.
 - **Below the hero:** the proof strip, the three skills (heyclicky blocks), the Diagnosis section,
   the about note and contact.
