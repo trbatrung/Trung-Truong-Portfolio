@@ -82,6 +82,17 @@ Proof strip swap, hero sub-line check, Diagnosis context ("why an editor writes 
 analysis": research is a skill), "Founder Intro" label fix (still open).
 
 ### Phase 5 · Performance, accessibility, mobile (P1)
+_Done 2026-10-26, the invisible part (Ethan: "nothing visual changes"):_
+- _The map stops drawing when scrolled away or under the board: CPU 48% → 2% (scrolled), 0.4% (board)._
+- _The map's post-processing files preload, so it loads in one wave; it shares the page's font request._
+- _The board and phone sheets are `aria-modal` and lock the page behind (`inert`); focus returns to
+  whatever opened them, the map included. Desktop video windows stay non-modal, as they float over
+  a usable page._
+- _A skip link (keyboard only) and a `<main>` landmark; keyboard focus rings on stickies and the Diagnosis card._
+- _Reduced motion: no smooth scrolling, still dots, no board fade._
+- _No WebGL or no CDN: a still of the map (`img/map-still.jpg`) instead of an empty hero._
+- _Left for a visible pass, if Ethan wants it: contrast of the faint greys, phone label sizes and tap
+  targets, the hero's reveal delay, a 30fps cap, a lower pixel ratio._
 From the technical audit below. Fixes that don't touch the look. The map pause (perf 1) and the
 phone nav (mobile 1) are small and high impact; they can jump the queue.
 

@@ -144,6 +144,9 @@ Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io lin
   - On wide screens the iframe fills the whole hero. The site tells the map where the headline ends: `&top=` on
     the iframe URL, then a `site:inset` message when the layout changes. The map frames itself below that line.
   - The map posts `studio:zoom` when it zooms in or out, and the site toggles `html.glassy`.
+  - The site sends `site:hold` while the map is out of view or under the board or a phone sheet, and the
+    map stops drawing. The map posts `studio:failed` when it has no WebGL or three.js fails to load,
+    and the site shows `img/map-still.jpg` instead.
   - The lens bend at the glass's edge is Chromium only (an SVG displacement map in `backdrop-filter`). Safari and
     Firefox get the same glass without the bend.
   - Headless Chrome screenshots go stale after a click on the map, the live site included. Check zoom states in a

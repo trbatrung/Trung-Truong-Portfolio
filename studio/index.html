@@ -6,7 +6,8 @@
 <title>Pipeline Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- the same font request as the site's page, so in the site's hero the browser reuses those files instead of fetching Space Grotesk twice -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Newsreader:opsz,wght@6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --bg: #f1ede6; --ink: #1a1a1a; --dim: rgba(26,26,26,.56); --line: rgba(26,26,26,.08); }
   html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
@@ -165,7 +166,16 @@
     addEventListener('message', e => {
       if (e.origin !== location.origin || !e.data || e.data.type !== 'site:inset') return;
       window.__inset = { top: +e.data.top || 0 }; dispatchEvent(new Event('inset'));
-    }); }
+    });
+    // the site holds the map while nobody can see it (scrolled away, or under the board), so it stops drawing
+    window.__held = false;
+    addEventListener('message', e => {
+      if (e.origin !== location.origin || !e.data || e.data.type !== 'site:hold') return;
+      window.__held = !!e.data.held; dispatchEvent(new Event('hold'));
+    });
+    // no WebGL at all: tell the site at once, so it shows a still instead of a loading label
+    const c3 = document.createElement('canvas');
+    if (q.get('embed') === '1' && parent !== window && !(c3.getContext('webgl2') || c3.getContext('webgl'))) parent.postMessage({ type: 'studio:failed' }, location.origin); }
 </script>
 <script type="importmap">
 { "imports": {
@@ -178,13 +188,15 @@
   // the ambient-occlusion files only where they're used, not on phones
   { const q = new URLSearchParams(location.search);
     const files = ['build/three.module.min.js', 'examples/jsm/geometries/RoundedBoxGeometry.js'];
-    if (q.get('quality') !== 'low') files.push('examples/jsm/postprocessing/EffectComposer.js', 'examples/jsm/postprocessing/RenderPass.js', 'examples/jsm/postprocessing/GTAOPass.js', 'examples/jsm/postprocessing/OutputPass.js');
+    if (q.get('quality') !== 'low') files.push(...['postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/GTAOPass.js', 'postprocessing/OutputPass.js',
+      'postprocessing/Pass.js', 'postprocessing/ShaderPass.js', 'postprocessing/MaskPass.js', 'shaders/CopyShader.js', 'shaders/GTAOShader.js',
+      'shaders/PoissonDenoiseShader.js', 'shaders/OutputShader.js', 'math/SimplexNoise.js'].map(f => 'examples/jsm/' + f));   // the ones they import too, so nothing waits for a second round
     for (const f of files) { const l = document.createElement('link'); l.rel = 'modulepreload'; l.href = 'https://cdn.jsdelivr.net/npm/three@0.169.0/' + f; document.head.appendChild(l); } }
 </script>
 </head>
 <body>
 <div id="frame"><canvas id="c"></canvas><div id="ui"></div></div>
-<script type="module">
+<script type="module" onerror="if (parent !== window) parent.postMessage({ type: 'studio:failed' }, location.origin)">
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
@@ -1896,11 +1908,13 @@ window.ready = (async () => {
     try { draw(offset + (now - start) / 1000); } catch (err) { if (!warned) { warned = true; console.error(err); } }
     if (!shown && EMBED && parent !== window) { shown = true; parent.postMessage({ type: 'studio:ready' }, location.origin); }   // the site swaps its placeholder for the map now, not on page load
   };
-  raf = requestAnimationFrame(tick);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelAnimationFrame(raf); if (start !== null) offset += (performance.now() - start) / 1000; start = null; }
-    else raf = requestAnimationFrame(tick);
-  });
+  // draw only while someone can see it: not in a hidden tab, and not while the site holds it
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; if (start !== null) offset += (performance.now() - start) / 1000; start = null; };
+  const go = () => { if (!raf && !document.hidden && !window.__held) raf = requestAnimationFrame(tick); };
+  go();
+  if (!raf && !shown && EMBED && parent !== window) { draw(INTRO); shown = true; parent.postMessage({ type: 'studio:ready' }, location.origin); }   // held from the start: one frame, so it's there on the way back
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : go()));
+  addEventListener('hold', () => (window.__held ? stop() : go()));
 })();
 </script>
 </body>

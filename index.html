@@ -189,6 +189,16 @@
   .map-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .7rem; color: rgba(241,237,230,.55); transition: opacity .15s; }
   .map-loading i { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 8px var(--teal); animation: pulse 1.4s infinite; }
   .map.live .map-loading { opacity: 0; pointer-events: none; }
+  /* no WebGL, or three.js couldn't load: a still of the map in its place */
+  .map-still { display: none; }
+  .map.failed iframe, .map.failed .map-loading { display: none; }
+  .map.failed .map-still { display: block; position: absolute; left: 0; top: var(--still-top, 0px); width: 100%; height: calc(100% - var(--still-top, 0px)); object-fit: contain;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(transparent, #000 10%, #000 90%, transparent); -webkit-mask-composite: source-in;
+    mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent), linear-gradient(transparent, #000 10%, #000 90%, transparent); mask-composite: intersect; }   /* feathered into the Ember */
+  /* keyboard only: jump past the nav and the map */
+  .skip-link { position: fixed; left: 12px; top: -80px; z-index: 1000; padding: .8rem 1.1rem; border-radius: 999px; background: var(--amber); color: #17130c; font: 600 .74rem var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+  .skip-link:focus { top: 12px; }
+  main:focus { outline: none; }
 
   @media (max-width: 760px) {
     .hero { min-height: 700px; }
@@ -313,11 +323,13 @@
   .bd-file:hover .th, .bd-file:focus-visible .th { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 34px rgba(0,0,0,.45), 0 0 0 2px #fff; }
   .bd-file.doc:hover .th, .bd-file.doc:focus-visible .th { box-shadow: none; }
   .bd-file:hover .lb, .bd-file:focus-visible .lb { background: #0a5cd6; text-shadow: none; }
-  .bd-file:focus-visible, .bd-sticky:focus-visible { outline: none; }
+  .bd-file:focus-visible { outline: none; }
+  .bd-sticky:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }   /* keyboard focus shows a ring, not just a lift */
   /* Diagnosis: one card, its wordmark on its own cream */
   .bd-diag { width: 360px; height: 236px; display: flex; flex-direction: column; gap: 8px; padding: 20px 24px 20px; border-radius: 12px; border-top: 4px solid #c0392b; background: #faf6f0; color: #111; cursor: pointer;
     box-shadow: 0 16px 34px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2); transition: transform .35s var(--spring); }
   .bd-diag:hover, .bd-diag:focus-visible { transform: translateY(-3px) scale(1.02); outline: none; }
+  .bd-diag:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   .bd-diag .wm { font: 500 34px/1 'Newsreader', Georgia, serif; letter-spacing: -.01em; }
   .bd-diag .wm::after { content: '.'; color: #c0392b; }   /* Diagnosis's red: the site's accent */
   .bd-diag .tl { font: italic 400 17px/1.3 'Newsreader', Georgia, serif; color: #3a332c; }
@@ -634,6 +646,10 @@
 
   /* ---------- ANIM ---------- */
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) {   /* still dots and jumps instead of glides, for people who asked for less motion */
+    html { scroll-behavior: auto; }
+    .nav-tc::before, .hero-status .live, .map-loading i { animation: none; }
+  }
   /* content is visible by default; motion is pure enhancement (never leaves anything hidden) */
   .reveal { transition: opacity .7s ease, transform .7s ease; }
   @media (prefers-reduced-motion: no-preference) {
@@ -666,6 +682,7 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <nav id="nav">
   <a href="#top" class="nav-logo"><b>Ethan</b><i>.</i></a>
@@ -708,6 +725,7 @@
   </div>
   <div class="map" id="studio" role="region" aria-label="Live 3D map of the three areas: research, AI work and video production">
     <div class="map-loading mono"><i></i>Loading the map</div>
+    <img class="map-still" src="img/map-still.jpg" alt="The 3D map of Saigon: Ben Thanh Market for research, the glass floor by Bitexco for AI work, the riverside studio lot for video production" loading="lazy">
   </div>
 </header>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage id="lg-map" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="map"/><feDisplacementMap in="SourceGraphic" in2="map" scale="44" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
@@ -755,6 +773,7 @@
 </section>
 </noscript>
 
+<main id="main" tabindex="-1">
 <!-- ---------- STATS ---------- -->
 <div class="stats">
   <div class="wrap">
@@ -956,6 +975,8 @@
   </div>
 </section>
 
+</main>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <footer>
@@ -971,10 +992,14 @@
 </footer>
 
 <script>
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const glide = () => (still.matches ? 'auto' : 'smooth');
+
   // ----- running timecode (HH:MM:SS:FF @ 24fps feel) -----
   const navTc = document.getElementById('navTc');
   const pad = n => String(n).padStart(2, '0');
   function tick() {
+    if (document.documentElement.classList.contains('board-open')) return;   // the board covers the nav: no need to redraw it
     const d = new Date();
     const ff = Math.floor((d.getMilliseconds() / 1000) * 24);
     const s = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}:${pad(ff)}`;
@@ -1035,7 +1060,7 @@
     if (!f) {
       f = document.createElement('iframe');
       f.title = 'Live 3D map: research, AI work and video production';
-      f.addEventListener('load', () => setTimeout(() => studio.classList.add('live'), 8000));   // a fallback; normally the map says when it has drawn
+      f.addEventListener('load', () => { holdMap(true); setTimeout(() => studio.classList.add('live'), 8000); });   // a fallback; normally the map says when it has drawn
       studio.appendChild(f);
     }
     // the version follows this page's publish time, so a phone never keeps an old map from its cache
@@ -1083,6 +1108,19 @@
     document.documentElement.classList.add('refract');
   }
   new ResizeObserver(() => { sendInset(); buildRefraction(); }).observe(glass);
+
+  // The map stops drawing while nobody can see it: scrolled out of view, or under the board or a phone sheet.
+  // Those full-screen windows also lock the page behind them for keyboards and screen readers.
+  let mapSeen = true, lastHold = null;
+  function holdMap(force) {
+    const c = document.documentElement.classList, cover = c.contains('board-open') || c.contains('sheet-open'), held = !mapSeen || cover;
+    for (const el of document.body.children) if (el !== winsEl && el.id !== 'toast' && el.tagName !== 'SCRIPT') el.inert = cover;
+    if (held === lastHold && !force) return;
+    lastHold = held;
+    studio.querySelector('iframe')?.contentWindow?.postMessage({ type: 'site:hold', held }, location.origin);
+  }
+  new IntersectionObserver(([e]) => { mapSeen = e.isIntersecting; holdMap(); }).observe(studio);
+  new MutationObserver(() => holdMap()).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   function openArea(area, opener) {
     openBoard(area, opener);
   }
@@ -1090,7 +1128,11 @@
     if (e.origin !== location.origin || !e.data) return;
     if (e.data.type === 'studio:ready') { studio.classList.add('live'); sendInset(true); }
     if (e.data.type === 'studio:zoom') document.documentElement.classList.toggle('glassy', !!e.data.zoomed && !isPhone());   // zoomed in: the map runs under the glass
-    if (e.data.type === 'studio:area') openArea(e.data.area);
+    if (e.data.type === 'studio:area') openArea(e.data.area, studio.querySelector('iframe'));   // closing the board puts focus back on the map
+    if (e.data.type === 'studio:failed') {
+      studio.style.setProperty('--still-top', (isPhone() ? 0 : heroInset().top + 4) + 'px');
+      studio.classList.add('failed');
+    }
   });
   document.querySelectorAll('.tri [data-area]').forEach(b => b.addEventListener('click', () => {
     try { studio.querySelector('iframe')?.contentWindow?.selectArea?.(b.dataset.area, false); } catch {}   // the map highlights it too
@@ -1184,10 +1226,11 @@
     openWins.delete(w.dataset.key);
     if (w.classList.contains('board')) closeBoard();
     w.addEventListener('animationend', () => w.remove(), { once: true });
-    if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
     if (w._hist && !fromHistory) { skipPop++; history.back(); }
     w._hist = false;
     updateBars();
+    holdMap();                                                                // unlock the page first, so the focus can land
+    if (w._opener && document.contains(w._opener)) w._opener.focus({ preventScroll: true });
   }
   function closeAll() {
     const wins = stack();
@@ -1213,6 +1256,7 @@
       w.tabIndex = -1;
       w.setAttribute('role', 'dialog');
       w.setAttribute('aria-label', title);
+      if (cls === 'board' || sheet()) w.setAttribute('aria-modal', 'true');   // full screen: the page behind is locked too (lockPage)
       w.innerHTML = `<div class="dt-bar"><div class="dt-lights"><button class="dt-close" aria-label="Close" title="Close (Esc)"></button><button class="dt-min" aria-hidden="true" tabindex="-1"></button><button class="dt-max" aria-label="Zoom"></button></div><span class="dt-title">${esc(title)}</span><span class="dt-ctx"></span><span class="dt-nav"><button type="button" data-act="prev" aria-label="Previous video" title="Previous (←)">←</button><span class="dt-count"></span><button type="button" data-act="next" aria-label="Next video" title="Next (→)">→</button></span><button type="button" class="dt-done" data-act="all">Done</button></div><div class="dt-body">${html}</div><div class="dt-sheetbar"></div>`;
       winsEl.appendChild(w);
       w._opener = opener;
@@ -1240,7 +1284,7 @@
       e.preventDefault();
       closeAll();
       const target = document.querySelector(sysLink.getAttribute('href'));
-      setTimeout(() => { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); target.classList.add('flash'); setTimeout(() => target.classList.remove('flash'), 1800); }, 80);
+      setTimeout(() => { target.scrollIntoView({ behavior: glide(), block: 'start' }); target.classList.add('flash'); setTimeout(() => target.classList.remove('flash'), 1800); }, 80);
       return;
     }
     if (e.target.closest('[data-act="next"]')) return stepProject(w, 1);
@@ -1493,7 +1537,7 @@
       layoutBoard();
       const v = viewFor(area);
       setView(v.s, v.tx, v.ty);
-      if (animate) bd.world.animate([{ opacity: 0, transform: bd.world.style.transform + ' translateY(16px)' }, { opacity: 1, transform: bd.world.style.transform }], { duration: 320, easing: 'cubic-bezier(.16,1,.3,1)' });
+      if (animate && !still.matches) bd.world.animate([{ opacity: 0, transform: bd.world.style.transform + ' translateY(16px)' }, { opacity: 1, transform: bd.world.style.transform }], { duration: 320, easing: 'cubic-bezier(.16,1,.3,1)' });
       return;
     }
     const v = viewFor(area);
@@ -1607,7 +1651,7 @@
   const OPENERS = { board: el => openBoard('production', el) };
   document.querySelectorAll('[data-open]').forEach(el => el.addEventListener('click', e => {
     e.preventDefault();
-    if (el.closest('nav')) scrollTo({ top: 0, behavior: 'smooth' });
+    if (el.closest('nav')) scrollTo({ top: 0, behavior: glide() });
     OPENERS[el.dataset.open](el);
   }));
   document.querySelectorAll('.watch-chip, .shot').forEach(el => el.addEventListener('click', () => openProject(el.dataset.project, el)));
