@@ -1647,7 +1647,7 @@ function frameCamera() {
   let cx = (free.x0 + free.x1) / 2;
   if (refs.side && refs.cards) {
     const r = parseFloat(getComputedStyle(document.documentElement).fontSize), bw = b.x1 - b.x0, sw = refs.side.offsetWidth;
-    const gap = clamp(W * 0.07, 5 * r, 14 * r);                                 // the space between them grows with the screen
+    const gap = clamp(W * 0.035, 3.5 * r, 8 * r);                                // the space between them grows with the screen
     const left = Math.max(free.x0, (W - (bw + gap + sw)) / 2);
     cx = Math.min(cx, left + bw / 2);
     refs.side.style.right = 'auto';
