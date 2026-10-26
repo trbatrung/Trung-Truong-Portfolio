@@ -97,20 +97,48 @@ pixel wordmark).
    tagged `pre-revamp-2026-10`). Merge and push wait for Ethan's go-ahead after he sees the final
    preview.
 
+## Where things stand (2026-10-26)
+Live at **https://ethantrungtruong.com** (main `82248cd`). The old github.io link 301s to it.
+- **Hero:** the 3D Saigon map in an iframe, with the headline band and the Research | AI work | Video
+  production control above it.
+- **Below the hero:** the proof strip, the three skills (heyclicky blocks), the Diagnosis section,
+  the about note and contact.
+- **The work:** each map area opens its own board.
+- **The map:** Ben Thanh as Research, Nguyen Hue with 42 Nguyen Hue, Notre-Dame, the Post Office,
+  the Opera House, the Independence Palace, the Ba Son bridge and towers, the zoo across the river,
+  Bitexco and Landmark 81. The areas glow.
+- **Map gestures:**
+  - At rest: one finger or drag turns; clearly vertical swipes scroll the page.
+  - Zoomed in: a sideways drag turns, an up-or-down drag moves; right-drag or Shift-drag moves on
+    desktop.
+  - Pinch or ⌘/Ctrl-scroll zooms.
+  - The view resets after 15s idle on phones, and 2.5s after the mouse leaves on desktop.
+
 ## Still open
 | What | Notes |
 |---|---|
+| Make the repo private | Free GitHub Pages needs a public repo. Plan: host on Cloudflare Pages (free, builds from a private repo), point the domain there, make the repo private, and keep a tiny public `Trung-Truong-Portfolio` stub that forwards the old github.io link. Ethan: "leave it atm". |
+| "ETC building" | Ethan asked for "the Ba Son buildings, or the newest ETC building" across the river. Ba Son twin towers are built; we don't know which ETC building he means. |
 | Founder Intro label | Site says "Infinite Leverage · Founder Intro"; YouTube title is "EO Melboure Intro" (AI Officer Institute). Name the client, or just say Edge8? |
 | "For" column in `projects.md` | Which company each pre-AI project was for (4Front, Arrowhead, freelance). Not shown on the site. |
-| Copy sign-off | Systems, How I Choose Tools, What I Do + About, folder lines and the 34 video descriptions are drafts. |
-| Em dashes in section labels | "01 — Systems" etc. still use them; the tone rules say no em dashes in copy. |
 | "8+ years" | CV entries start Mar 2019 (about 7.5 years). Fine if there's earlier work. |
 
 ## Gotchas
+- **Deploys:** pushing `main` deploys to GitHub Pages in about a minute; the edge servers switch
+  over within a minute or so.
+- **Domain:** `ethantrungtruong.com` was registered at Cloudflare on 2026-10-25 for 1 year, with
+  auto-renew. Cloudflare holds its DNS: four A records to GitHub Pages and a `www` CNAME, all
+  "DNS only" (grey cloud, which GitHub needs for HTTPS). The `CNAME` file in the repo names the
+  domain. Enforce HTTPS is on.
+- **Caching:** GitHub serves files with `max-age=600`. The page asks for the map as
+  `studio/index.html?...&v=<page publish time>`, so phones don't keep an old map after a deploy.
+  Testing in the iOS Simulator still needs Safari's cache cleared.
+- **The map** (`studio/index.html`) loads three.js r0.169.0 (minified) from jsDelivr. Phones
+  (`quality=low`) skip post-processing entirely. It posts `studio:ready` (the site swaps its
+  loading label for the map) and `studio:area` (open that area's board) to the parent.
 - **GitHub Pages publishes this repo with Jekyll.** `index.html` is the site. `_config.yml` keeps
-  `docs/` and `CLAUDE.md` off the site (they were published as pages until 2026-10-08), and
-  folders starting with `_` (like `_archive/`) are never published.
-- **The GitHub repo is public.** Everything in `docs/` is readable by anyone. The testing PDF stays
-  gitignored.
+  `docs/` and `CLAUDE.md` off the site, and folders starting with `_` (like `_archive/`) are never
+  published.
+- **The GitHub repo is public.** Everything in `docs/` is readable by anyone. PDFs stay gitignored.
 - Thumbnails come from `img.youtube.com`. A video with no maxres thumbnail needs `hq: true` in
   `WORK` (Cats TNR does).
