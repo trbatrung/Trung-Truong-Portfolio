@@ -4,6 +4,11 @@ Ethan's brief: improve clarity, credibility and hiring effectiveness, keep the i
 **in 30 seconds, someone knows what he does, why he's valuable and what he's done, and remembers it.**
 Work one phase at a time with his sign-off, update docs first, never invent facts (`positioning.md`).
 
+> **Rule (Ethan, 2026-10-26): add, don't change.** "i like how the web look atm, and im not intend to
+> change it, add more yes but not changing." Existing sections, their look and their copy stay as
+> they are. New things are additions, in the same heyclicky style (Mac windows, filenames, chat
+> bubbles). Invisible fixes (speed, accessibility) are fine. Ask him one question at a time.
+
 ## The 30-second test, today
 | Question | What a visitor gets in 30s | Verdict |
 |---|---|---|
@@ -44,6 +49,10 @@ Minh City or remote. Freelance projects welcome." · GitHub link not yet._
   The repo rule is never to publish PDFs, so a PDF download needs Ethan's explicit OK.
 
 ### Phase 2 · Selected work (P0 · medium)
+_Dropped (2026-10-26). Built with his picks (code pipeline in 5D, Joe Schaeffer, Diagnosis, this
+website), then pulled before it went live: "this is kind of redundant", since the map, the boards
+and the skill blocks already carry the work. Reverted in `d3ff380`; the build is in `b592d55` if
+it's ever wanted. Kept from it: his 5D framing (Discover · Define · Design · Develop · Deliver)._
 _Picked by Ethan (2026-10-26): **code-animation pipeline · Mike Dee channel · Joe Schaeffer · this
 website · Diagnosis**. Avatar video, Arrowhead/Nailzy and the AI Language Lesson stay on the boards.
 This website and Diagnosis are featured here, so Phase 3 covers the rest of what he's built._
