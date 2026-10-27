@@ -143,7 +143,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 - **AI Language Lesson** (1:11, `8EKCg3SiSPI`): A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens' office.
 
 ## Retired
-- **Feedflo** (`J0j3ZWbqS5s`, Impact Film · Mogler Farms). Removed 2026-10-27 at Ethan's request ("remove feedflo from the feed at all").
+- **Feedflo** (`J0j3ZWbqS5s`, Impact Film · Mogler Farms). Off the boards since 2026-10-27 at Ethan's request ("remove feedflo from the feed at all"), but still in the no-JavaScript fallback list ("leave it in fallback, just remove on the main").
 - **What Is an NFT?** (`DV1G6hvNptI`, Ninja Ape). Removed 2026-10-09 with the Motion & Explainers folder; Revve moved to Video Ads and Web 3.0 to Long-form.
 - **Dermatology Course · Module Intro** (`uGsAgs07RbU`). AI-directed b-roll (Veo 3, Kling),
   replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
