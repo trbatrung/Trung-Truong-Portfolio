@@ -62,7 +62,7 @@ A "Selected work" section right after the hero: 4–6 Mac-window cards, each wit
 2. **Avatar video at volume** (Edge8, full direction): Executive Scale, Brand Presence.
 3. **Mike Dee channel** (PM / video editor, team of 10): 300K → 1M subscribers in under a year.
 4. **Arrowhead** (founder, 10+ team, 50+ projects): the Nailzy launch content rule set + ad.
-5. **A brand film** (edit & planning): Joe Schaeffer or Feedflo, told through the edit's decisions.
+5. **A brand film** (edit & planning): Joe Schaeffer, told through the edit's decisions.
 6. **This website** (or it goes in phase 3).
 
 ### Phase 3 · Things I've built (P0 · medium)

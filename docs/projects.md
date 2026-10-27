@@ -12,7 +12,6 @@ can't go above its role (see the credit rules in `positioning.md`).
 | Project | Type | Video | Role | For |
 |---|---|---|---|---|
 | Joe Schaeffer | Artist Film | `jH6LaZDXNMs` | Edit & planning | ? |
-| Feedflo | Impact Film · Mogler Farms | `J0j3ZWbqS5s` | Edit & planning | ? |
 | Willow's Story | Awareness Film · Drug Use | `wEyszIni9cs` | Edit & planning | ? |
 
 ## 02 · Client & Story Work
@@ -96,7 +95,6 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 **Brand Film**
 
 - **Joe Schaeffer** (5:59, `jH6LaZDXNMs`): A six-minute artist film on Joe Schaeffer, moving between him, his paintings and the gallery they hang in.
-- **Feedflo** (5:45, `J0j3ZWbqS5s`): Feedflo's impact story, told from Mogler Farms. Six minutes, led by on-camera interviews.
 - **Willow's Story** (4:10, `wEyszIni9cs`): A four-minute awareness film on drug use, told through Willow's story. (From the title and Ethan's note; YouTube had no description yet.)
 
 **Client & Story**
@@ -145,6 +143,7 @@ Shown in each video's window on the site. Written from the YouTube title, the Yo
 - **AI Language Lesson** (1:11, `8EKCg3SiSPI`): A 71-second German lesson on booking an appointment at the Bürgeramt, the local citizens' office.
 
 ## Retired
+- **Feedflo** (`J0j3ZWbqS5s`, Impact Film · Mogler Farms). Removed 2026-10-27 at Ethan's request ("remove feedflo from the feed at all").
 - **What Is an NFT?** (`DV1G6hvNptI`, Ninja Ape). Removed 2026-10-09 with the Motion & Explainers folder; Revve moved to Video Ads and Web 3.0 to Long-form.
 - **Dermatology Course · Module Intro** (`uGsAgs07RbU`). AI-directed b-roll (Veo 3, Kling),
   replaced a 2-day location shoot. Removed from the site in the 2026-08 copy pass when Founder
